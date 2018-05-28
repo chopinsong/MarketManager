@@ -40,3 +40,26 @@ object GoodsTable {
                 "${GoodsTable.GOODS_NAME} Text,${GoodsTable.BRAND} text,$TYPE text,$AVERAGE_PRICE DOUBLE,${GoodsTable.TIME} TIMESTAMP(14));"
     }
 }
+
+//object BrandTable{
+//    val NAME = "Brand"
+//    val BRAND_ID = "BrandId"
+//    val BRAND_NAME = "BrandName"
+//    val TIME = "Time"
+//
+//    fun getCommand(): String {
+//        return "CREATE TABLE ${BrandTable.NAME}(${BrandTable.BRAND_ID}  INTEGER PRIMARY KEY," +
+//                "${BrandTable.BRAND_NAME} Text,${BrandTable.TIME} TIMESTAMP(14));"
+//    }
+//}
+//object TypeTable{
+//    val NAME = "Type"
+//    val Type_ID = "TypeId"
+//    val Type_NAME = "TypeName"
+//    val TIME = "Time"
+//
+//    fun getCommand(): String {
+//        return "CREATE TABLE ${TypeTable.NAME}(${TypeTable.Type_ID}  INTEGER PRIMARY KEY," +
+//                "${TypeTable.Type_NAME} Text,${TypeTable.TIME} TIMESTAMP(14));"
+//    }
+//}

@@ -5,4 +5,18 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="name_text">名字</string>
+    <string name="name_hint">名字</string>
+    <string name="price_hint">价格</string>
+    <string name="commit_btn">提交</string>
+    <string name="purchase_count">数量</string>
+    <string name="customer_hint">客户</string>
+    <string name="add_goods_brand_text">品牌</string>
+    <string name="add_goods_type_text">类型</string>
+    <string name="add_goods_name_text">名字</string>
+    <string name="add_goods_commit_text">提交</string>
+    <string name="add_goods_avg_price_text">平均价格</string>
+    <string name="select_ps_purchase">进货</string>
+    <string name="select_ps_shipment">出货</string>
+    <string name="title_activity_shipment">ShipmentActivity</string>
 </resources>

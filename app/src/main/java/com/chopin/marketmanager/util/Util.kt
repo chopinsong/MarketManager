@@ -14,4 +14,9 @@ object Util {
         val fm=SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA)
         return fm.format(System.currentTimeMillis())
     }
+
+    fun time2long(s:String):Long{
+        val fm=SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA)
+       return fm.parse(s).time
+    }
 }

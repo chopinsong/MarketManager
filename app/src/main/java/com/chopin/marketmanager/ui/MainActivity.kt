@@ -1,5 +1,6 @@
 package com.chopin.marketmanager.ui
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
@@ -11,17 +12,22 @@ import android.view.MenuItem
 import com.chopin.marketmanager.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
+import android.support.v7.widget.LinearLayoutManager
+import com.chopin.marketmanager.bean.PSItemBean
+import com.chopin.marketmanager.sql.DBManager
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    lateinit var adapter:PSAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        fab.setOnClickListener {
+            SelectPSDialog().show(fragmentManager,"chopin")
         }
 
         val toggle = ActionBarDrawerToggle(
@@ -30,6 +36,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        val layoutManager = LinearLayoutManager(this)
+        purchase_shipment_list.layoutManager = layoutManager
+         adapter = PSAdapter()
+        purchase_shipment_list.adapter = adapter
+
+        updateList()
+
+    }
+
+    private fun updateList() {
+        object:AsyncTask<Void,Void,ArrayList<PSItemBean>>(){
+            override fun doInBackground(vararg params: Void?): ArrayList<PSItemBean> {
+                return DBManager.getPSBeans()
+            }
+
+            override fun onPostExecute(result: ArrayList<PSItemBean>) {
+                super.onPostExecute(result)
+                adapter?.setData(result)
+            }
+
+        }.execute()
     }
 
     override fun onBackPressed() {

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/add_goods_brand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/add_goods_brand_text" />
+
+    <EditText
+        android:id="@+id/add_goods_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/add_goods_type_text" />
+
+    <EditText
+        android:id="@+id/add_goods_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/add_goods_name_text" />
+
+    <EditText
+        android:id="@+id/add_goods_avg_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/add_goods_avg_price_text" />
+
+    <Button
+        android:id="@+id/add_goods_commit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/add_goods_commit_text"
+        android:textSize="50sp" />
+
+</LinearLayout>

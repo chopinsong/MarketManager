@@ -63,5 +63,41 @@ object DBManager {
         return stock()
     }
 
+    fun brands():ArrayList<String>{
+     return   db.brands()
+    }
+
+    fun types():ArrayList<String>{
+        return db.types()
+    }
+
+    fun goodsNames():ArrayList<String> {
+        return db.goodsNames()
+    }
+
+    fun getGoodsName(selectBrand: String, selecttype: String, selectName: String) :Int{
+        return db.getGoodsId(selectBrand,selecttype,selectName)
+    }
+
+    fun addGoods(g:Goods){
+        db.addGoods(g)
+    }
+
+    fun getPSBeans(): ArrayList<PSItemBean> {
+        return db.PsBeans()
+    }
+//
+//    fun types(): ArrayList<String> {
+//       return db.types()
+//    }
+//
+//    fun addBrand(name:String){
+//       db.addBrand(name)
+//    }
+//
+//    fun addTYpe(name:String){
+//        db.addTYpe(name)
+//    }
+
 }
 
