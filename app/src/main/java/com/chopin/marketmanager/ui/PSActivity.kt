@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
-import android.view.View
 import com.chopin.marketmanager.R
-import com.chopin.marketmanager.bean.PurchaseBean
-import com.chopin.marketmanager.bean.ShipmentsBean
+import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.sql.DBManager
 import kotlinx.android.synthetic.main.purchase_layout.*
 
@@ -70,19 +68,19 @@ class PSActivity : AppCompatActivity() {
     }
 
     private fun getSelectName(): String {
-        val name=names[name_picker.value]
+        val name = names[name_picker.value]
 //        val name = name_picker.value.toString()
         return if (TextUtils.isEmpty(name)) "" else name
     }
 
     private fun getSelectBrand(): String {
-        val brand=brands[brand_picker.value]
+        val brand = brands[brand_picker.value]
 //        val brand = brand_picker.value.toString()
         return if (TextUtils.isEmpty(brand)) "" else brand
     }
 
     private fun getSelectType(): String {
-        val type=types[type_picker.value]
+        val type = types[type_picker.value]
 //        val type = type_picker.value.toString()
         return if (TextUtils.isEmpty(type)) "" else type
     }
@@ -97,11 +95,7 @@ class PSActivity : AppCompatActivity() {
         val goodsId = DBManager.getGoodsName(selectBrand, selectType, selectName)
 
         for (i in 0 until purchaseCount) {
-            if (isP) {
-                DBManager.purchase(PurchaseBean(0, goodsId, inputPrice, customerName))
-            } else {
-                DBManager.shipments(ShipmentsBean(0, goodsId, inputPrice, customerName))
-            }
+            DBManager.ps(PSBean(0, goodsId, inputPrice, customerName, isP))
         }
         finish()
     }

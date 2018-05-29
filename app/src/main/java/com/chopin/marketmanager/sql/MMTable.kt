@@ -1,30 +1,43 @@
 package com.chopin.marketmanager.sql
 
-object PurchaseTable {
-    val NAME = "Purchase"
-    val PURCHASE_ID = "PurchaseId"
+object PSTable{
+    val NAME = "PS"
+    val PS_ID = "PSId"
     val GOODS_ID = "GoodsId"
-    val PURCHASE_PRICE = "PurchasePrice"
+    val PS_PRICE = "PSPrice"
     val CUSTOMER_NAME = "CustomerName"
+    val IS_PURCHASE="isPURCHASE"
     val TIME = "Time"
 
     fun getCommand(): String {
-        return "CREATE TABLE $NAME($PURCHASE_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$PURCHASE_PRICE DOUBLE,$CUSTOMER_NAME text,$TIME TIMESTAMP(14));"
+        return "CREATE TABLE $NAME($PS_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$PS_PRICE DOUBLE,$CUSTOMER_NAME text,$IS_PURCHASE INTEGER,$TIME TIMESTAMP(14));"
     }
 }
-
-object ShipmentsTable {
-    val NAME = "Shipments"
-    val SHIPMENTS_ID = "ShipmentsId"
-    val GOODS_ID = "GoodsId"
-    val SHIPMENTS_PRICE = "ShipmentsPrice"
-    val CUSTOMER_NAME = "CustomerName"
-    val TIME = "Time"
-
-    fun getCommand(): String {
-        return "CREATE TABLE $NAME($SHIPMENTS_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$SHIPMENTS_PRICE DOUBLE,${ShipmentsTable.CUSTOMER_NAME} text,$TIME TIMESTAMP(14));"
-    }
-}
+//object PurchaseTable {
+//    val NAME = "Purchase"
+//    val PURCHASE_ID = "PurchaseId"
+//    val GOODS_ID = "GoodsId"
+//    val PURCHASE_PRICE = "PurchasePrice"
+//    val CUSTOMER_NAME = "CustomerName"
+//    val TIME = "Time"
+//
+//    fun getCommand(): String {
+//        return "CREATE TABLE $NAME($PURCHASE_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$PURCHASE_PRICE DOUBLE,$CUSTOMER_NAME text,$TIME TIMESTAMP(14));"
+//    }
+//}
+//
+//object ShipmentsTable {
+//    val NAME = "Shipments"
+//    val SHIPMENTS_ID = "ShipmentsId"
+//    val GOODS_ID = "GoodsId"
+//    val SHIPMENTS_PRICE = "ShipmentsPrice"
+//    val CUSTOMER_NAME = "CustomerName"
+//    val TIME = "Time"
+//
+//    fun getCommand(): String {
+//        return "CREATE TABLE $NAME($SHIPMENTS_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$SHIPMENTS_PRICE DOUBLE,${ShipmentsTable.CUSTOMER_NAME} text,$TIME TIMESTAMP(14));"
+//    }
+//}
 
 object GoodsTable {
     val NAME = "Goods"

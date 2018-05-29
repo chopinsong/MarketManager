@@ -1,6 +1,7 @@
 package com.chopin.marketmanager.ui
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -12,19 +13,25 @@ class PSAdapter : RecyclerView.Adapter<ViewHolder>() {
     var mData = ArrayList<PSItemBean>()
 
     fun setData(data: ArrayList<PSItemBean>) {
-        mData = data
+        mData .clear()
+        mData.addAll(data)
+        this.notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        Log.i("chopin","onCreateViewHolder")
         val view = LayoutInflater.from(parent.context).inflate(R.layout.ps_recycle_layout, parent, false)
         return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return mData.size
+        val size = mData.size
+        Log.i("chopin","getItemCount=$size")
+        return size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.i("chopin","onBindViewHolder")
         val bean = mData[position]
         holder.itemBrandTv.text=bean.g.brand
         holder.itemTypeTv.text=bean.g.type

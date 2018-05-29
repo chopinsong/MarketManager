@@ -17,8 +17,9 @@ import com.chopin.marketmanager.util.Constant
 
     override fun onCreate(db: SQLiteDatabase) {
         Log.i(Constant.TAG, "enter DBHelper onCreate")
-        db.execSQL(PurchaseTable.getCommand())
-        db.execSQL(ShipmentsTable.getCommand())
+//        db.execSQL(PurchaseTable.getCommand())
+//        db.execSQL(ShipmentsTable.getCommand())
+        db.execSQL(PSTable.getCommand())
         db.execSQL(GoodsTable.getCommand())
 //        db.execSQL(BrandTable.getCommand())
 //        db.execSQL(TypeTable.getCommand())
@@ -29,8 +30,9 @@ import com.chopin.marketmanager.util.Constant
         Log.i(Constant.TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data")
         // Kills the table and existing data
-        db.execSQL("DROP TABLE IF EXISTS " + PurchaseTable.NAME)
-        db.execSQL("DROP TABLE IF EXISTS " + ShipmentsTable.NAME)
+//        db.execSQL("DROP TABLE IF EXISTS " + PurchaseTable.NAME)
+//        db.execSQL("DROP TABLE IF EXISTS " + ShipmentsTable.NAME)
+        db.execSQL("DROP TABLE IF EXISTS " + PSTable.NAME)
         db.execSQL("DROP TABLE IF EXISTS " + GoodsTable.NAME)
 //        db.execSQL("DROP TABLE IF EXISTS " + BrandTable.NAME)
 //        db.execSQL("DROP TABLE IF EXISTS " + TypeTable.NAME)

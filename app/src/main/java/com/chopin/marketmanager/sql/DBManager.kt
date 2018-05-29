@@ -31,19 +31,22 @@ object DBManager {
     fun deletelDB(context: Context) {
     }
 
-    fun purchase(b: PurchaseBean) {
+    fun ps(b:PSBean){
+        db.ps(b)
+    }
+    fun purchase(b: PSBean) {
         db.purchase(b)
     }
 
-    fun shipments(b: ShipmentsBean) {
+    fun shipments(b: PSBean) {
         db.shipments(b)
     }
 
-    fun purchaseList(): ArrayList<PurchaseBean> {
+    fun purchaseList(): ArrayList<PSBean> {
      return   db.purchaseList()
     }
 
-    fun shipmentsList(): ArrayList<ShipmentsBean> {
+    fun shipmentsList(): ArrayList<PSBean> {
        return db.shipmentsList()
     }
 
@@ -84,7 +87,11 @@ object DBManager {
     }
 
     fun getPSBeans(): ArrayList<PSItemBean> {
-        return db.PsBeans()
+        return db.psBeans()
+    }
+
+    fun psList(): ArrayList<PSBean> {
+        return db.psList()
     }
 //
 //    fun types(): ArrayList<String> {
