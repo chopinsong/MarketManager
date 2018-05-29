@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.chopin.marketmanager.ui.MainActivity"
     tools:showIn="@layout/app_bar_main">
@@ -11,6 +12,28 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/purchase_shipment_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_weight="9"
+        android:layout_height="0dp" />
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:orientation="horizontal">
+
+        <NumberPicker
+            android:id="@+id/main_filter_type_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <NumberPicker
+            android:id="@+id/main_filter_picker"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+</LinearLayout>

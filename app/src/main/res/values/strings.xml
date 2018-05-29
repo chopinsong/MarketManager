@@ -20,4 +20,5 @@
     <string name="title_activity_shipment">出货</string>
     <string name="drawer_purchase">进货</string>
     <string name="drawer_shipment">出货</string>
+    <string name="is_p_img_dsc">进出货图标</string>
 </resources>

@@ -9,6 +9,8 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import kotlinx.android.synthetic.main.add_goods_activity.*
+import org.jetbrains.anko.async
+import org.jetbrains.anko.uiThread
 
 class AddGoodsActivity : AppCompatActivity() {
 
@@ -34,17 +36,24 @@ class AddGoodsActivity : AppCompatActivity() {
     }
 
     private fun commit() {
+        val progressDialog = getProgressDialog()
+        progressDialog.show(fragmentManager,"addGoodsActivity")
         val brand = getBrand()
         val type = getType()
         val name = getName()
         val avgPrice=getAvgPrice()
-        val goodsId = DBManager.getGoodsId(brand, type, name)
-        if (goodsId==-1){
-            DBManager.addGoods(Goods(brand = brand,type = type,name = name,avgPrice = avgPrice))
-        }else{
-            Snackbar.make(window.decorView,"商品重复",Snackbar.LENGTH_SHORT).show()
+        async {
+            val goodsId = DBManager.getGoodsId(brand, type, name)
+            if (goodsId==-1){
+                DBManager.addGoods(Goods(brand = brand,type = type,name = name,avgPrice = avgPrice))
+            }else{
+                Snackbar.make(window.decorView,"商品重复",Snackbar.LENGTH_SHORT).show()
+            }
+            uiThread {
+                finish()
+            }
         }
-        finish()
+
     }
 
     private fun getAvgPrice(): Double {
