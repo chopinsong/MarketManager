@@ -38,6 +38,7 @@ class AddGoodsActivity : AppCompatActivity() {
         val name = getName()
         val avgPrice=getAvgPrice()
         DBManager.addGoods(Goods(brand = brand,type = type,name = name,avgPrice = avgPrice))
+        finish()
     }
 
     private fun getAvgPrice(): Double {

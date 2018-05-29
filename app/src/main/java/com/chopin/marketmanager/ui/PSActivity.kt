@@ -21,6 +21,13 @@ class PSActivity : AppCompatActivity() {
 
         isP = intent.getBooleanExtra("isP", true)
 
+        updateBrandTypeName()
+
+        commit_btn.setOnClickListener { commit() }
+        add_goods_btn.setOnClickListener { startAddGoodsActivity() }
+    }
+
+    private fun updateBrandTypeName() {
         brands = DBManager.brands().toTypedArray()
         types = DBManager.types().toTypedArray()
         names = DBManager.goodsNames().toTypedArray()
@@ -41,9 +48,11 @@ class PSActivity : AppCompatActivity() {
             name_picker.minValue = 0
             name_picker.maxValue = names.size - 1
         }
+    }
 
-        commit_btn.setOnClickListener { commit() }
-        add_goods_btn.setOnClickListener { startAddGoodsActivity() }
+    override fun onResume() {
+        super.onResume()
+        updateBrandTypeName()
     }
 
     private fun startAddGoodsActivity() {
@@ -63,8 +72,8 @@ class PSActivity : AppCompatActivity() {
     }
 
     private fun getPurchaseCount(): Int {
-        val price = price_et.text.toString()
-        return if (TextUtils.isEmpty(price)) 0 else price.toInt()
+        val count = purchase_count.text.toString()
+        return if (TextUtils.isEmpty(count)) 0 else count.toInt()
     }
 
     private fun getSelectName(): String {

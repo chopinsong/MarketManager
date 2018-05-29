@@ -47,6 +47,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateList()
+    }
+
     private fun updateList() {
         object:AsyncTask<Void,Void,ArrayList<PSItemBean>>(){
             override fun doInBackground(vararg params: Void?): ArrayList<PSItemBean> {
