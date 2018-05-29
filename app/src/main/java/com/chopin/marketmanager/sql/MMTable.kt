@@ -7,10 +7,11 @@ object PSTable{
     val PS_PRICE = "PSPrice"
     val CUSTOMER_NAME = "CustomerName"
     val IS_PURCHASE="isPURCHASE"
+    val PS_COUNT="count"
     val TIME = "Time"
 
     fun getCommand(): String {
-        return "CREATE TABLE $NAME($PS_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$PS_PRICE DOUBLE,$CUSTOMER_NAME text,$IS_PURCHASE INTEGER,$TIME TIMESTAMP(14));"
+        return "CREATE TABLE $NAME($PS_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$PS_PRICE DOUBLE,$CUSTOMER_NAME text,$IS_PURCHASE INTEGER,$PS_COUNT INTEGER,$TIME TIMESTAMP(14));"
     }
 }
 //object PurchaseTable {

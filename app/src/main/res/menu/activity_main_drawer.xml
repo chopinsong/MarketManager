@@ -6,29 +6,29 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_purchase"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Purchase" />
+            android:icon="@drawable/menu_purchase"
+            android:title="@string/drawer_purchase" />
         <item
             android:id="@+id/nav_shipments"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Shipments" />
+            android:icon="@drawable/menu_shipment"
+            android:title="@string/drawer_shipment" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Settings" />
+            android:title="@string/action_settings" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_share"-->
+                <!--android:icon="@drawable/ic_menu_share"-->
+                <!--android:title="Share" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_send"-->
+                <!--android:icon="@drawable/ic_menu_send"-->
+                <!--android:title="Send" />-->
+        <!--</menu>-->
+    <!--</item>-->
 
 </menu>

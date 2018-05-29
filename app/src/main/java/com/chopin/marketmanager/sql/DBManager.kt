@@ -78,8 +78,8 @@ object DBManager {
         return db.goodsNames()
     }
 
-    fun getGoodsName(selectBrand: String, selecttype: String, selectName: String) :Int{
-        return db.getGoodsId(selectBrand,selecttype,selectName)
+    fun getGoodsId(selectBrand: String, selectType: String, selectName: String) :Int{
+        return db.getGoodsId(selectBrand,selectType,selectName)
     }
 
     fun addGoods(g:Goods){

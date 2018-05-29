@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import com.chopin.marketmanager.R
+import com.chopin.marketmanager.util.Util
 
 class SelectPSDialog : DialogFragment() {
 
@@ -20,21 +21,18 @@ class SelectPSDialog : DialogFragment() {
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         v.findViewById<Button>(R.id.select_purchase_btn).setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val i = Intent(context, PSActivity::class.java)
-                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                context.startActivity(i)
-            }
+            showPSActivity(true)
             dialog.dismiss()
         }
         v.findViewById<Button>(R.id.select_shipment_btn).setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val i = Intent(context, PSActivity::class.java)
-                i.putExtra("isP", false)
-                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                context.startActivity(i)
-            }
+            showPSActivity(false)
             dialog.dismiss()
+        }
+    }
+
+    private fun showPSActivity(isP:Boolean){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Util.showPSActivity(context,isP)
         }
     }
 

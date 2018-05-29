@@ -3,7 +3,7 @@ package com.chopin.marketmanager.bean
 import com.chopin.marketmanager.util.Util
 
 class Goods(var id:Int=0,var name:String,var brand:String,var type:String,var avgPrice:Double)
-open class PSBean(var psId:Int, var goodsId:Int, var price:Double, var customerName:String,val isPurchase:Boolean, var time:String= Util.time())
+open class PSBean(var psId:Int, var goodsId:Int, var price:Double, var customerName:String,val isPurchase:Boolean,var count:Int, var time:String= Util.time())
 
 //class PurchaseBean(var purchaseId:Int,var pGoodsId:Int,var purchasePrice:Double,var pCustomerName:String,var pTime:String= Util.time()):PSBean(purchaseId,pGoodsId,purchasePrice,pCustomerName,pTime)
 //
@@ -15,8 +15,10 @@ class ShipmentsCount(var goodsId:Int, var count:Int)
 
 class StockBean(var goodsId:Int,var count:Int)
 
-class PSItemBean(var g:Goods,var pOrS:String,var price:String,var customerName: String,var time: String){
+class PSItemBean(var g:Goods,var isP:Boolean,var price:String,var customerName: String,var count:String,var time: String){
     @Override fun compareTo(bean:PSItemBean):Int{
         return (Util.time2long(time)-Util.time2long(bean.time)).toInt()
     }
 }
+
+class PickerBean(var brand:String,var type:String,var name:String)

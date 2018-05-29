@@ -2,6 +2,7 @@ package com.chopin.marketmanager.ui
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import com.chopin.marketmanager.R
@@ -37,7 +38,12 @@ class AddGoodsActivity : AppCompatActivity() {
         val type = getType()
         val name = getName()
         val avgPrice=getAvgPrice()
-        DBManager.addGoods(Goods(brand = brand,type = type,name = name,avgPrice = avgPrice))
+        val goodsId = DBManager.getGoodsId(brand, type, name)
+        if (goodsId==-1){
+            DBManager.addGoods(Goods(brand = brand,type = type,name = name,avgPrice = avgPrice))
+        }else{
+            Snackbar.make(window.decorView,"商品重复",Snackbar.LENGTH_SHORT).show()
+        }
         finish()
     }
 

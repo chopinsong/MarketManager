@@ -15,6 +15,7 @@ class DBUtil(context: Context) {
         cv.put(PSTable.CUSTOMER_NAME, b.customerName)
         cv.put(PSTable.TIME, b.time)
         cv.put(PSTable.IS_PURCHASE, if (b.isPurchase) 1 else 0)
+        cv.put(PSTable.PS_COUNT,b.count)
         db.insert(PSTable.NAME, null, cv)
     }
 
@@ -40,37 +41,38 @@ class DBUtil(context: Context) {
 
     fun purchaseList(): ArrayList<PSBean> {
         val list = ArrayList<PSBean>()
-        val c = db.query(PSTable.NAME, null, "${PSTable.IS_PURCHASE}=?", arrayOf(1.toString()), null, null, null)
-                ?: return list
+//        val c=db.rawQuery("select * from ${PSTable.NAME} where ${PSTable.IS_PURCHASE}=1",null )null
+        val c = db.query(PSTable.NAME, null, "${PSTable.IS_PURCHASE}=?", arrayOf(1.toString()), null, null, null)  ?: return list
         while (c.moveToNext()) {
             val purchaseId = c.getInt(c.getColumnIndex(PSTable.PS_ID))
             val goodsId = c.getInt(c.getColumnIndex(PSTable.GOODS_ID))
             val purchasePrice = c.getDouble(c.getColumnIndex(PSTable.PS_PRICE))
             val customerName = c.getString(c.getColumnIndex(PSTable.CUSTOMER_NAME))
+            val count=c.getInt(c.getColumnIndex(PSTable.PS_COUNT))
             val time = c.getString(c.getColumnIndex(PSTable.TIME))
-            list.add(PSBean(purchaseId, goodsId, purchasePrice, customerName, true, time))
+            list.add(PSBean(purchaseId, goodsId, purchasePrice, customerName, true,count, time))
         }
         return list
     }
 
     fun shipmentsList(): ArrayList<PSBean> {
         val list = ArrayList<PSBean>()
-        val c = db.query(PSTable.NAME, null, "${PSTable.IS_PURCHASE}=?", arrayOf(0.toString()), null, null, null)
-                ?: return list
+        val c = db.query(PSTable.NAME, null, "${PSTable.IS_PURCHASE}=?", arrayOf(0.toString()), null, null, null)    ?: return list
         while (c.moveToNext()) {
             val purchaseId = c.getInt(c.getColumnIndex(PSTable.PS_ID))
             val goodsId = c.getInt(c.getColumnIndex(PSTable.GOODS_ID))
             val purchasePrice = c.getDouble(c.getColumnIndex(PSTable.PS_PRICE))
             val customerName = c.getString(c.getColumnIndex(PSTable.CUSTOMER_NAME))
+            val count=c.getInt(c.getColumnIndex(PSTable.PS_COUNT))
             val time = c.getString(c.getColumnIndex(PSTable.TIME))
-            list.add(PSBean(purchaseId, goodsId, purchasePrice, customerName, false, time))
+            list.add(PSBean(purchaseId, goodsId, purchasePrice, customerName, false,count, time))
         }
         return list
     }
 
     fun purchaseGoodsCount(): ArrayList<PurchaseCount> {
         val list = ArrayList<PurchaseCount>()
-        val c = db.rawQuery("select GoodsId,Count(GoodsId) from ${PSTable.NAME} where ${PSTable.IS_PURCHASE}=1", null)
+        val c = db.rawQuery("select GoodsId,sum(${PSTable.PS_COUNT}) from ${PSTable.NAME} where ${PSTable.IS_PURCHASE}=1", null)
         while (c.moveToNext()) {
             val id = c.getInt(0)
             val count = c.getInt(1)
@@ -88,15 +90,16 @@ class DBUtil(context: Context) {
             val customerName = c.getString(c.getColumnIndex(PSTable.CUSTOMER_NAME))
             val psPrice = c.getDouble(c.getColumnIndex(PSTable.PS_PRICE))
             val isPurchase = c.getInt(c.getColumnIndex(PSTable.IS_PURCHASE))
+            val count=c.getInt(c.getColumnIndex(PSTable.PS_COUNT))
             val time = c.getString(c.getColumnIndex(PSTable.TIME))
-            list.add(PSBean(psId, goodsId, psPrice, customerName, isPurchase == 1, time))
+            list.add(PSBean(psId, goodsId, psPrice, customerName, isPurchase == 1,count, time))
         }
         return list
     }
 
     fun shipmentsGoodsCount(): ArrayList<ShipmentsCount> {
         val list = ArrayList<ShipmentsCount>()
-        val c = db.rawQuery("select GoodsId,Count(GoodsId) from ${PSTable.NAME} where ${PSTable.IS_PURCHASE}=0", null)
+        val c = db.rawQuery("select GoodsId,sum(${PSTable.PS_COUNT}) from ${PSTable.NAME} where ${PSTable.IS_PURCHASE}=0", null)
         while (c.moveToNext()) {
             val id = c.getInt(0)
             val count = c.getInt(1)
@@ -134,11 +137,6 @@ class DBUtil(context: Context) {
             val brand = c.getString(0)
             list.add(brand)
         }
-//        val c = db.rawQuery("select ${BrandTable.BRAND_NAME} from ${BrandTable.NAME}", null)
-//        while (c.moveToNext()) {
-//            val brand = c.getString(c.getColumnIndex(BrandTable.BRAND_NAME))
-//            list.add(brand)
-//        }
         return list
     }
 
@@ -149,11 +147,6 @@ class DBUtil(context: Context) {
             val brand = c.getString(0)
             list.add(brand)
         }
-//        val c = db.rawQuery("select ${TypeTable.Type_NAME} from ${TypeTable.NAME}", null)
-//        while (c.moveToNext()) {
-//            val brand = c.getString(c.getColumnIndex(TypeTable.Type_NAME))
-//            list.add(brand)
-//        }
         return list
     }
 
@@ -171,12 +164,12 @@ class DBUtil(context: Context) {
     fun getGoodsId(selectBrand: String, selecttype: String, selectName: String): Int {
         val c = db.query(GoodsTable.NAME, null, "${GoodsTable.BRAND}=? and ${GoodsTable.TYPE}=? and ${GoodsTable.GOODS_NAME}=?", arrayOf(selectBrand, selecttype, selectName), null, null, null)
         if (c == null || c.count == 0) {
-            return 0
+            return -1
         }
         if (c.moveToNext()) {
             return c.getInt(c.getColumnIndex(GoodsTable.Goods_ID))
         }
-        return 0
+        return -1
     }
 
     fun getGood(id: Int): Goods {
@@ -206,7 +199,7 @@ class DBUtil(context: Context) {
         val list = ArrayList<PSItemBean>()
         for (b in psList()) {
             val g = getGood(b.goodsId)
-            list.add(PSItemBean(g, if (b.isPurchase) "进货" else "出货", b.price.toString(), b.customerName, b.time))
+            list.add(PSItemBean(g, b.isPurchase, b.price.toString(), b.customerName,b.count.toString(), b.time))
         }
         return list
     }

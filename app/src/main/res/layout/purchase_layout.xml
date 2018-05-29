@@ -10,20 +10,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/customer_hint" />
+        android:hint="@string/customer_hint"
+        android:textColor="@color/colorPrimary"
+         />
+
     <EditText
         android:id="@+id/price_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/price_hint" />
+        android:hint="@string/price_hint"
+        android:textColor="@color/colorPrimary"
+         />
 
     <EditText
         android:id="@+id/purchase_count"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/purchase_count" />
+        android:hint="@string/purchase_count"
+        android:inputType="number"
+        android:textColor="@color/colorPrimary"
+         />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,21 +42,25 @@
             android:id="@+id/brand_picker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:solidColor="@color/colorPrimary"
             android:layout_marginEnd="10dp">
 
         </NumberPicker>
 
         <NumberPicker
             android:id="@+id/type_picker"
+            android:solidColor="@color/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
         </NumberPicker>
+
         <NumberPicker
-            android:layout_marginStart="10dp"
             android:id="@+id/name_picker"
+            android:solidColor="@color/colorPrimary"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp">
 
         </NumberPicker>
 
@@ -56,15 +68,18 @@
             android:id="@+id/add_goods_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:drawable/ic_input_add" />
+
+            android:background="@drawable/add_plus" />
     </LinearLayout>
 
     <Button
         android:id="@+id/commit_btn"
-        android:text="@string/commit_btn"
-        android:textSize="80sp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:text="@string/commit_btn"
+        android:textColor="@color/white"
+        android:textSize="80sp" />
 
 
 </LinearLayout>

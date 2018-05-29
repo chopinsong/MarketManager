@@ -9,4 +9,5 @@ class MyApplication :Application(){
         super.onCreate()
         DBManager.initDB(applicationContext)
     }
+
 }

@@ -10,34 +10,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/add_goods_brand_text" />
+        android:hint="@string/add_goods_brand_text"
+        android:textColor="@color/colorPrimary" />
 
     <EditText
         android:id="@+id/add_goods_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/add_goods_type_text" />
+        android:hint="@string/add_goods_type_text"
+        android:textColor="@color/colorPrimary" />
 
     <EditText
         android:id="@+id/add_goods_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/add_goods_name_text" />
+        android:hint="@string/add_goods_name_text"
+        android:textColor="@color/colorPrimary" />
 
     <EditText
         android:id="@+id/add_goods_avg_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/add_goods_avg_price_text" />
+        android:hint="@string/add_goods_avg_price_text"
+        android:inputType="number"
+        android:textColor="@color/colorPrimary" />
 
     <Button
         android:id="@+id/add_goods_commit_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:text="@string/add_goods_commit_text"
+        android:textColor="@color/white"
         android:textSize="50sp" />
 
 </LinearLayout>

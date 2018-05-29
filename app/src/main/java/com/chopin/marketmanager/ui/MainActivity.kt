@@ -1,6 +1,7 @@
 package com.chopin.marketmanager.ui
 
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
@@ -17,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.util.Util
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val layoutManager = LinearLayoutManager(this)
         purchase_shipment_list.layoutManager = layoutManager
-         adapter = PSAdapter()
+         adapter = PSAdapter(applicationContext)
         purchase_shipment_list.adapter = adapter
 
         updateList()
@@ -95,20 +97,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_purchase -> {
-                // Handle the camera action
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Util.showPSActivity(applicationContext,true)
+                }
             }
             R.id.nav_shipments -> {
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Util.showPSActivity(applicationContext,false)
+                }
             }
             R.id.nav_settings -> {
 
             }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
-            }
+//            R.id.nav_share -> {
+//
+//            }
+//            R.id.nav_send -> {
+//
+//            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
