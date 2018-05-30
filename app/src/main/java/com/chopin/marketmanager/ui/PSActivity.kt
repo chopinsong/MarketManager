@@ -3,7 +3,9 @@ package com.chopin.marketmanager.ui
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.sql.DBManager
@@ -41,6 +43,21 @@ class PSActivity : AppCompatActivity() {
                 Snackbar.make(window.decorView, "请重新选择名字", Snackbar.LENGTH_SHORT).show()
             }
         }
+
+        purchase_count.addTextChangedListener(object:TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!TextUtils.isEmpty(s)){
+                    checkLeftGoodsCount()
+                }
+            }
+
+        })
     }
 
     private fun updateBrandTypeName() {
@@ -105,6 +122,22 @@ class PSActivity : AppCompatActivity() {
     private fun getSelectType(): String {
         val type = types[type_picker.value]
         return if (TextUtils.isEmpty(type)) "" else type
+    }
+
+    private fun checkLeftGoodsCount(){
+        val selectBrand = getSelectBrand()
+        val selectType = getSelectType()
+        val selectName = getSelectName()
+        val psCount = getPSCount()
+        async{
+            val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
+            val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
+            uiThread {
+                if (psCount>goodsCountLeft){
+                    Snackbar.make(window.decorView,"当前库存不足,只有${goodsCountLeft}个",Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun commit() {

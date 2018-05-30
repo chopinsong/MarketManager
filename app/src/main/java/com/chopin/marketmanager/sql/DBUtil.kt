@@ -182,6 +182,7 @@ class DBUtil(context: Context) {
             val avgPrice = c.getDouble(c.getColumnIndex(GoodsTable.AVERAGE_PRICE))
             return Goods(id, goodsName, brand, type, avgPrice)
         }
+        c.close()
         return Goods(0, "", "", "", 0.0)
     }
 
@@ -202,6 +203,18 @@ class DBUtil(context: Context) {
             list.add(PSItemBean(g, b.isPurchase, b.price.toString(), b.customerName,b.count.toString(), b.time))
         }
         return list
+    }
+
+    fun goodsCountLeft(goodsId: Int): Int {
+        val c=db.rawQuery("select count(${PSTable.PS_ID}) from ${PSTable.NAME} where ${PSTable.GOODS_ID}=$goodsId and ${PSTable.IS_PURCHASE}=1",null)
+        c.moveToNext()
+        val purchaseCount = c.getInt(0)
+        c.close()
+        val c2=db.rawQuery("select count(${PSTable.PS_ID}) from ${PSTable.NAME} where ${PSTable.GOODS_ID}=$goodsId and ${PSTable.IS_PURCHASE}=0",null)
+        c2.moveToNext()
+        val shipmentCount = c2.getInt(0)
+        c2.close()
+        return purchaseCount-shipmentCount
     }
 
 

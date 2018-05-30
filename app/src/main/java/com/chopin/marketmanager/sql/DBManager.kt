@@ -93,6 +93,10 @@ object DBManager {
     fun psList(): ArrayList<PSBean> {
         return db.psList()
     }
+
+    fun getGoodsCountLeft(goodsId: Int) :Int{
+        return db.goodsCountLeft(goodsId)
+    }
 //
 //    fun types(): ArrayList<String> {
 //       return db.types()
