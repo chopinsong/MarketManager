@@ -1,6 +1,5 @@
 package com.chopin.marketmanager.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -10,9 +9,10 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.sql.DBManager
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 
-class PSActivity : AppCompatActivity(){
+class PSActivity : AppCompatActivity() {
 
     var isP = false
     var brands = arrayOf("")
@@ -28,17 +28,17 @@ class PSActivity : AppCompatActivity(){
         updateBrandTypeName()
 
         commit_btn.setOnClickListener { commit() }
-        add_goods_btn.setOnClickListener { startAddGoodsActivity() }
+        add_goods_btn.setOnClickListener { startActivity<AddGoodsActivity>() }
         type_picker.setOnValueChangedListener { _, _, _ ->
             val goodsId = DBManager.getGoodsId(getSelectBrand(), getSelectType(), getSelectName())
-            if (goodsId==-1){
-                Snackbar.make(window.decorView,"请重新选择类型",Snackbar.LENGTH_SHORT).show()
+            if (goodsId == -1) {
+                Snackbar.make(window.decorView, "请重新选择类型", Snackbar.LENGTH_SHORT).show()
             }
         }
         name_picker.setOnValueChangedListener { _, _, _ ->
             val goodsId = DBManager.getGoodsId(getSelectBrand(), getSelectType(), getSelectName())
-            if (goodsId==-1){
-                Snackbar.make(window.decorView,"请重新选择名字",Snackbar.LENGTH_SHORT).show()
+            if (goodsId == -1) {
+                Snackbar.make(window.decorView, "请重新选择名字", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -76,11 +76,6 @@ class PSActivity : AppCompatActivity(){
         updateBrandTypeName()
     }
 
-    private fun startAddGoodsActivity() {
-        val i = Intent(applicationContext, AddGoodsActivity::class.java)
-        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(i)
-    }
 
     private fun getCustomerName(): String {
         val name = customer_et.text.toString()
@@ -117,7 +112,7 @@ class PSActivity : AppCompatActivity(){
 
     private fun commit() {
         val progress = getProgressDialog()
-        progress.show(fragmentManager,"PSActivity")
+        progress.show(fragmentManager, "PSActivity")
         val selectBrand = getSelectBrand()
         val selectType = getSelectType()
         val selectName = getSelectName()
@@ -126,7 +121,7 @@ class PSActivity : AppCompatActivity(){
         val customerName = getCustomerName()
         async {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
-            DBManager.ps(PSBean(0, goodsId, inputPrice, customerName, isP,psCount))
+            DBManager.ps(PSBean(0, goodsId, inputPrice, customerName, isP, psCount))
             uiThread {
                 progress.dismiss()
                 finish()

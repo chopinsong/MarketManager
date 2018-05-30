@@ -8,6 +8,7 @@ import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
 import com.chopin.marketmanager.ui.PSActivity
+import org.jetbrains.anko.startActivity
 import java.io.File
 import java.lang.ref.WeakReference
 import java.net.HttpURLConnection
@@ -33,10 +34,7 @@ object Util {
     }
 
     fun showPSActivity(context: Context, isP: Boolean) {
-        val i = Intent(context, PSActivity::class.java)
-        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        i.putExtra("isP", isP)
-        context.startActivity(i)
+        context.startActivity<PSActivity>(Pair("isP",isP))
     }
 
     fun obtainVersion(): Double {
