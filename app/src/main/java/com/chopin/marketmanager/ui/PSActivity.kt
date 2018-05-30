@@ -94,19 +94,16 @@ class PSActivity : AppCompatActivity() {
 
     private fun getSelectName(): String {
         val name = names[name_picker.value]
-//        val name = name_picker.value.toString()
         return if (TextUtils.isEmpty(name)) "" else name
     }
 
     private fun getSelectBrand(): String {
         val brand = brands[brand_picker.value]
-//        val brand = brand_picker.value.toString()
         return if (TextUtils.isEmpty(brand)) "" else brand
     }
 
     private fun getSelectType(): String {
         val type = types[type_picker.value]
-//        val type = type_picker.value.toString()
         return if (TextUtils.isEmpty(type)) "" else type
     }
 
