@@ -6,11 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.text.TextUtils
+import android.util.Log
 import com.chopin.marketmanager.ui.PSActivity
 import java.io.File
 import java.lang.ref.WeakReference
 import java.net.HttpURLConnection
 import java.net.URL
+import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,13 +39,13 @@ object Util {
         context.startActivity(i)
     }
 
-    fun obtainVersion(url: URL): Double {
-        val httpConn: HttpURLConnection = url.openConnection() as HttpURLConnection
-        httpConn.requestMethod = "POST"
-        httpConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14")
-        val bytes = ByteArray(httpConn.inputStream.available())
-        httpConn.inputStream.read(bytes)
-        val str = String(bytes)
+    fun obtainVersion(): Double {
+        val url = URL("https://github.com/chopinsong/FileLibrary/blob/master/version.txt")
+        val ism = url.openStream()
+        val bytes = ByteArray(1024)
+        ism.read(bytes)
+        val str = String(bytes, Charset.forName("utf-8"))
+        Log.i("chopin" ,"ver =$str")
         return if (TextUtils.isEmpty(str)) 0.0 else str.toDouble()
     }
 
