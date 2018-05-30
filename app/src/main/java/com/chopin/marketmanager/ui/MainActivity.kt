@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.SimpleAdapter
 import com.chopin.marketmanager.R
+import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.Util
@@ -23,8 +24,8 @@ import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     lateinit var adapter: PSAdapter
-    private var filterType=0
-    private var content= arrayOf("")
+    private var filterType = 0
+    private var content = arrayOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,48 +53,58 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         updatePicker()
 
         main_filter_type_picker.setOnValueChangedListener { picker, oldVal, newVal ->
-            filterType=newVal
+            filterType = newVal
             async {
-                 content=when(newVal){
-                    0->DBManager.brands().toTypedArray()
-                    1->DBManager.types().toTypedArray()
+                content = when (newVal) {
+                    1 -> DBManager.brands().toTypedArray()
+                    2 -> DBManager.types().toTypedArray()
+                    3-> arrayOf("进货","出货")
                     else -> {
-                        arrayOf("")
-                    }
+                        arrayOf("")}
                 }
                 uiThread {
-                    main_filter_picker.displayedValues = content
-                    main_filter_picker.minValue = 0
-                    main_filter_picker.maxValue = content.size - 1
+                    val oldValues = main_filter_picker.displayedValues
+                    if (oldValues != null && oldValues.size > content.size) {
+                        main_filter_picker.minValue = 0
+                        main_filter_picker.maxValue = content.size - 1
+                        main_filter_picker.displayedValues = content
+                    } else {
+                        main_filter_picker.displayedValues = content
+                        main_filter_picker.minValue = 0
+                        main_filter_picker.maxValue = content.size - 1
+                    }
+                    handleFilter(main_filter_picker.value)
                 }
             }
         }
 
-        main_filter_picker.setOnValueChangedListener { picker, oldVal, newVal ->
-            async {
-                val psBeans = DBManager.getPSBeans()
-                val data=psBeans.filter {
-                   when(filterType){
-                        0->it.g.brand==content[newVal]
-                        1->it.g.type==content[newVal]
-                        else -> {
-                            false
-                        }
-                    }
-                }
-                val nData=ArrayList<PSItemBean>()
-                nData.addAll(data)
-                uiThread {
-                    adapter.setData(nData)
-                }
-
-            }
+        main_filter_picker.setOnValueChangedListener { _, _, newVal ->
+            handleFilter(newVal)
         }
 
     }
 
+    private fun handleFilter(newVal: Int) {
+        async {
+            val psBeans = DBManager.getPSBeans()
+            val data = psBeans.filter {
+                when (filterType) {
+                    1 -> it.g.brand == content[newVal]
+                    2 -> it.g.type == content[newVal]
+                    3 -> newVal == 0 && it.isP || newVal == 1 && !it.isP
+                    else -> true
+                }
+            }
+            val nData = ArrayList<PSItemBean>()
+            nData.addAll(data)
+            uiThread {
+                adapter.setData(nData)
+            }
+        }
+    }
+
     private fun updatePicker() {
-        val filterType = arrayOf("品牌", "类型")
+        val filterType = arrayOf("无过滤", "品牌", "类型","进出货")
         main_filter_type_picker.displayedValues = filterType
         main_filter_type_picker.minValue = 0
         main_filter_type_picker.maxValue = filterType.size - 1
