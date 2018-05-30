@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SimpleAdapter
@@ -58,9 +59,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 content = when (newVal) {
                     1 -> DBManager.brands().toTypedArray()
                     2 -> DBManager.types().toTypedArray()
-                    3-> arrayOf("进货","出货")
+                    3 -> arrayOf("进货", "出货")
                     else -> {
-                        arrayOf("")}
+                        arrayOf("")
+                    }
                 }
                 uiThread {
                     val oldValues = main_filter_picker.displayedValues
@@ -104,7 +106,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun updatePicker() {
-        val filterType = arrayOf("无过滤", "品牌", "类型","进出货")
+        val filterType = arrayOf("无过滤", "品牌", "类型", "进出货")
         main_filter_type_picker.displayedValues = filterType
         main_filter_type_picker.minValue = 0
         main_filter_type_picker.maxValue = filterType.size - 1

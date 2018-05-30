@@ -27,9 +27,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        val size = mData.size
-        Log.i("chopin","getItemCount=$size")
-        return size
+        return mData.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
