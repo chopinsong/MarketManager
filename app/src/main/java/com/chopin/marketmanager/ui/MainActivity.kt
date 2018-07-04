@@ -1,5 +1,6 @@
 package com.chopin.marketmanager.ui
 
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -7,26 +8,30 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.SimpleAdapter
 import com.chopin.marketmanager.R
-import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
+import com.chopin.marketmanager.recevier.InstallReceiver
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.Util
+import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
+import java.lang.ref.WeakReference
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     lateinit var adapter: PSAdapter
     private var filterType = 0
     private var content = arrayOf("")
+
+    private val installReceiver: InstallReceiver
+        get() {
+            return InstallReceiver(WeakReference(this))
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,17 +70,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
                 uiThread {
-                    val oldValues = main_filter_picker.displayedValues
-                    if (oldValues != null && oldValues.size > content.size) {
-                        main_filter_picker.minValue = 0
-                        main_filter_picker.maxValue = content.size - 1
-                        main_filter_picker.displayedValues = content
-                    } else {
-                        main_filter_picker.displayedValues = content
-                        main_filter_picker.minValue = 0
-                        main_filter_picker.maxValue = content.size - 1
+                    if (content.size > 0) {
+                        val oldValues = main_filter_picker.displayedValues
+                        if (oldValues != null && oldValues.size > content.size) {
+                            main_filter_picker.minValue = 0
+                            main_filter_picker.maxValue = content.size - 1
+                            main_filter_picker.displayedValues = content
+                        } else {
+                            main_filter_picker.displayedValues = content
+                            main_filter_picker.minValue = 0
+                            main_filter_picker.maxValue = content.size - 1
+                        }
+                        handleFilter(main_filter_picker.value)
                     }
-                    handleFilter(main_filter_picker.value)
                 }
             }
         }
@@ -83,7 +90,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         main_filter_picker.setOnValueChangedListener { _, _, newVal ->
             handleFilter(newVal)
         }
+        val intentFilter = IntentFilter(Constant.INSTALL_ACTION)
+        registerReceiver(installReceiver,intentFilter)
 
+        async {
+            if (UpdateHelper.check(applicationContext)){
+                UpdateHelper.showDownload(this@MainActivity){
+                    UpdateHelper.download(it){
+                        UpdateHelper.showInstall(this@MainActivity)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(installReceiver)
     }
 
     private fun handleFilter(newVal: Int) {
