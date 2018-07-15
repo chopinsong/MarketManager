@@ -37,7 +37,11 @@ object Util {
     }
 
     fun showPSActivity(context: Context, isP: Boolean) {
-        context.startActivity<PSActivity>(Pair("isP",isP))
+//        context.startActivity<PSActivity>(Pair("isP",isP))
+        val i = Intent(context, PSActivity::class.java)
+        i.putExtra("isP", isP)
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(i)
     }
 
 }

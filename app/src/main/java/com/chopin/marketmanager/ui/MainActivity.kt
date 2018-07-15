@@ -28,10 +28,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var filterType = 0
     private var content = arrayOf("")
 
-    private val installReceiver: InstallReceiver
-        get() {
-            return InstallReceiver(WeakReference(this))
-        }
+    private lateinit var installReceiver: InstallReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +39,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             SelectPSDialog().show(fragmentManager, "chopin")
         }
 
+//        val toggle = ActionBarDrawerToggle(
+//                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+//        drawer_layout.addDrawerListener(toggle)
+//        toggle.syncState()
         val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
+                this, drawer_layout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+
 
         nav_view.setNavigationItemSelectedListener(this)
 
@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             handleFilter(newVal)
         }
         val intentFilter = IntentFilter(Constant.INSTALL_ACTION)
+        installReceiver=InstallReceiver(WeakReference(this))
         registerReceiver(installReceiver,intentFilter)
 
         async {

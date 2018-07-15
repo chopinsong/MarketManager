@@ -44,7 +44,7 @@ class PSActivity : AppCompatActivity() {
             }
         }
 
-        purchase_count.addTextChangedListener(object:TextWatcher{
+        purchase_count.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -52,7 +52,7 @@ class PSActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!TextUtils.isEmpty(s)){
+                if (!TextUtils.isEmpty(s)) {
                     checkLeftGoodsCount()
                 }
             }
@@ -115,8 +115,11 @@ class PSActivity : AppCompatActivity() {
     }
 
     private fun getSelectBrand(): String {
-        val brand = brands[brand_picker.value]
-        return if (TextUtils.isEmpty(brand)) "" else brand
+        if (brands.isNotEmpty()) {
+            val brand = brands[brand_picker.value]
+            return if (TextUtils.isEmpty(brand)) "" else brand
+        }
+        return ""
     }
 
     private fun getSelectType(): String {
@@ -124,17 +127,17 @@ class PSActivity : AppCompatActivity() {
         return if (TextUtils.isEmpty(type)) "" else type
     }
 
-    private fun checkLeftGoodsCount(){
+    private fun checkLeftGoodsCount() {
         val selectBrand = getSelectBrand()
         val selectType = getSelectType()
         val selectName = getSelectName()
         val psCount = getPSCount()
-        async{
+        async {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
             val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
             uiThread {
-                if (psCount>goodsCountLeft){
-                    Snackbar.make(window.decorView,"当前库存不足,只有${goodsCountLeft}个",Snackbar.LENGTH_SHORT).show()
+                if (psCount > goodsCountLeft) {
+                    Snackbar.make(window.decorView, "当前库存不足,只有${goodsCountLeft}个", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
