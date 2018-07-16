@@ -26,8 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.PSActivity" />
-        <activity android:name=".ui.AddGoodsActivity" />
+        <activity android:name=".ui.old.PSActivity" />
+        <activity android:name=".ui.old.AddGoodsActivity" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui
+package com.chopin.marketmanager.ui.fragment
 
 import android.app.DialogFragment
 import android.os.Build
@@ -11,9 +11,9 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.getProgressDialog
+import com.chopin.marketmanager.util.showAddGoods
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
-import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
@@ -31,9 +31,9 @@ class PSFragment : DialogFragment() {
     override fun onViewCreated(v: View, b: Bundle?) {
         isP = b?.getBoolean("isP", true) ?: true
         updateBrandTypeName()
-
+        dialog.window.attributes.windowAnimations = R.style.dialogAnim
         commit_btn.setOnClickListener { commit() }
-        add_goods_btn.setOnClickListener { startActivity<AddGoodsActivity>() }
+        add_goods_btn.setOnClickListener {showAddGoods(fragmentManager) }
         type_picker.setOnValueChangedListener { _, _, _ ->
             val goodsId = DBManager.getGoodsId(getSelectBrand(), getSelectType(), getSelectName())
             if (goodsId == -1) {
@@ -75,11 +75,10 @@ class PSFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val window = dialog.window
-        val params = window.attributes
+        val params =  dialog.window.attributes
         params.gravity = Gravity.BOTTOM
         params.width = WindowManager.LayoutParams.MATCH_PARENT
-        window.attributes = params
+        dialog.window.attributes = params
 //        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 

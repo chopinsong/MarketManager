@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui
+package com.chopin.marketmanager.ui.old
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar

@@ -12,7 +12,7 @@
     <string name="customer_hint">客户</string>
     <string name="add_goods_brand_text">品牌</string>
     <string name="add_goods_type_text">类型</string>
-    <string name="add_goods_name_text">名字</string>
+    <string name="add_goods_name_text">备注</string>
     <string name="add_goods_commit_text">提交</string>
     <string name="add_goods_avg_price_text">平均价格</string>
     <string name="select_ps_purchase">进货</string>

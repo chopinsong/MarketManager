@@ -1,17 +1,14 @@
-package com.chopin.marketmanager.ui
+package com.chopin.marketmanager.ui.fragment
 
 import android.app.DialogFragment
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
+import android.view.*
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.util.showPsFragment
+import kotlinx.android.synthetic.main.select_ps_dialog_layout.*
 
-class SelectPSDialog : DialogFragment() {
+class SelectPSFragment : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -19,19 +16,20 @@ class SelectPSDialog : DialogFragment() {
     }
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
-        v.findViewById<Button>(R.id.select_purchase_btn).setOnClickListener {
+        select_purchase_btn.setOnClickListener {
             showPSActivity(true)
             dialog.dismiss()
         }
-        v.findViewById<Button>(R.id.select_shipment_btn).setOnClickListener {
+        select_shipment_btn.setOnClickListener {
             showPSActivity(false)
             dialog.dismiss()
         }
+        dialog.window.attributes.windowAnimations = R.style.dialogAnim
     }
 
-    private fun showPSActivity(isP:Boolean){
+    private fun showPSActivity(isP: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            showPsFragment(fragmentManager,isP)
+            showPsFragment(fragmentManager, isP)
         }
     }
 
@@ -39,5 +37,13 @@ class SelectPSDialog : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         dialog.setCancelable(true)
         dialog.setCanceledOnTouchOutside(true)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val params = dialog.window.attributes
+        params.gravity = Gravity.BOTTOM
+        params.width = WindowManager.LayoutParams.MATCH_PARENT
+        dialog.window.attributes = params
     }
 }

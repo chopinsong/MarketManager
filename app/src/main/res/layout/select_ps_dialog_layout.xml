@@ -10,24 +10,24 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:minHeight="300dp"
-        android:textColor="@color/white"
+        android:background="@color/white"
+        android:textColor="@color/gray"
         android:minWidth="200dp"
-        android:background="@color/colorPrimary"
         android:text="@string/select_ps_purchase"
         android:textSize="50sp" />
     <View
         android:layout_width="2px"
         android:layout_height="match_parent"
-        android:background="@color/white"/>
+        android:background="@color/gray"/>
 
     <Button
         android:id="@+id/select_shipment_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="@color/white"
+        android:textColor="@color/gray"
+        android:background="@color/white"
         android:minHeight="300dp"
-        android:background="@color/colorPrimary"
         android:minWidth="200dp"
         android:text="@string/select_ps_shipment"
         android:textSize="50sp" />

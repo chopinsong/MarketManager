@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui
+package com.chopin.marketmanager.ui.fragment
 
 import android.app.Activity
 import android.app.DialogFragment

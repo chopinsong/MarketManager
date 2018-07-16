@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui
+package com.chopin.marketmanager.ui.old
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -10,9 +10,9 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.getProgressDialog
+import com.chopin.marketmanager.util.showAddGoods
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
-import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 
 class PSActivity : AppCompatActivity() {
@@ -32,7 +32,7 @@ class PSActivity : AppCompatActivity() {
         updateBrandTypeName()
 
         commit_btn.setOnClickListener { commit() }
-        add_goods_btn.setOnClickListener { startActivity<AddGoodsActivity>() }
+        add_goods_btn.setOnClickListener { showAddGoods(fragmentManager) }
         type_picker.setOnValueChangedListener { _, _, _ ->
             val goodsId = DBManager.getGoodsId(getSelectBrand(), getSelectType(), getSelectName())
             if (goodsId == -1) {

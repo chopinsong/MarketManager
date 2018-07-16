@@ -14,9 +14,10 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.Toast
-import com.chopin.marketmanager.ui.PSActivity
-import com.chopin.marketmanager.ui.PSFragment
-import com.chopin.marketmanager.ui.ProgressDialog
+import com.chopin.marketmanager.ui.fragment.AddGoodsFragment
+import com.chopin.marketmanager.ui.old.PSActivity
+import com.chopin.marketmanager.ui.fragment.PSFragment
+import com.chopin.marketmanager.ui.fragment.ProgressDialog
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
@@ -70,6 +71,10 @@ fun Any.showPsFragment(fm: FragmentManager, isP: Boolean) {
     b.putBoolean("isP", isP)
     f.arguments = b
     f.show(fm, "PSFragment")
+}
+
+fun Any.showAddGoods(fm: FragmentManager){
+    AddGoodsFragment().show(fm,"AddGoods")
 }
 
 fun Any.time2long(s: String): Long {

@@ -14,6 +14,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.recevier.InstallReceiver
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.ui.fragment.SelectPSFragment
 import com.chopin.marketmanager.util.Constant
 import com.chopin.marketmanager.util.UpdateHelper
 import com.chopin.marketmanager.util.showPsFragment
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener {
-            SelectPSDialog().show(fragmentManager, "chopin")
+            SelectPSFragment().show(fragmentManager, "chopin")
         }
 
 //        val toggle = ActionBarDrawerToggle(
