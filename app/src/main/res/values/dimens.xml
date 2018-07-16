@@ -9,4 +9,6 @@
     <dimen name="bottom_lib_dialog_padding_bottom">12dp</dimen>
     <dimen name="bottom_lib_dialog_padding_left">12dp</dimen>
     <dimen name="bottom_lib_dialog_padding_right">12dp</dimen>
+
+    <dimen name="ps_list_text_size">18sp</dimen>
 </resources>

@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -56,6 +57,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         purchase_shipment_list.layoutManager = layoutManager
         adapter = PSAdapter(applicationContext)
         purchase_shipment_list.adapter = adapter
+        val defaultItemAnimator = DefaultItemAnimator()
+        defaultItemAnimator.addDuration = 400
+        defaultItemAnimator.removeDuration = 400
+        purchase_shipment_list.itemAnimator = defaultItemAnimator
 
         updateList()
 
@@ -172,12 +177,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_purchase -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                   showPsFragment(fragmentManager,true)
+                    showPsFragment(fragmentManager, true)
                 }
             }
             R.id.nav_shipments -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    showPsFragment(fragmentManager,false)
+                    showPsFragment(fragmentManager, false)
                 }
             }
             R.id.nav_settings -> {

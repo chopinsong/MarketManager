@@ -38,7 +38,7 @@
                     android:layout_height="match_parent"
                     android:gravity="start"
                     android:textColor="@color/gray"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/ps_list_text_size"
                     android:textStyle="bold" />
 
 
@@ -53,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:textColor="@color/gray"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/ps_list_text_size" />
 
                     <TextView
                         android:id="@+id/item_type_tv"
@@ -61,7 +61,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:textColor="@color/gray"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/ps_list_text_size" />
 
                 </LinearLayout>
 
@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@color/gray"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/ps_list_text_size" />
             </LinearLayout>
 
             <LinearLayout
@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@color/gray"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/ps_list_text_size"
                     android:textStyle="bold" />
 
                 <TextView
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@color/gray"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/ps_list_text_size"
                     android:textStyle="bold" />
             </LinearLayout>
 
