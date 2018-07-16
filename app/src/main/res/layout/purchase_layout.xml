@@ -6,33 +6,77 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/customer_et"
+    <LinearLayout
+        android:id="@+id/input_info_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="@string/customer_hint"
-        android:textColor="@color/colorPrimary"
-         />
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/price_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="@string/price_hint"
-        android:textColor="@color/colorPrimary"
-         />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/purchase_count"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="@string/purchase_count"
-        android:inputType="number"
-        android:textColor="@color/colorPrimary"
-         />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/customer_et"
+                android:layout_marginStart="5dp"
+                android:text="@string/customer_hint" />
+
+            <EditText
+                android:id="@+id/customer_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="textAutoComplete"
+                android:labelFor="@+id/customer_et"
+                android:textColor="@color/colorPrimary" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/price_et"
+                android:layout_marginStart="5dp"
+                android:text="@string/price_hint" />
+
+            <EditText
+                android:id="@+id/price_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="number"
+                android:labelFor="@+id/price_et"
+                android:textColor="@color/colorPrimary" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/purchase_count"
+                android:layout_marginStart="5dp"
+                android:text="@string/purchase_count" />
+
+            <EditText
+                android:id="@+id/purchase_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="number"
+                android:textColor="@color/colorPrimary" />
+        </RelativeLayout>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,25 +87,25 @@
             android:id="@+id/brand_picker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:solidColor="@color/colorPrimary"
-            android:layout_marginEnd="10dp">
+            android:layout_marginEnd="10dp"
+            android:solidColor="@color/colorPrimary">
 
         </NumberPicker>
 
         <NumberPicker
             android:id="@+id/type_picker"
-            android:solidColor="@color/colorPrimary"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:solidColor="@color/colorPrimary">
 
         </NumberPicker>
 
         <NumberPicker
             android:id="@+id/name_picker"
-            android:solidColor="@color/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp">
+            android:layout_marginStart="10dp"
+            android:solidColor="@color/colorPrimary">
 
         </NumberPicker>
 
