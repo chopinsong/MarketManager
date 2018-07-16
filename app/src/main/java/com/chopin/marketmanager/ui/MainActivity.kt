@@ -14,7 +14,9 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.recevier.InstallReceiver
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.*
+import com.chopin.marketmanager.util.Constant
+import com.chopin.marketmanager.util.UpdateHelper
+import com.chopin.marketmanager.util.showPsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -24,7 +26,7 @@ import java.lang.ref.WeakReference
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    lateinit var adapter: PSAdapter
+    private lateinit var adapter: PSAdapter
     private var filterType = 0
     private var content = arrayOf("")
 
@@ -91,13 +93,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             handleFilter(newVal)
         }
         val intentFilter = IntentFilter(Constant.INSTALL_ACTION)
-        installReceiver=InstallReceiver(WeakReference(this))
-        registerReceiver(installReceiver,intentFilter)
+        installReceiver = InstallReceiver(WeakReference(this))
+        registerReceiver(installReceiver, intentFilter)
 
         async {
-            if (UpdateHelper.check(applicationContext)){
-                UpdateHelper.showDownload(this@MainActivity){
-                    UpdateHelper.download(it){
+            if (UpdateHelper.check(applicationContext)) {
+                UpdateHelper.showDownload(this@MainActivity) {
+                    UpdateHelper.download(it) {
                         UpdateHelper.showInstall(this@MainActivity)
                     }
                 }
@@ -164,36 +166,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-//        return when (item.itemId) {
-//            R.id.action_settings -> true
-//            else -> super.onOptionsItemSelected(item)
-//        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_purchase -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    Util.showPSActivity(applicationContext, true)
+                   showPsFragment(fragmentManager,true)
                 }
             }
             R.id.nav_shipments -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    Util.showPSActivity(applicationContext, false)
+                    showPsFragment(fragmentManager,false)
                 }
             }
             R.id.nav_settings -> {
 
             }
         }
-
+        item.isChecked = false
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
+
 }

@@ -7,4 +7,7 @@
     <color name="zero">#00000000</color>
     <color name="black">#000000</color>
     <color name="gray">#77000000</color>
+    <color name="bg_gray">#06000000</color>
+    <color name="bg_blue">#FF404979</color>
+
 </resources>

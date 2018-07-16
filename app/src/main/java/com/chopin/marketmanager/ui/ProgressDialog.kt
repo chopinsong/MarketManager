@@ -27,6 +27,4 @@ class ProgressDialog:DialogFragment(){
 
 }
 
-fun Activity.getProgressDialog(): ProgressDialog {
-    return ProgressDialog()
-}
+

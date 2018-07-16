@@ -1,13 +1,13 @@
 package com.chopin.marketmanager.ui
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.util.getProgressDialog
 import kotlinx.android.synthetic.main.add_goods_activity.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread

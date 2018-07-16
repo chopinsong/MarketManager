@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import com.chopin.marketmanager.R
-import com.chopin.marketmanager.util.Util
+import com.chopin.marketmanager.util.showPsFragment
 
 class SelectPSDialog : DialogFragment() {
 
@@ -31,7 +31,7 @@ class SelectPSDialog : DialogFragment() {
 
     private fun showPSActivity(isP:Boolean){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Util.showPSActivity(context,isP)
+            showPsFragment(fragmentManager,isP)
         }
     }
 
