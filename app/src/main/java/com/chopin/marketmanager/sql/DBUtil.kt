@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import com.chopin.marketmanager.bean.*
+import com.chopin.marketmanager.util.i
 
 class DBUtil(context: Context) {
     private val db = DBHelper(context).writableDatabase
@@ -88,7 +89,7 @@ class DBUtil(context: Context) {
 
     fun psList(): ArrayList<PSBean> {
         val list = ArrayList<PSBean>()
-        val c = db.query(PSTable.NAME, null, "${PSTable.IS_ENABLE}=?", arrayOf(1.toString()), null, null, null)
+        val c = db.rawQuery("select * from ${PSTable.NAME} where ${PSTable.IS_ENABLE} =1" , null, null)
                 ?: return list
         while (c.moveToNext()) {
             val psId = c.getInt(c.getColumnIndex(PSTable.PS_ID))
@@ -98,8 +99,10 @@ class DBUtil(context: Context) {
             val isPurchase = c.getInt(c.getColumnIndex(PSTable.IS_PURCHASE))
             val count = c.getInt(c.getColumnIndex(PSTable.PS_COUNT))
             val time = c.getString(c.getColumnIndex(PSTable.TIME))
-            list.add(PSBean(psId, goodsId, psPrice, customerName, isPurchase == 1, count, true, time))
+            val psBean = PSBean(psId, goodsId, psPrice, customerName, isPurchase == 1, count, true, time)
+            list.add(psBean)
         }
+        c.close()
         return list
     }
 
@@ -182,7 +185,7 @@ class DBUtil(context: Context) {
     }
 
     fun getGood(id: Int): Goods {
-        val c = db.rawQuery("select * from ${GoodsTable.NAME} where ${GoodsTable.Goods_ID}=$id", null)
+        val c = db.rawQuery("select * from ${GoodsTable.NAME} where ${GoodsTable.Goods_ID}=$id ", null)
                 ?: return Goods(0, "", "", "", 0.0)
         if (c.moveToNext()) {
             val brand = c.getString(c.getColumnIndex(GoodsTable.BRAND))

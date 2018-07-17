@@ -192,7 +192,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val line = DBManager.setPSEnable(id, false)
                     i("line=$line")
                     uiThread {
-//                        snack("删除成功")
+                        snack("删除成功")
                         adapter.remove(i)
 //                        if (line > 0) {
 //                            Snackbar.make(window.decorView, "删除成功，是否撤消?", Snackbar.LENGTH_INDEFINITE).setAction("撤消") {
