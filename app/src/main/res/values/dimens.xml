@@ -11,6 +11,7 @@
     <dimen name="bottom_lib_dialog_padding_right">12dp</dimen>
 
     <dimen name="ps_list_text_size">14sp</dimen>
+    <dimen name="ps_list_price_text_size">20sp</dimen>
     <dimen name="dialog_fragment_anim_duration">530</dimen>
 
 </resources>

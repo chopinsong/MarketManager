@@ -17,7 +17,7 @@ class ShipmentsCount(var goodsId: Int, var count: Int)
 
 class StockBean(var goodsId: Int, var count: Int)
 
-class PSItemBean(var g: Goods, var isP: Boolean, var price: String, var customerName: String, var count: String, var time: String) {
+class PSItemBean(var g: Goods,var psId: Int, var isP: Boolean, var price: String, var customerName: String, var count: String, var time: String) {
     @Override
     fun compareTo(bean: PSItemBean): Int {
         return (time2long(time) - time2long(bean.time)).toInt()

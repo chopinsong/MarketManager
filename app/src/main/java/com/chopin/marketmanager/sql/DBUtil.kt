@@ -212,7 +212,7 @@ class DBUtil(context: Context) {
         val list = ArrayList<PSItemBean>()
         for (b in psList()) {
             val g = getGood(b.goodsId)
-            list.add(PSItemBean(g, b.isPurchase, b.price.toString(), b.customerName, b.count.toString(), b.time))
+            list.add(PSItemBean(g,b.psId, b.isPurchase, b.price.toString(), b.customerName, b.count.toString(), b.time))
         }
         return list
     }

@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             handleFilter(newVal)
         }
         adapter.setOnDelListener {b,i->
-            val id = b.g.id
+            val id = b.psId
             Snackbar.make(window.decorView, "确定删除?", Snackbar.LENGTH_INDEFINITE).setAction("确定") {
                 async {
                     val line = DBManager.setPSEnable(id, false)

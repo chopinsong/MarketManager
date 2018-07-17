@@ -26,12 +26,14 @@
         <NumberPicker
             android:id="@+id/main_filter_type_picker"
             android:layout_width="wrap_content"
+            android:minWidth="120dp"
             android:layout_height="wrap_content"
             android:descendantFocusability="blocksDescendants" />
 
         <NumberPicker
             android:id="@+id/main_filter_picker"
             android:layout_width="wrap_content"
+            android:minWidth="120dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:descendantFocusability="blocksDescendants" />

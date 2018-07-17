@@ -87,6 +87,11 @@ fun Any.time2long(s: String): Long {
     return fm.parse(s).time
 }
 
+fun Any.time2shorTime(s:String):String{
+    val fm = SimpleDateFormat("hh:mm", Locale.CHINA)
+    return fm.format(time2long(s))
+}
+
 fun Any.showSettings(fm: FragmentManager){
     SettingsFragment().show(fm,"SettingsFragment")
 }

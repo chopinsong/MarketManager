@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSItemBean
+import com.chopin.marketmanager.util.time2shorTime
 import swipe.SwipeItemLayout
 
 class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
@@ -68,6 +69,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         holder.itemPriceTv.text = bean.price
         holder.itemNameTv.text = bean.g.name
         holder.itemCountTv.text = bean.count
+        holder.itemTimeTv.text = time2shorTime(bean.time)
     }
 
 }
@@ -82,5 +84,6 @@ class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val itemCountTv = v.findViewById<TextView>(R.id.item_count_tv)
     val mRightMenu = v.findViewById<TextView>(R.id.right_menu)
     val mSwipeItemLayout = v.findViewById<SwipeItemLayout>(R.id.swipe_layout)
+    val itemTimeTv = v.findViewById<TextView>(R.id.time_tv)
 
 }
