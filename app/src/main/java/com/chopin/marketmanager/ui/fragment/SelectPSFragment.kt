@@ -1,15 +1,22 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.util.showPsFragment
 import kotlinx.android.synthetic.main.select_ps_dialog_layout.*
 
 class SelectPSFragment : MyDialogFragment() {
+
+    private var update: () -> Unit = {}
+
+    fun setUpdateFunc(update: () -> Unit) {
+        this.update = update
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -30,7 +37,7 @@ class SelectPSFragment : MyDialogFragment() {
 
     private fun showPSActivity(isP: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            showPsFragment(fragmentManager, isP)
+            showPsFragment(fragmentManager, isP, update)
         }
     }
 
@@ -38,15 +45,6 @@ class SelectPSFragment : MyDialogFragment() {
         super.onActivityCreated(savedInstanceState)
         dialog.setCancelable(true)
         dialog.setCanceledOnTouchOutside(true)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val params = dialog.window.attributes
-        params.gravity = Gravity.BOTTOM
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
-        dialog.window.attributes = params
-        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
     }
 
 }

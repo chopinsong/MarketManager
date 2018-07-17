@@ -18,6 +18,7 @@ import android.widget.Toast
 import com.chopin.marketmanager.ui.fragment.AddGoodsFragment
 import com.chopin.marketmanager.ui.fragment.PSFragment
 import com.chopin.marketmanager.ui.fragment.ProgressDialog
+import com.chopin.marketmanager.ui.fragment.SettingsFragment
 import com.chopin.marketmanager.ui.old.PSActivity
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -66,9 +67,9 @@ fun Any.showPSActivity(context: Context, isP: Boolean) {
     context.startActivity(i)
 }
 
-fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: (dialog: DialogInterface?) -> Unit = {}) {
+fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: () -> Unit = {}) {
     val f = PSFragment()
-    f.setOnDismissListener(func)
+    f.setCommitListener(func)
     val b = Bundle()
     b.putBoolean("isP", isP)
     f.arguments = b
@@ -86,6 +87,10 @@ fun Any.time2long(s: String): Long {
     return fm.parse(s).time
 }
 
+fun Any.showSettings(fm: FragmentManager){
+    SettingsFragment().show(fm,"SettingsFragment")
+}
+
 fun View.slideToUp() {
     val slide = TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
             Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
@@ -98,6 +103,10 @@ fun View.slideToUp() {
 
 fun DialogFragment.snack(msg: String) {
     Snackbar.make(dialog.window.decorView, msg, Snackbar.LENGTH_LONG).show()
+}
+
+fun Activity.snack(msg: String) {
+    Snackbar.make(window.decorView, msg, Snackbar.LENGTH_LONG).show()
 }
 
 object Util {

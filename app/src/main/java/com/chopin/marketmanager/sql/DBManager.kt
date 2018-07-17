@@ -31,8 +31,8 @@ object DBManager {
     fun deletelDB(context: Context) {
     }
 
-    fun ps(b:PSBean){
-        db.ps(b)
+    fun ps(b:PSBean): Long {
+       return db.ps(b)
     }
     fun purchase(b: PSBean) {
         db.purchase(b)
@@ -98,6 +98,14 @@ object DBManager {
 
     fun getGoodsCountLeft(goodsId: Int) :Int{
         return db.goodsCountLeft(goodsId)
+    }
+
+    fun setAllDisable() {
+        db.setAllDisable()
+    }
+
+    fun setPSEnable(psId:Int,b:Boolean): Int {
+       return db.setPSEnable(psId,b)
     }
 //
 //    fun types(): ArrayList<String> {

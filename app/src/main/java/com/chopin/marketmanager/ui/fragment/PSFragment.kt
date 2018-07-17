@@ -1,15 +1,17 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
+import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.util.getProgressDialog
@@ -26,6 +28,7 @@ class PSFragment : MyDialogFragment() {
     private var brands = arrayOf("")
     private var types = arrayOf("")
     private var names = arrayOf("")
+    private var commitListener: () -> Unit = {}
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
@@ -76,14 +79,10 @@ class PSFragment : MyDialogFragment() {
         dialog.setCanceledOnTouchOutside(true)
     }
 
-    override fun onStart() {
-        super.onStart()
-        val params = dialog.window.attributes
-        params.gravity = Gravity.BOTTOM
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
-        dialog.window.attributes = params
-        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+    fun setCommitListener(commitListener: () -> Unit = {}) {
+        this.commitListener = commitListener
     }
+
 
     private fun updateBrands() {
         async {
@@ -94,6 +93,7 @@ class PSFragment : MyDialogFragment() {
                     brand_picker.minValue = 0
                     brand_picker.maxValue = brands.size - 1
                 }
+                updateTypes(getSelectBrand())
             }
         }
     }
@@ -189,9 +189,12 @@ class PSFragment : MyDialogFragment() {
         val customerName = getCustomerName()
         async {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
-            DBManager.ps(PSBean(0, goodsId, inputPrice, customerName, isP, psCount))
+            val b = PSBean(0, goodsId, inputPrice, customerName, isP, psCount)
+            val id = DBManager.ps(b)
+            b.psId = id.toInt()
             uiThread {
                 progress.dismiss()
+                commitListener.invoke()
                 dismiss()
             }
         }

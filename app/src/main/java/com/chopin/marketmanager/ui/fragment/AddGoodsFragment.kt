@@ -33,14 +33,6 @@ class AddGoodsFragment : MyDialogFragment() {
         dialog.setCanceledOnTouchOutside(true)
     }
 
-    override fun onStart() {
-        super.onStart()
-        val params = dialog.window.attributes
-        params.gravity = Gravity.BOTTOM
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
-        dialog.window.attributes = params
-        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
-    }
 
     private fun getBrand(): String {
         val str = add_goods_brand.text.toString()

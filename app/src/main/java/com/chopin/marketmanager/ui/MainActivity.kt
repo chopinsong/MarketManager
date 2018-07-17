@@ -4,6 +4,7 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -16,9 +17,7 @@ import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.recevier.InstallReceiver
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.SelectPSFragment
-import com.chopin.marketmanager.util.Constant
-import com.chopin.marketmanager.util.UpdateHelper
-import com.chopin.marketmanager.util.showPsFragment
+import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -78,20 +77,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_purchase -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    showPsFragment(fragmentManager, true){
+                    showPsFragment(fragmentManager, true) {
                         updateList()
                     }
                 }
             }
             R.id.nav_shipments -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    showPsFragment(fragmentManager, false){
+                    showPsFragment(fragmentManager, false) {
                         updateList()
                     }
                 }
             }
             R.id.nav_settings -> {
-
+                showSettings(fragmentManager)
             }
         }
         item.isChecked = false
@@ -151,9 +150,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun initListener() {
         fab.setOnClickListener {
             val sps = SelectPSFragment()
+            sps.setUpdateFunc { updateList() }
             sps.show(fragmentManager, "chopin")
         }
-        main_filter_type_picker.setOnValueChangedListener { picker, oldVal, newVal ->
+        main_filter_type_picker.setOnValueChangedListener { _, _, newVal ->
             filterType = newVal
             async {
                 content = when (newVal) {
@@ -184,6 +184,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         main_filter_picker.setOnValueChangedListener { _, _, newVal ->
             handleFilter(newVal)
+        }
+        adapter.setOnDelListener {b,i->
+            val id = b.g.id
+            Snackbar.make(window.decorView, "确定删除?", Snackbar.LENGTH_INDEFINITE).setAction("确定") {
+                async {
+                    val line = DBManager.setPSEnable(id, false)
+                    i("line=$line")
+                    uiThread {
+//                        snack("删除成功")
+                        adapter.remove(i)
+//                        if (line > 0) {
+//                            Snackbar.make(window.decorView, "删除成功，是否撤消?", Snackbar.LENGTH_INDEFINITE).setAction("撤消") {
+//                                async {
+//                                    DBManager.setPSEnable(id, true)
+//                                    uiThread {
+//                                        snack("撤消成功")
+//                                    }
+//                                }
+//                            }.show()
+//                        }
+                    }
+                }
+            }.show()
         }
     }
 

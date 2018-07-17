@@ -1,10 +1,10 @@
 package com.chopin.marketmanager.util
 
 object Constant {
-    val DATABASE_NAME: String = "MarketManager"
-    val DATABASE_VERSION: Int = 2
-    val TAG = "chopin.purchase"
-    val APKNAME="MarketManager.apk"
-    val INSTALL_ACTION = "install_action"
+    const val DATABASE_NAME: String = "MarketManager"
+    const val DATABASE_VERSION: Int = 3
+    const val TAG = "chopin.purchase"
+    const val APKNAME="MarketManager.apk"
+    const val INSTALL_ACTION = "install_action"
 
 }

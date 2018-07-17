@@ -3,13 +3,14 @@ package com.chopin.marketmanager.ui
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSItemBean
+import swipe.SwipeItemLayout
 
 class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     var mData = ArrayList<PSItemBean>()
@@ -18,6 +19,27 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         mData.clear()
         mData.addAll(data)
         this.notifyDataSetChanged()
+    }
+
+    fun addData(position: Int = -1, b: PSItemBean) {
+        if (position == -1) {
+            mData.add(b)
+            notifyItemChanged(mData.size - 1)
+        } else {
+            mData.add(position, b)
+            notifyItemChanged(position)
+        }
+    }
+
+    fun remove(position: Int) {
+        mData.removeAt(position)
+        notifyItemChanged(position)
+    }
+
+    private var listener: (b: PSItemBean, position: Int) -> Unit = { _, _ -> }
+
+    fun setOnDelListener(listener: (b: PSItemBean, position: Int) -> Unit) {
+        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,6 +55,12 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.i("chopin", "onBindViewHolder")
         val bean = mData[position]
+        if (holder.mRightMenu != null) {
+            holder.mRightMenu.setOnClickListener { _ ->
+                listener.invoke(bean, position)
+                holder.mSwipeItemLayout.close()
+            }
+        }
         holder.img.setImageDrawable(context.getDrawable(if (bean.isP) R.drawable.menu_purchase else R.drawable.menu_shipment))
         holder.itemBrandTv.text = bean.g.brand
         holder.itemTypeTv.text = bean.g.type
@@ -52,5 +80,7 @@ class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     val itemPriceTv = v.findViewById<TextView>(R.id.item_price_tv)
     val itemCustomerTv = v.findViewById<TextView>(R.id.item_customer_tv)
     val itemCountTv = v.findViewById<TextView>(R.id.item_count_tv)
+    val mRightMenu = v.findViewById<TextView>(R.id.right_menu)
+    val mSwipeItemLayout = v.findViewById<SwipeItemLayout>(R.id.swipe_layout)
 
 }

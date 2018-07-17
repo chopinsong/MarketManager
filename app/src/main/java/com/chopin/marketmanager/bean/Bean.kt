@@ -4,8 +4,8 @@ import com.chopin.marketmanager.util.Util
 import com.chopin.marketmanager.util.time2long
 
 
-class Goods(var id: Int = 0, var name: String, var brand: String, var type: String, var avgPrice: Double)
-open class PSBean(var psId: Int, var goodsId: Int, var price: Double, var customerName: String, val isPurchase: Boolean, var count: Int, var time: String = Util.crTime())
+class Goods(var id: Int = 0, var name: String, var brand: String, var type: String,var avgPrice: Double, var isEnabled:Boolean=true,var time: String = Util.crTime())
+open class PSBean(var psId: Int, var goodsId: Int, var price: Double, var customerName: String, val isPurchase: Boolean, var count: Int, var isEnabled: Boolean =true, var time: String = Util.crTime())
 
 //class PurchaseBean(var purchaseId:Int,var pGoodsId:Int,var purchasePrice:Double,var pCustomerName:String,var pTime:String= Util.time()):PSBean(purchaseId,pGoodsId,purchasePrice,pCustomerName,pTime)
 //

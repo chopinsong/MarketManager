@@ -1,17 +1,18 @@
 package com.chopin.marketmanager.sql
 
-object PSTable{
+object PSTable {
     val NAME = "PS"
     val PS_ID = "PSId"
     val GOODS_ID = "GoodsId"
     val PS_PRICE = "PSPrice"
     val CUSTOMER_NAME = "CustomerName"
-    val IS_PURCHASE="isPURCHASE"
-    val PS_COUNT="count"
+    val IS_PURCHASE = "isPURCHASE"
+    val PS_COUNT = "count"
+    val IS_ENABLE = "isEnabled"
     val TIME = "Time"
 
     fun getCommand(): String {
-        return "CREATE TABLE $NAME($PS_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$PS_PRICE DOUBLE,$CUSTOMER_NAME text,$IS_PURCHASE INTEGER,$PS_COUNT INTEGER,$TIME TIMESTAMP(14));"
+        return "CREATE TABLE $NAME($PS_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$PS_PRICE DOUBLE,$CUSTOMER_NAME text,$IS_PURCHASE INTEGER,$PS_COUNT INTEGER,$IS_ENABLE INTEGER,$TIME TIMESTAMP(14));"
     }
 }
 //object PurchaseTable {
@@ -47,11 +48,12 @@ object GoodsTable {
     val BRAND = "brand"
     val TYPE = "type"
     val AVERAGE_PRICE = "AveragePrice"
+    val IS_ENABLE = "isEnabled"
     val TIME = "Time"
 
     fun getCommand(): String {
-        return "CREATE TABLE ${GoodsTable.NAME}(${GoodsTable.Goods_ID}  INTEGER PRIMARY KEY," +
-                "${GoodsTable.GOODS_NAME} Text,${GoodsTable.BRAND} text,$TYPE text,$AVERAGE_PRICE DOUBLE,${GoodsTable.TIME} TIMESTAMP(14));"
+        return "CREATE TABLE $NAME($Goods_ID  INTEGER PRIMARY KEY," +
+                "$GOODS_NAME Text,$BRAND text,$TYPE text,$AVERAGE_PRICE DOUBLE,$IS_ENABLE INTEGER,$TIME TIMESTAMP(14));"
     }
 }
 

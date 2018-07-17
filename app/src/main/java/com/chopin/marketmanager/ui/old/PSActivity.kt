@@ -1,19 +1,11 @@
 package com.chopin.marketmanager.ui.old
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import com.chopin.marketmanager.R
-import com.chopin.marketmanager.bean.PSBean
-import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.getProgressDialog
 import com.chopin.marketmanager.util.showAddGoods
 import kotlinx.android.synthetic.main.purchase_layout.*
-import org.jetbrains.anko.async
-import org.jetbrains.anko.uiThread
 
 class PSActivity : AppCompatActivity() {
 

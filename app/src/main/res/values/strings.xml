@@ -21,4 +21,6 @@
     <string name="drawer_purchase">进货</string>
     <string name="drawer_shipment">出货</string>
     <string name="is_p_img_dsc">进出货图标</string>
+    <string name="del_all_ps">全部清除</string>
+    <string name="del_all_ps_title">清除全部进出货数据</string>
 </resources>
