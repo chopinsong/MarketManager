@@ -16,6 +16,7 @@ import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.util.getProgressDialog
 import com.chopin.marketmanager.util.showAddGoods
+import com.chopin.marketmanager.util.snack
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.enabled
@@ -182,11 +183,25 @@ class PSFragment : MyDialogFragment() {
         val progress = getProgressDialog()
         progress.show(fragmentManager, "PSActivity")
         val selectBrand = getSelectBrand()
+        if (selectBrand.isEmpty()){
+            snack("请选择品牌")
+            return
+        }
         val selectType = getSelectType()
+        if (selectType.isEmpty()){
+            snack("请选择类型")
+            return
+        }
         val selectName = getSelectName()
         val inputPrice = getInputPrice()
-        val psCount = getPSCount()
-        val customerName = getCustomerName()
+        if (selectType.isEmpty()){
+            snack("请输入价格")
+            return
+        }
+        var psCount = getPSCount()
+        psCount = if (psCount==0) 1 else psCount
+        var customerName = getCustomerName()
+        customerName = if (customerName.isNotEmpty()) customerName else "未知"
         async {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
             val b = PSBean(0, goodsId, inputPrice, customerName, isP, psCount)
