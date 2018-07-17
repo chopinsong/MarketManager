@@ -38,84 +38,65 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        fab.setOnClickListener {
-            SelectPSFragment().show(fragmentManager, "chopin")
-        }
-
-//        val toggle = ActionBarDrawerToggle(
-//                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-//        drawer_layout.addDrawerListener(toggle)
-//        toggle.syncState()
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-
-
-        nav_view.setNavigationItemSelectedListener(this)
-
-        val layoutManager = LinearLayoutManager(this)
-        purchase_shipment_list.layoutManager = layoutManager
-        adapter = PSAdapter(applicationContext)
-        purchase_shipment_list.adapter = adapter
-        val defaultItemAnimator = DefaultItemAnimator()
-        defaultItemAnimator.addDuration = 400
-        defaultItemAnimator.removeDuration = 400
-        purchase_shipment_list.itemAnimator = defaultItemAnimator
-
+        initView()
         updateList()
-
         updatePicker()
-
-        main_filter_type_picker.setOnValueChangedListener { picker, oldVal, newVal ->
-            filterType = newVal
-            async {
-                content = when (newVal) {
-                    1 -> DBManager.brands().toTypedArray()
-                    2 -> DBManager.types().toTypedArray()
-                    3 -> arrayOf("进货", "出货")
-                    else -> {
-                        arrayOf("")
-                    }
-                }
-                uiThread {
-                    if (content.size > 0) {
-                        val oldValues = main_filter_picker.displayedValues
-                        if (oldValues != null && oldValues.size > content.size) {
-                            main_filter_picker.minValue = 0
-                            main_filter_picker.maxValue = content.size - 1
-                            main_filter_picker.displayedValues = content
-                        } else {
-                            main_filter_picker.displayedValues = content
-                            main_filter_picker.minValue = 0
-                            main_filter_picker.maxValue = content.size - 1
-                        }
-                        handleFilter(main_filter_picker.value)
-                    }
-                }
-            }
-        }
-
-        main_filter_picker.setOnValueChangedListener { _, _, newVal ->
-            handleFilter(newVal)
-        }
+        initListener()
         val intentFilter = IntentFilter(Constant.INSTALL_ACTION)
         installReceiver = InstallReceiver(WeakReference(this))
         registerReceiver(installReceiver, intentFilter)
-
-        async {
-            if (UpdateHelper.check(applicationContext)) {
-                UpdateHelper.showDownload(this@MainActivity) {
-                    UpdateHelper.download(it) {
-                        UpdateHelper.showInstall(this@MainActivity)
-                    }
-                }
-            }
-        }
+        checkUpdate()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(installReceiver)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        updateList()
+    }
+
+    override fun onBackPressed() {
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        when (item.itemId) {
+            R.id.nav_purchase -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    showPsFragment(fragmentManager, true){
+                        updateList()
+                    }
+                }
+            }
+            R.id.nav_shipments -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    showPsFragment(fragmentManager, false){
+                        updateList()
+                    }
+                }
+            }
+            R.id.nav_settings -> {
+
+            }
+        }
+        item.isChecked = false
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
     }
 
     private fun handleFilter(newVal: Int) {
@@ -144,11 +125,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         main_filter_type_picker.maxValue = filterType.size - 1
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateList()
-    }
-
     private fun updateList() {
         async {
             val data = DBManager.getPSBeans()
@@ -158,40 +134,68 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+
+    private fun initView() {
+        ActionBarDrawerToggle(this, drawer_layout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        nav_view.setNavigationItemSelectedListener(this)
+        val layoutManager = LinearLayoutManager(this)
+        purchase_shipment_list.layoutManager = layoutManager
+        adapter = PSAdapter(applicationContext)
+        purchase_shipment_list.adapter = adapter
+        val defaultItemAnimator = DefaultItemAnimator()
+        defaultItemAnimator.addDuration = 400
+        defaultItemAnimator.removeDuration = 400
+        purchase_shipment_list.itemAnimator = defaultItemAnimator
+    }
+
+    private fun initListener() {
+        fab.setOnClickListener {
+            val sps = SelectPSFragment()
+            sps.show(fragmentManager, "chopin")
+        }
+        main_filter_type_picker.setOnValueChangedListener { picker, oldVal, newVal ->
+            filterType = newVal
+            async {
+                content = when (newVal) {
+                    1 -> DBManager.brands().toTypedArray()
+                    2 -> DBManager.types().toTypedArray()
+                    3 -> arrayOf("进货", "出货")
+                    else -> {
+                        arrayOf("")
+                    }
+                }
+                uiThread {
+                    if (content.isNotEmpty()) {
+                        val oldValues = main_filter_picker.displayedValues
+                        if (oldValues != null && oldValues.size > content.size) {
+                            main_filter_picker.minValue = 0
+                            main_filter_picker.maxValue = content.size - 1
+                            main_filter_picker.displayedValues = content
+                        } else {
+                            main_filter_picker.displayedValues = content
+                            main_filter_picker.minValue = 0
+                            main_filter_picker.maxValue = content.size - 1
+                        }
+                        handleFilter(main_filter_picker.value)
+                    }
+                }
+            }
+        }
+
+        main_filter_picker.setOnValueChangedListener { _, _, newVal ->
+            handleFilter(newVal)
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_purchase -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    showPsFragment(fragmentManager, true)
+    private fun checkUpdate() {
+        async {
+            if (UpdateHelper.check(applicationContext)) {
+                UpdateHelper.showDownload(this@MainActivity) {
+                    UpdateHelper.download(it) {
+                        UpdateHelper.showInstall(this@MainActivity)
+                    }
                 }
-            }
-            R.id.nav_shipments -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    showPsFragment(fragmentManager, false)
-                }
-            }
-            R.id.nav_settings -> {
-
             }
         }
-        item.isChecked = false
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
     }
-
 }

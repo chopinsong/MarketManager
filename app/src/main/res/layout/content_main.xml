@@ -12,27 +12,29 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/purchase_shipment_list"
         android:layout_width="match_parent"
-        android:layout_weight="13"
-        android:layout_height="0dp" />
+        android:layout_height="0dp"
+        android:layout_weight="13" />
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
         android:layout_weight="2"
         android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_height="0dp"
         android:orientation="horizontal">
 
         <NumberPicker
             android:id="@+id/main_filter_type_picker"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants" />
 
         <NumberPicker
             android:id="@+id/main_filter_picker"
-            android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:descendantFocusability="blocksDescendants" />
     </LinearLayout>
 
 

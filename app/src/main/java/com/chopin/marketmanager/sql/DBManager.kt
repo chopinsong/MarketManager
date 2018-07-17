@@ -66,22 +66,24 @@ object DBManager {
         return stock()
     }
 
-    fun brands():ArrayList<String>{
+    fun brands(where:String=""):ArrayList<String>{
      return   db.brands()
     }
 
-    fun types():ArrayList<String>{
-        return db.types()
+    fun types(where:String=""):ArrayList<String>{
+        return db.types(where)
     }
 
-    fun goodsNames():ArrayList<String> {
-        return db.goodsNames()
+    fun goodsNames(where:String=""):ArrayList<String> {
+        return db.goodsNames(where)
     }
 
     fun getGoodsId(selectBrand: String, selectType: String, selectName: String) :Int{
         return db.getGoodsId(selectBrand,selectType,selectName)
     }
-
+    fun getGoodsId(goods:Goods) :Int{
+        return db.getGoodsId(goods.brand,goods.type,goods.name)
+    }
     fun addGoods(g:Goods){
         db.addGoods(g)
     }

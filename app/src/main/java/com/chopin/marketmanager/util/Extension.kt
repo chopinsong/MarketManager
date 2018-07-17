@@ -5,6 +5,7 @@ import android.app.DialogFragment
 import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -15,9 +16,9 @@ import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.Toast
 import com.chopin.marketmanager.ui.fragment.AddGoodsFragment
-import com.chopin.marketmanager.ui.old.PSActivity
 import com.chopin.marketmanager.ui.fragment.PSFragment
 import com.chopin.marketmanager.ui.fragment.ProgressDialog
+import com.chopin.marketmanager.ui.old.PSActivity
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,16 +66,19 @@ fun Any.showPSActivity(context: Context, isP: Boolean) {
     context.startActivity(i)
 }
 
-fun Any.showPsFragment(fm: FragmentManager, isP: Boolean) {
+fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: (dialog: DialogInterface?) -> Unit = {}) {
     val f = PSFragment()
+    f.setOnDismissListener(func)
     val b = Bundle()
     b.putBoolean("isP", isP)
     f.arguments = b
     f.show(fm, "PSFragment")
 }
 
-fun Any.showAddGoods(fm: FragmentManager){
-    AddGoodsFragment().show(fm,"AddGoods")
+fun Any.showAddGoods(fm: FragmentManager, f: (dialog: DialogInterface?) -> Unit = {}) {
+    val af = AddGoodsFragment()
+    af.setOnDismissListener(f)
+    af.show(fm, "AddGoods")
 }
 
 fun Any.time2long(s: String): Long {
@@ -92,8 +96,8 @@ fun View.slideToUp() {
     startAnimation(slide)
 }
 
-fun DialogFragment.snack(msg:String){
-    Snackbar.make(dialog.window.decorView,msg,Snackbar.LENGTH_LONG).show()
+fun DialogFragment.snack(msg: String) {
+    Snackbar.make(dialog.window.decorView, msg, Snackbar.LENGTH_LONG).show()
 }
 
 object Util {

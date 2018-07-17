@@ -18,7 +18,7 @@
 
             <ImageView
                 android:id="@+id/item_is_p_img"
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:contentDescription="@string/is_p_img_dsc" />

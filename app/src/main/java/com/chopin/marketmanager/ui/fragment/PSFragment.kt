@@ -1,6 +1,7 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.app.DialogFragment
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -10,47 +11,49 @@ import android.view.*
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.util.getProgressDialog
 import com.chopin.marketmanager.util.showAddGoods
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
+import org.jetbrains.anko.enabled
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
-class PSFragment : DialogFragment() {
+
+class PSFragment : MyDialogFragment() {
     var isP = false
-    var brands = arrayOf("")
-    var types = arrayOf("")
-    var names = arrayOf("")
+    private var brands = arrayOf("")
+    private var types = arrayOf("")
+    private var names = arrayOf("")
+
+    override fun onCreate(b: Bundle?) {
+        super.onCreate(b)
+        isP = arguments.getBoolean("isP", true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window.setWindowAnimations(R.style.dialogAnim)
         return inflater.inflate(R.layout.purchase_layout, container)
     }
 
     override fun onViewCreated(v: View, b: Bundle?) {
-        isP = b?.getBoolean("isP", true) ?: true
-        updateBrandTypeName()
-        dialog.window.attributes.windowAnimations = R.style.dialogAnim
+        updateBrands()
         commit_btn.setOnClickListener { commit() }
-        add_goods_btn.setOnClickListener {showAddGoods(fragmentManager) }
+        if (isP) {
+            add_goods_btn.setOnClickListener { showAddGoods(fragmentManager) { updateBrands() } }
+            add_goods_btn.visibility = View.VISIBLE
+        } else {
+            add_goods_btn.visibility = View.GONE
+        }
+        brand_picker.setOnValueChangedListener { _, _, _ ->
+            updateTypes(getSelectBrand())
+        }
         type_picker.setOnValueChangedListener { _, _, _ ->
-            val goodsId = DBManager.getGoodsId(getSelectBrand(), getSelectType(), getSelectName())
-            if (goodsId == -1) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    context.toast("请重新选择类型")
-                }
-            }
+            updateNames(getSelectBrand(), getSelectType())
+            checkLeftGoodsCount()
         }
-        name_picker.setOnValueChangedListener { _, _, _ ->
-            val goodsId = DBManager.getGoodsId(getSelectBrand(), getSelectType(), getSelectName())
-            if (goodsId == -1) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    context.toast("请重新选择名字")
-                }
-            }
-        }
-
         purchase_count.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
@@ -59,7 +62,7 @@ class PSFragment : DialogFragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!TextUtils.isEmpty(s)) {
+                if (!TextUtils.isEmpty(s) && !isP) {
                     checkLeftGoodsCount()
                 }
             }
@@ -75,41 +78,47 @@ class PSFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val params =  dialog.window.attributes
+        val params = dialog.window.attributes
         params.gravity = Gravity.BOTTOM
         params.width = WindowManager.LayoutParams.MATCH_PARENT
         dialog.window.attributes = params
-//        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateBrandTypeName()
-    }
-
-
-    private fun updateBrandTypeName() {
+    private fun updateBrands() {
         async {
             brands = DBManager.brands().toTypedArray()
-            types = DBManager.types().toTypedArray()
-            names = DBManager.goodsNames().toTypedArray()
             uiThread {
                 if (brands.isNotEmpty()) {
                     brand_picker.displayedValues = brands
                     brand_picker.minValue = 0
                     brand_picker.maxValue = brands.size - 1
                 }
+            }
+        }
+    }
 
+    private fun updateTypes(brand: String) {
+        async {
+            types = DBManager.types("${GoodsTable.BRAND}=\"$brand\"").toTypedArray()
+            uiThread {
                 if (types.isNotEmpty()) {
                     type_picker.displayedValues = types
                     type_picker.minValue = 0
                     type_picker.maxValue = types.size - 1
                 }
+            }
+        }
+    }
 
+    private fun updateNames(brand: String, type: String) {
+        async {
+            names = DBManager.goodsNames("${GoodsTable.BRAND}=\"$brand\" and ${GoodsTable.TYPE} =\"$type\"").toTypedArray()
+            uiThread {
                 if (names.isNotEmpty()) {
-                    name_picker.displayedValues = names
-                    name_picker.minValue = 0
-                    name_picker.maxValue = names.size - 1
+                    type_picker.displayedValues = types
+                    type_picker.minValue = 0
+                    type_picker.maxValue = types.size - 1
                 }
             }
         }
@@ -158,9 +167,12 @@ class PSFragment : DialogFragment() {
             val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
             uiThread {
                 if (psCount > goodsCountLeft) {
+                    commit_btn.enabled = false
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        context.toast("当前库存不足,只有${goodsCountLeft}个")
+                        context.toast("当前库存不足,$selectBrand$selectType${selectName}只有${goodsCountLeft}个")
                     }
+                } else {
+                    commit_btn.enabled = true
                 }
             }
         }
@@ -184,4 +196,6 @@ class PSFragment : DialogFragment() {
             }
         }
     }
+
+
 }

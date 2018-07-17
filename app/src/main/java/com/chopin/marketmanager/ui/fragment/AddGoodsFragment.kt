@@ -1,6 +1,7 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.app.DialogFragment
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -13,16 +14,16 @@ import kotlinx.android.synthetic.main.add_goods_activity.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
 
-class AddGoodsFragment : DialogFragment() {
+class AddGoodsFragment : MyDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window.setWindowAnimations(R.style.dialogAnim)
         return inflater.inflate(R.layout.add_goods_activity, container)
     }
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         add_goods_commit_btn.setOnClickListener { commit() }
-        dialog.window.attributes.windowAnimations = R.style.dialogAnim
     }
 
 
@@ -38,6 +39,7 @@ class AddGoodsFragment : DialogFragment() {
         params.gravity = Gravity.BOTTOM
         params.width = WindowManager.LayoutParams.MATCH_PARENT
         dialog.window.attributes = params
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
     }
 
     private fun getBrand(): String {
@@ -70,6 +72,7 @@ class AddGoodsFragment : DialogFragment() {
                 snack("商品重复")
             }
             uiThread {
+                progressDialog.dismiss()
                 dismiss()
             }
         }

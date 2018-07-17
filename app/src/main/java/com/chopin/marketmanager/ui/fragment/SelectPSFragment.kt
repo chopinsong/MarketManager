@@ -1,6 +1,7 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.app.DialogFragment
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -8,10 +9,11 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.util.showPsFragment
 import kotlinx.android.synthetic.main.select_ps_dialog_layout.*
 
-class SelectPSFragment : DialogFragment() {
+class SelectPSFragment : MyDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window.setWindowAnimations(R.style.dialogAnim)
         return inflater.inflate(R.layout.select_ps_dialog_layout, container)
     }
 
@@ -24,7 +26,6 @@ class SelectPSFragment : DialogFragment() {
             showPSActivity(false)
             dialog.dismiss()
         }
-        dialog.window.attributes.windowAnimations = R.style.dialogAnim
     }
 
     private fun showPSActivity(isP: Boolean) {
@@ -45,5 +46,7 @@ class SelectPSFragment : DialogFragment() {
         params.gravity = Gravity.BOTTOM
         params.width = WindowManager.LayoutParams.MATCH_PARENT
         dialog.window.attributes = params
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
     }
+
 }

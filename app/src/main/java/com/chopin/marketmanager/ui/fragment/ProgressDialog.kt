@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.view.Window
 import com.chopin.marketmanager.R
 
-class ProgressDialog:DialogFragment(){
+class ProgressDialog:MyDialogFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         return inflater.inflate(R.layout.progress_dialog_layout, container)

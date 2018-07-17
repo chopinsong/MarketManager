@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="15dp">
 
     <LinearLayout
         android:id="@+id/input_info_layout"
@@ -88,14 +88,18 @@
             android:id="@+id/brand_picker"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:layout_marginEnd="10dp">
+            android:layout_marginEnd="10dp"
+            android:clickable="false"
+            android:descendantFocusability="blocksDescendants">
 
         </NumberPicker>
 
         <NumberPicker
             android:id="@+id/type_picker"
             android:layout_width="wrap_content"
-            android:layout_height="100dp">
+            android:layout_height="100dp"
+            android:clickable="false"
+            android:descendantFocusability="blocksDescendants">
 
         </NumberPicker>
 
@@ -103,7 +107,9 @@
             android:id="@+id/name_picker"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:layout_marginStart="10dp">
+            android:layout_marginStart="10dp"
+            android:clickable="false"
+            android:descendantFocusability="blocksDescendants">
 
         </NumberPicker>
 
@@ -112,15 +118,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+"
-            android:textSize="70sp"/>
+            android:textSize="60sp" />
     </LinearLayout>
 
     <Button
         android:id="@+id/commit_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/gray"
         android:text="@string/commit_btn"
+        android:textColor="@color/gray"
         android:textSize="24sp" />
 
 
