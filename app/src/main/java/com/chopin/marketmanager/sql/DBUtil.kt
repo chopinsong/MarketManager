@@ -108,7 +108,7 @@ class DBUtil(context: Context) {
 
     fun shipmentsGoodsCount(): ArrayList<ShipmentsCount> {
         val list = ArrayList<ShipmentsCount>()
-        val c = db.rawQuery("select GoodsId,sum(${PSTable.PS_COUNT}) from ${PSTable.NAME} where ${PSTable.IS_PURCHASE}=0 and ${PSTable.IS_ENABLE}=1", null)
+        val c = db.rawQuery("select ${PSTable.GOODS_ID},sum(${PSTable.PS_COUNT}) from ${PSTable.NAME} where ${PSTable.IS_PURCHASE}=0 and ${PSTable.IS_ENABLE}=1", null)
         while (c.moveToNext()) {
             val id = c.getInt(0)
             val count = c.getInt(1)
@@ -119,24 +119,23 @@ class DBUtil(context: Context) {
 
     fun shipmentsGoodsCountMap(): HashMap<Int, Int> {
         val map = HashMap<Int, Int>()
-        val c = db.rawQuery("select GoodsId,Count(GoodsId) from ${PSTable.NAME} where ${PSTable.IS_PURCHASE}=0 and ${PSTable.IS_ENABLE}=1", null)
+        val c = db.rawQuery("select ${PSTable.GOODS_ID},sum(${PSTable.PS_COUNT}) from ${PSTable.NAME} where ${PSTable.IS_PURCHASE}=0 and ${PSTable.IS_ENABLE}=1", null)
         while (c.moveToNext()) {
             val id = c.getInt(0)
             val count = c.getInt(1)
-            map.put(id, count)
+            map[id] = count
         }
         return map
     }
 
-    fun stock(): ArrayList<StockBean> {
+    fun stock(): HashMap<Int, Int> {
         val pcList = purchaseGoodsCount()
         val map = shipmentsGoodsCountMap()
-        val stockList = ArrayList<StockBean>()
+        val stockMap=HashMap<Int,Int>()
         for (purchaseCount in pcList) {
-            val shipmentsCount = map[purchaseCount.goodsId] ?: 0
-            stockList.add(StockBean(purchaseCount.goodsId, purchaseCount.count - shipmentsCount))
+            stockMap[purchaseCount.goodsId] = purchaseCount.count - (map[purchaseCount.goodsId] ?: 0)
         }
-        return stockList
+        return stockMap
     }
 
     fun brands(where: String = ""): ArrayList<String> {
@@ -186,7 +185,7 @@ class DBUtil(context: Context) {
 
     fun getGood(id: Int): Goods {
         val c = db.rawQuery("select * from ${GoodsTable.NAME} where ${GoodsTable.Goods_ID}=$id ", null)
-                ?: return Goods(0, "", "", "", 0.0)
+                ?: return Goods(-1, "", "", "", 0.0)
         if (c.moveToNext()) {
             val brand = c.getString(c.getColumnIndex(GoodsTable.BRAND))
             val type = c.getString(c.getColumnIndex(GoodsTable.TYPE))
@@ -195,7 +194,7 @@ class DBUtil(context: Context) {
             return Goods(id, goodsName, brand, type, avgPrice)
         }
         c.close()
-        return Goods(0, "", "", "", 0.0)
+        return Goods(-1, "", "", "", 0.0)
     }
 
     fun addGoods(g: Goods) {
@@ -218,15 +217,7 @@ class DBUtil(context: Context) {
     }
 
     fun goodsCountLeft(goodsId: Int): Int {
-        val c = db.rawQuery("select count(${PSTable.PS_ID}) from ${PSTable.NAME} where ${PSTable.GOODS_ID}=$goodsId and ${PSTable.IS_PURCHASE}=1", null)
-        c.moveToNext()
-        val purchaseCount = c.getInt(0)
-        c.close()
-        val c2 = db.rawQuery("select count(${PSTable.PS_ID}) from ${PSTable.NAME} where ${PSTable.GOODS_ID}=$goodsId and ${PSTable.IS_PURCHASE}=0", null)
-        c2.moveToNext()
-        val shipmentCount = c2.getInt(0)
-        c2.close()
-        return purchaseCount - shipmentCount
+        return stock()[goodsId]?:0
     }
 
     fun setAllDisable() {

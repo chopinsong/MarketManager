@@ -7,14 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import com.chopin.marketmanager.R
+import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.util.showPsFragment
 import kotlinx.android.synthetic.main.select_ps_dialog_layout.*
 
 class SelectPSFragment : MyDialogFragment() {
 
-    private var update: () -> Unit = {}
+    private var update: (b:PSBean) -> Unit = {}
 
-    fun setUpdateFunc(update: () -> Unit) {
+    fun setUpdateFunc(update: (b:PSBean) -> Unit) {
         this.update = update
     }
 

@@ -21,8 +21,8 @@ import java.nio.charset.Charset
 import java.util.*
 import android.app.AlarmManager
 import android.app.PendingIntent
-
-
+import org.jetbrains.anko.async
+import java.lang.ref.WeakReference
 
 
 object UpdateHelper {
@@ -45,7 +45,7 @@ object UpdateHelper {
                 val alarmManager = activity.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 val intent2 = Intent().setAction(Constant.INSTALL_ACTION)
                 val uploadIntent = PendingIntent.getService(activity.applicationContext, 0, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+10*60*60, AlarmManager.INTERVAL_DAY, uploadIntent)
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10 * 60 * 60, AlarmManager.INTERVAL_DAY, uploadIntent)
             }
         }).show()
     }
@@ -160,6 +160,22 @@ object UpdateHelper {
         }
         bos.close()
         return String(bos.toByteArray(), Charset.forName("utf-8"))
+    }
+
+    fun update(weak:WeakReference<Activity>) {
+        async {
+            weak.get()?.let {
+                val ac=it
+                if (UpdateHelper.check(it.applicationContext)) {
+                    UpdateHelper.showDownload(ac) {
+                        UpdateHelper.download(ac) {
+                            UpdateHelper.showInstall(ac)
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
 

@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
-import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.util.getProgressDialog
@@ -29,7 +28,7 @@ class PSFragment : MyDialogFragment() {
     private var brands = arrayOf("")
     private var types = arrayOf("")
     private var names = arrayOf("")
-    private var commitListener: () -> Unit = {}
+    private var commitListener: (b:PSBean) -> Unit = {}
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
@@ -80,7 +79,7 @@ class PSFragment : MyDialogFragment() {
         dialog.setCanceledOnTouchOutside(true)
     }
 
-    fun setCommitListener(commitListener: () -> Unit = {}) {
+    fun setCommitListener(commitListener: (b:PSBean) -> Unit = {}) {
         this.commitListener = commitListener
     }
 
@@ -209,7 +208,7 @@ class PSFragment : MyDialogFragment() {
             b.psId = id.toInt()
             uiThread {
                 progress.dismiss()
-                commitListener.invoke()
+                commitListener.invoke(b)
                 dismiss()
             }
         }

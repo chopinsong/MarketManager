@@ -32,6 +32,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         }
     }
 
+
     fun remove(position: Int) {
         mData.removeAt(position)
         notifyItemChanged(position)

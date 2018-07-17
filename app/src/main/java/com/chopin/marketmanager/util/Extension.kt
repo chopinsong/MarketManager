@@ -15,6 +15,9 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.Toast
+import com.chopin.marketmanager.bean.PSBean
+import com.chopin.marketmanager.bean.PSItemBean
+import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.AddGoodsFragment
 import com.chopin.marketmanager.ui.fragment.PSFragment
 import com.chopin.marketmanager.ui.fragment.ProgressDialog
@@ -50,12 +53,16 @@ fun Activity.getPSFragment(): PSFragment {
     return PSFragment()
 }
 
-fun Any.toWeak(context: Context): WeakReference<Context> {
-    return WeakReference(context)
+fun Context.toWeak(): WeakReference<Context> {
+    return WeakReference(this)
+}
+
+fun Activity.toWeak(): WeakReference<Activity> {
+    return WeakReference(this)
 }
 
 fun Any.crTime(): String {
-    val fm = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA)
+    val fm = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
     return fm.format(System.currentTimeMillis())
 }
 
@@ -67,7 +74,7 @@ fun Any.showPSActivity(context: Context, isP: Boolean) {
     context.startActivity(i)
 }
 
-fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: () -> Unit = {}) {
+fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: (b:PSBean) -> Unit = {}) {
     val f = PSFragment()
     f.setCommitListener(func)
     val b = Bundle()
@@ -83,7 +90,7 @@ fun Any.showAddGoods(fm: FragmentManager, f: (dialog: DialogInterface?) -> Unit 
 }
 
 fun Any.time2long(s: String): Long {
-    val fm = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA)
+    val fm = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
     return fm.parse(s).time
 }
 
@@ -114,9 +121,14 @@ fun Activity.snack(msg: String) {
     Snackbar.make(window.decorView, msg, Snackbar.LENGTH_LONG).show()
 }
 
+fun PSBean.toPSItemBean(): PSItemBean {
+    val goods = DBManager.getGoodsInfo(goodsId)
+    return PSItemBean(goods,psId,isPurchase,price.toString(),customerName,count.toString(),time)
+}
+
 object Util {
     fun crTime(): String {
-        val fm = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA)
+        val fm = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
         return fm.format(System.currentTimeMillis())
     }
 }

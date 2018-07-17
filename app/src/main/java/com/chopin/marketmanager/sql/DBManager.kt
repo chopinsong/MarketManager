@@ -107,18 +107,10 @@ object DBManager {
     fun setPSEnable(psId:Int,b:Boolean): Int {
        return db.setPSEnable(psId,b)
     }
-//
-//    fun types(): ArrayList<String> {
-//       return db.types()
-//    }
-//
-//    fun addBrand(name:String){
-//       db.addBrand(name)
-//    }
-//
-//    fun addTYpe(name:String){
-//        db.addTYpe(name)
-//    }
+
+    fun getGoodsInfo(goodsId: Int): Goods {
+        return db.getGood(goodsId)
+    }
 
 }
 
