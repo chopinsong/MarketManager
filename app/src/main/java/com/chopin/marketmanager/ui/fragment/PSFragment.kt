@@ -14,7 +14,6 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.util.getProgressDialog
-import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.showAddGoods
 import com.chopin.marketmanager.util.snack
 import kotlinx.android.synthetic.main.purchase_layout.*
@@ -98,19 +97,10 @@ class PSFragment : MyDialogFragment() {
             } catch (e: Exception) {
             }
             uiThread {
-                try {
-                    if (brands.isNotEmpty()) {
-                        brand_picker.minValue = 0
-                        brand_picker.maxValue = brands.size - 1
-                        brand_picker.displayedValues = brands
-                    }
-                } catch (e: Exception) {
-                    i(e.toString())
+                if (brands.isNotEmpty()) {
+                    brand_picker.refreshByNewDisplayedValues(brands)
                 }
-                val selectBrand = getSelectBrand()
-                if (selectBrand.isNotEmpty()){
-                    updateTypes(getSelectBrand())
-                }
+                updateTypes(getSelectBrand())
             }
         }
     }
@@ -123,13 +113,7 @@ class PSFragment : MyDialogFragment() {
             }
             uiThread {
                 if (types.isNotEmpty()) {
-                    try {
-                        type_picker.minValue = 0
-                        type_picker.maxValue = types.size - 1
-                        type_picker.displayedValues = types
-                    } catch (e: Exception) {
-                        i(e.toString())
-                    }
+                    type_picker.refreshByNewDisplayedValues(types)
                 }
             }
         }
@@ -142,14 +126,8 @@ class PSFragment : MyDialogFragment() {
             } catch (e: Exception) {
             }
             uiThread {
-                try {
-                    if (names.isNotEmpty()) {
-                        name_picker.minValue = 0
-                        name_picker.maxValue = names.size - 1
-                        name_picker.displayedValues = names
-                    }
-                } catch (e: Exception) {
-                    i(e.toString())
+                if (names.isNotEmpty()) {
+                    name_picker.refreshByNewDisplayedValues(names)
                 }
             }
         }
@@ -157,7 +135,7 @@ class PSFragment : MyDialogFragment() {
 
     private fun getCustomerName(): String {
         val name = customer_et.text.toString()
-        return if (TextUtils.isEmpty(name)) "" else name
+        return if (TextUtils.isEmpty(name)) "" else name.trim()
     }
 
     private fun getInputPrice(): Double {
@@ -172,20 +150,20 @@ class PSFragment : MyDialogFragment() {
 
     private fun getSelectName(): String {
         val name = names[name_picker.value]
-        return if (TextUtils.isEmpty(name)) "" else name
+        return if (TextUtils.isEmpty(name)) "" else name.trim()
     }
 
     private fun getSelectBrand(): String {
         if (brands.isNotEmpty()) {
             val brand = brands[brand_picker.value]
-            return if (TextUtils.isEmpty(brand)) "" else brand
+            return if (TextUtils.isEmpty(brand)) "" else brand.trim()
         }
         return ""
     }
 
     private fun getSelectType(): String {
         val type = types[type_picker.value]
-        return if (TextUtils.isEmpty(type)) "" else type
+        return if (TextUtils.isEmpty(type)) "" else type.trim()
     }
 
     private fun checkLeftGoodsCount() {
