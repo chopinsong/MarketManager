@@ -14,6 +14,7 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.util.getProgressDialog
+import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.showAddGoods
 import com.chopin.marketmanager.util.snack
 import kotlinx.android.synthetic.main.purchase_layout.*
@@ -28,7 +29,7 @@ class PSFragment : MyDialogFragment() {
     private var brands = arrayOf("")
     private var types = arrayOf("")
     private var names = arrayOf("")
-    private var commitListener: (b:PSBean) -> Unit = {}
+    private var commitListener: (b: PSBean) -> Unit = {}
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
@@ -55,7 +56,9 @@ class PSFragment : MyDialogFragment() {
         }
         type_picker.setOnValueChangedListener { _, _, _ ->
             updateNames(getSelectBrand(), getSelectType())
-            checkLeftGoodsCount()
+            if (!isP) {
+                checkLeftGoodsCount()
+            }
         }
         purchase_count.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -79,7 +82,7 @@ class PSFragment : MyDialogFragment() {
         dialog.setCanceledOnTouchOutside(true)
     }
 
-    fun setCommitListener(commitListener: (b:PSBean) -> Unit = {}) {
+    fun setCommitListener(commitListener: (b: PSBean) -> Unit = {}) {
         this.commitListener = commitListener
     }
 
@@ -88,10 +91,14 @@ class PSFragment : MyDialogFragment() {
         async {
             brands = DBManager.brands().toTypedArray()
             uiThread {
-                if (brands.isNotEmpty()) {
-                    brand_picker.displayedValues = brands
-                    brand_picker.minValue = 0
-                    brand_picker.maxValue = brands.size - 1
+                try {
+                    if (brands.isNotEmpty()) {
+                        brand_picker.minValue = 0
+                        brand_picker.maxValue = brands.size - 1
+                        brand_picker.displayedValues = brands
+                    }
+                } catch (e: Exception) {
+                    i(e.toString())
                 }
                 updateTypes(getSelectBrand())
             }
@@ -103,9 +110,13 @@ class PSFragment : MyDialogFragment() {
             types = DBManager.types("${GoodsTable.BRAND}=\"$brand\"").toTypedArray()
             uiThread {
                 if (types.isNotEmpty()) {
-                    type_picker.displayedValues = types
-                    type_picker.minValue = 0
-                    type_picker.maxValue = types.size - 1
+                    try {
+                        type_picker.minValue = 0
+                        type_picker.maxValue = types.size - 1
+                        type_picker.displayedValues = types
+                    } catch (e: Exception) {
+                        i(e.toString())
+                    }
                 }
             }
         }
@@ -115,10 +126,14 @@ class PSFragment : MyDialogFragment() {
         async {
             names = DBManager.goodsNames("${GoodsTable.BRAND}=\"$brand\" and ${GoodsTable.TYPE} =\"$type\"").toTypedArray()
             uiThread {
-                if (names.isNotEmpty()) {
-                    type_picker.displayedValues = types
-                    type_picker.minValue = 0
-                    type_picker.maxValue = types.size - 1
+                try {
+                    if (names.isNotEmpty()) {
+                        name_picker.minValue = 0
+                        name_picker.maxValue = names.size - 1
+                        name_picker.displayedValues = names
+                    }
+                } catch (e: Exception) {
+                    i(e.toString())
                 }
             }
         }
@@ -182,23 +197,23 @@ class PSFragment : MyDialogFragment() {
         val progress = getProgressDialog()
         progress.show(fragmentManager, "PSActivity")
         val selectBrand = getSelectBrand()
-        if (selectBrand.isEmpty()){
+        if (selectBrand.isEmpty()) {
             snack("请选择品牌")
             return
         }
         val selectType = getSelectType()
-        if (selectType.isEmpty()){
+        if (selectType.isEmpty()) {
             snack("请选择类型")
             return
         }
         val selectName = getSelectName()
         val inputPrice = getInputPrice()
-        if (selectType.isEmpty()){
+        if (selectType.isEmpty()) {
             snack("请输入价格")
             return
         }
         var psCount = getPSCount()
-        psCount = if (psCount==0) 1 else psCount
+        psCount = if (psCount == 0) 1 else psCount
         var customerName = getCustomerName()
         customerName = if (customerName.isNotEmpty()) customerName else "未知"
         async {

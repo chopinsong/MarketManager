@@ -63,7 +63,11 @@ object DBManager {
     }
 
     fun stock(): ArrayList<StockBean> {
-        return stock()
+        return db.stock()
+    }
+
+    fun stockMap(): HashMap<Int, Int> {
+        return db.stockMap()
     }
 
     fun brands(where:String=""):ArrayList<String>{

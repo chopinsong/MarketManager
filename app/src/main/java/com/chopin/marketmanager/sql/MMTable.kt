@@ -6,7 +6,7 @@ object PSTable {
     val GOODS_ID = "GoodsId"
     val PS_PRICE = "PSPrice"
     val CUSTOMER_NAME = "CustomerName"
-    val IS_PURCHASE = "isPURCHASE"
+    val IS_PURCHASE = "isPurchase"
     val PS_COUNT = "count"
     val IS_ENABLE = "isEnabled"
     val TIME = "Time"

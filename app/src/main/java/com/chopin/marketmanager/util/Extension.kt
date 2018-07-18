@@ -18,6 +18,7 @@ import android.widget.Toast
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.ui.fragment.StockFragment
 import com.chopin.marketmanager.ui.fragment.AddGoodsFragment
 import com.chopin.marketmanager.ui.fragment.PSFragment
 import com.chopin.marketmanager.ui.fragment.ProgressDialog
@@ -72,6 +73,10 @@ fun Any.showPSActivity(context: Context, isP: Boolean) {
     i.putExtra("isP", isP)
     i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     context.startActivity(i)
+}
+
+fun Any.showStock(fm: FragmentManager){
+    StockFragment().show(fm,"stockFragment")
 }
 
 fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: (b:PSBean) -> Unit = {}) {

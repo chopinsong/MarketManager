@@ -17,6 +17,7 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.recevier.InstallReceiver
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.ui.fragment.PSAdapter
 import com.chopin.marketmanager.ui.fragment.SelectPSFragment
 import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_purchase -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    showPsFragment(fragmentManager, true){
+                    showPsFragment(fragmentManager, true) {
                         addData(it)
                     }
                 }
@@ -89,6 +90,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         addData(it)
                     }
                 }
+            }
+            R.id.stock -> {
+                showStock(fragmentManager)
             }
             R.id.nav_settings -> {
                 showSettings(fragmentManager)
@@ -118,7 +122,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun showGoodsLeft(b:PSItemBean){
+    private fun showGoodsLeft(b: PSItemBean) {
         async {
             val countLeft = DBManager.getGoodsCountLeft(b.g.id)
             uiThread {
@@ -157,11 +161,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         purchase_shipment_list.itemAnimator = defaultItemAnimator
     }
 
-    private fun addData(b:PSBean){
+    private fun addData(b: PSBean) {
         async {
             val pib = b.toPSItemBean()
             uiThread {
-                adapter.addData(b=pib)
+                adapter.addData(b = pib)
                 showGoodsLeft(pib)
             }
         }
@@ -171,7 +175,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab.setOnClickListener {
             val sps = SelectPSFragment()
             sps.setUpdateFunc {
-               addData(it)
+                addData(it)
             }
             sps.show(fragmentManager, "chopin")
         }
@@ -207,7 +211,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         main_filter_picker.setOnValueChangedListener { _, _, newVal ->
             handleFilter(newVal)
         }
-        adapter.setOnDelListener {b,i->
+        adapter.setOnDelListener { b, i ->
             val bean = b
             val id = b.psId
             Snackbar.make(window.decorView, "确定删除?", Snackbar.LENGTH_INDEFINITE).setAction("确定") {
@@ -215,14 +219,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val line = DBManager.setPSEnable(id, false)
                     i("line=$line")
                     uiThread {
-//                        snack("删除成功")
+                        //                        snack("删除成功")
                         adapter.remove(i)
                         if (line > 0) {
                             Snackbar.make(window.decorView, "删除成功，是否撤消?", Snackbar.LENGTH_INDEFINITE).setAction("撤消") {
                                 async {
                                     DBManager.setPSEnable(id, true)
                                     uiThread {
-                                        adapter.addData(i,bean)
+                                        adapter.addData(i, bean)
                                         snack("撤消成功")
                                     }
                                 }
