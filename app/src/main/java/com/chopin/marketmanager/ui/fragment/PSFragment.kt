@@ -46,7 +46,11 @@ class PSFragment : MyDialogFragment() {
         updateBrands()
         commit_btn.setOnClickListener { commit() }
         if (isP) {
-            add_goods_btn.setOnClickListener { showAddGoods(fragmentManager) { updateBrands() } }
+            add_goods_btn.setOnClickListener {
+                showAddGoods(fragmentManager) {
+                    updateBrands()
+                }
+            }
             add_goods_btn.visibility = View.VISIBLE
         } else {
             add_goods_btn.visibility = View.GONE
@@ -89,7 +93,10 @@ class PSFragment : MyDialogFragment() {
 
     private fun updateBrands() {
         async {
-            brands = DBManager.brands().toTypedArray()
+            try {
+                brands = DBManager.brands().toTypedArray()
+            } catch (e: Exception) {
+            }
             uiThread {
                 try {
                     if (brands.isNotEmpty()) {
@@ -107,7 +114,10 @@ class PSFragment : MyDialogFragment() {
 
     private fun updateTypes(brand: String) {
         async {
-            types = DBManager.types("${GoodsTable.BRAND}=\"$brand\"").toTypedArray()
+            try {
+                types = DBManager.types("${GoodsTable.BRAND}=\"$brand\"").toTypedArray()
+            } catch (e: Exception) {
+            }
             uiThread {
                 if (types.isNotEmpty()) {
                     try {
@@ -124,7 +134,10 @@ class PSFragment : MyDialogFragment() {
 
     private fun updateNames(brand: String, type: String) {
         async {
-            names = DBManager.goodsNames("${GoodsTable.BRAND}=\"$brand\" and ${GoodsTable.TYPE} =\"$type\"").toTypedArray()
+            try {
+                names = DBManager.goodsNames("${GoodsTable.BRAND}=\"$brand\" and ${GoodsTable.TYPE} =\"$type\"").toTypedArray()
+            } catch (e: Exception) {
+            }
             uiThread {
                 try {
                     if (names.isNotEmpty()) {

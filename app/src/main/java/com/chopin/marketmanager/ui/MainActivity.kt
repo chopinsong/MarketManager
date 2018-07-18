@@ -3,6 +3,8 @@ package com.chopin.marketmanager.ui
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.os.Debug
+import android.os.Environment
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
@@ -40,12 +42,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         initView()
-        updateList()
-        updatePicker()
         initListener()
         val intentFilter = IntentFilter(Constant.INSTALL_ACTION)
         installReceiver = InstallReceiver(WeakReference(this))
         registerReceiver(installReceiver, intentFilter)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        updateList()
+        updatePicker()
         checkUpdate()
     }
 

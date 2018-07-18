@@ -53,17 +53,26 @@ class AddGoodsFragment : MyDialogFragment() {
         val progressDialog = getProgressDialog()
         progressDialog.show(fragmentManager, "addGoodsActivity")
         val brand = getBrand()
+        if (brand.isEmpty()){
+            snack("请输入品牌")
+            return
+        }
         val type = getType()
+        if (type.isEmpty()){
+            snack("请输入类型")
+            return
+        }
         val name = getName()
         val avgPrice = getAvgPrice()
         async {
             val goodsId = DBManager.getGoodsId(brand, type, name)
             if (goodsId == -1) {
                 DBManager.addGoods(Goods(brand = brand, type = type, name = name, avgPrice = avgPrice))
-            } else {
-                snack("商品重复")
             }
             uiThread {
+                if (goodsId!=-1){
+                    snack("商品重复")
+                }
                 progressDialog.dismiss()
                 dismiss()
             }
