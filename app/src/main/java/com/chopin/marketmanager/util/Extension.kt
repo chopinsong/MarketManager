@@ -5,7 +5,6 @@ import android.app.DialogFragment
 import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -19,12 +18,7 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.ui.fragment.StockFragment
-import com.chopin.marketmanager.ui.fragment.AddGoodsFragment
-import com.chopin.marketmanager.ui.fragment.PSFragment
-import com.chopin.marketmanager.ui.fragment.ProgressDialog
-import com.chopin.marketmanager.ui.fragment.SettingsFragment
-import com.chopin.marketmanager.ui.old.PSActivity
+import com.chopin.marketmanager.ui.fragment.*
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
@@ -68,13 +62,6 @@ fun Any.crTime(): String {
     return fm.format(System.currentTimeMillis())
 }
 
-fun Any.showPSActivity(context: Context, isP: Boolean) {
-//        context.startActivity<PSActivity>(Pair("isP",isP))
-    val i = Intent(context, PSActivity::class.java)
-    i.putExtra("isP", isP)
-    i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    context.startActivity(i)
-}
 
 fun Any.showStock(fm: FragmentManager){
     StockFragment().show(fm,"stockFragment")
