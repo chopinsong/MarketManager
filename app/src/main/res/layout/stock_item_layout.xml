@@ -8,10 +8,13 @@
     <TextView
         android:id="@+id/stock_item_brand_type_tv"
         android:layout_width="0dp"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"
         android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:gravity="center" />
+        />
 
     <TextView
         android:id="@+id/stock_item_count_tv"

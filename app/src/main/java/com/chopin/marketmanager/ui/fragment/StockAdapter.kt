@@ -1,6 +1,7 @@
 package com.chopin.marketmanager.ui.fragment
 
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.util.Log
@@ -10,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.StockBean
-import com.chopin.marketmanager.util.i
 
 class StockAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     var mData = ArrayList<StockBean>()
@@ -38,7 +38,6 @@ class StockAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        i("size=${mData.size}")
         return mData.size
     }
 
@@ -48,6 +47,10 @@ class StockAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         val bean = mData[position]
         h.itemBrandTypeTv.text = String.format("%s%s", bean.goods.brand, bean.goods.type)
         h.itemCountTv.text = bean.count.toString()
+        if (bean.count < 10) {
+            h.itemCountTv.setTextColor(Color.RED)
+            h.itemCountTv.paint.isFakeBoldText = true
+        }
     }
 
 }
