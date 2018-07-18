@@ -88,8 +88,8 @@ object DBManager {
     fun getGoodsId(goods:Goods) :Int{
         return db.getGoodsId(goods.brand,goods.type,goods.name)
     }
-    fun addGoods(g:Goods){
-        db.addGoods(g)
+    fun addGoods(g:Goods): Long {
+      return  db.addGoods(g)
     }
 
     fun getPSBeans(): ArrayList<PSItemBean> {

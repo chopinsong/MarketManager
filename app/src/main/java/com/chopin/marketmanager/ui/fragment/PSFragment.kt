@@ -107,7 +107,10 @@ class PSFragment : MyDialogFragment() {
                 } catch (e: Exception) {
                     i(e.toString())
                 }
-                updateTypes(getSelectBrand())
+                val selectBrand = getSelectBrand()
+                if (selectBrand.isNotEmpty()){
+                    updateTypes(getSelectBrand())
+                }
             }
         }
     }
@@ -207,8 +210,6 @@ class PSFragment : MyDialogFragment() {
     }
 
     private fun commit() {
-        val progress = getProgressDialog()
-        progress.show(fragmentManager, "PSActivity")
         val selectBrand = getSelectBrand()
         if (selectBrand.isEmpty()) {
             snack("请选择品牌")
@@ -225,6 +226,8 @@ class PSFragment : MyDialogFragment() {
             snack("请输入价格")
             return
         }
+        val progress = getProgressDialog()
+        progress.show(fragmentManager, "PSActivity")
         var psCount = getPSCount()
         psCount = if (psCount == 0) 1 else psCount
         var customerName = getCustomerName()

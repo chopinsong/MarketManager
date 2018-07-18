@@ -45,7 +45,7 @@ class AddGoodsActivity : AppCompatActivity() {
         async {
             val goodsId = DBManager.getGoodsId(brand, type, name)
             if (goodsId==-1){
-                DBManager.addGoods(Goods(brand = brand,type = type,name = name,avgPrice = avgPrice))
+               Goods(brand = brand, type = type, name = name, avgPrice = avgPrice)
             }else{
                 Snackbar.make(window.decorView,"商品重复",Snackbar.LENGTH_SHORT).show()
             }

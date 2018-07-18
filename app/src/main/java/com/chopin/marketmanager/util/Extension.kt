@@ -15,6 +15,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.Toast
+import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
@@ -88,9 +89,9 @@ fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: (b:PSBean) -> Un
     f.show(fm, "PSFragment")
 }
 
-fun Any.showAddGoods(fm: FragmentManager, f: (dialog: DialogInterface?) -> Unit = {}) {
+fun Any.showAddGoods(fm: FragmentManager, f: (g: Goods) -> Unit = {}) {
     val af = AddGoodsFragment()
-    af.setOnDismissListener(f)
+    af.setCommitListener(f)
     af.show(fm, "AddGoods")
 }
 

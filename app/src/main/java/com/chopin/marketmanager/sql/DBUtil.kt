@@ -224,7 +224,7 @@ class DBUtil(context: Context) {
         return Goods(-1, "", "", "", 0.0)
     }
 
-    fun addGoods(g: Goods) {
+    fun addGoods(g: Goods): Long {
         val cv = ContentValues()
         cv.put(GoodsTable.BRAND, g.brand)
         cv.put(GoodsTable.TYPE, g.type)
@@ -232,7 +232,7 @@ class DBUtil(context: Context) {
         cv.put(GoodsTable.AVERAGE_PRICE, g.avgPrice)
         cv.put(GoodsTable.IS_ENABLE,1)
         cv.put(GoodsTable.TIME, Util.crTime())
-        db.insert(GoodsTable.NAME, null, cv)
+       return db.insert(GoodsTable.NAME, null, cv)
 
     }
 
