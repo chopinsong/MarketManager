@@ -65,7 +65,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
                 holder.mSwipeItemLayout.close()
             }
         }
-        h.img.setImageDrawable(context.getDrawable(if (bean.isP) R.drawable.menu_purchase else R.drawable.menu_shipment))
+        h.img.setImageDrawable(context.getDrawable(if (bean.isP) R.mipmap.menu_purchase else R.mipmap.menu_shipment))
         h.itemBrandTv.text = bean.g.brand
         h.itemTypeTv.text = bean.g.type
         h.itemCustomerTv.text = bean.customerName

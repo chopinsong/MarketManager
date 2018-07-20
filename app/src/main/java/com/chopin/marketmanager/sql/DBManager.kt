@@ -2,6 +2,7 @@ package com.chopin.marketmanager.sql
 
 import android.content.Context
 import com.chopin.marketmanager.bean.*
+import java.lang.ref.WeakReference
 
 /**
  * Created by viking on 11/7/17.
@@ -28,7 +29,7 @@ object DBManager {
      * @param context The context to use.  Usually your [android.app.Application]
      * or [android.app.Activity] object.
      */
-    fun deletelDB(context: Context) {
+    fun deletelDB(weak:WeakReference<Context>) {
     }
 
     fun ps(b:PSBean): Long {
@@ -71,7 +72,7 @@ object DBManager {
     }
 
     fun brands(where:String=""):ArrayList<String>{
-     return   db.brands()
+     return   db.brands(where)
     }
 
     fun types(where:String=""):ArrayList<String>{

@@ -387,7 +387,7 @@ public class SwipeItemLayout extends FrameLayout {
             int contentLeft = contentView.getLeft();
             if (contentLeft == 0) {
                 for (View view : mMenus.values()) {
-                    if (checkAbsoluteGravity(view, Gravity.LEFT)) {
+                    if (checkAbsoluteGravity(view, Gravity.START)) {
                         view.layout(-view.getWidth(), view.getTop(), 0, view.getBottom());
                     } else {
                         view.layout(getMeasuredWidth(), view.getTop(),

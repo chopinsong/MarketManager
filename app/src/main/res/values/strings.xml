@@ -17,7 +17,6 @@
     <string name="add_goods_avg_price_text">平均价格</string>
     <string name="select_ps_purchase">进货</string>
     <string name="select_ps_shipment">出货</string>
-    <string name="title_activity_shipment">出货</string>
     <string name="drawer_purchase">进货</string>
     <string name="drawer_shipment">出货</string>
     <string name="is_p_img_dsc">进出货图标</string>
@@ -26,4 +25,9 @@
     <string name="menu_stock">库存</string>
     <string name="title_stock">库存</string>
     <string name="title_setting">设置</string>
+    <string name="logo">logo</string>
+    <string name="email_title">chopinsong@gmail.com</string>
+    <string name="del_text">删除</string>
+    <string name="plus">+</string>
+    <string name="X">X</string>
 </resources>

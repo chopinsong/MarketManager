@@ -709,7 +709,7 @@ public class NumberPickerView extends View{
         if(needRespond){
             mHandlerInNewThread.sendMessageDelayed(getMsg(HANDLER_WHAT_REFRESH), duration / 4);
         }else{
-            mHandlerInNewThread.sendMessageDelayed(getMsg(HANDLER_WHAT_REFRESH, 0, 0, new Boolean(needRespond)), duration / 4);
+            mHandlerInNewThread.sendMessageDelayed(getMsg(HANDLER_WHAT_REFRESH, 0, 0, Boolean.valueOf(needRespond)), duration / 4);
         }
         postInvalidate();
     }

@@ -10,12 +10,13 @@
     app:cardElevation="1dp"
     app:cardUseCompatPadding="true"
     app:contentPadding="5dp">
+
     <TextView
+        android:id="@+id/time_tv"
         android:layout_width="match_parent"
-        android:gravity="end|top"
-        android:textSize="10sp"
         android:layout_height="wrap_content"
-        android:id="@+id/time_tv"/>
+        android:gravity="end|top"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,43 +86,35 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/item_price_tv"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:textColor="@color/gray"
+                android:textSize="@dimen/ps_list_price_text_size"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/item_price_tv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600"
-                    android:gravity="center"
-                    android:layout_weight="3"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/ps_list_price_text_size"
-                    android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/X"
+                android:textColor="@color/gray" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="X"
-                    android:textColor="@color/gray" />
-
-                <TextView
-                    android:id="@+id/item_count_tv"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:text="10"
-                    android:gravity="center"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/ps_list_price_text_size"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/item_count_tv"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/ps_list_price_text_size"
+                android:textStyle="bold" />
 
 
         </LinearLayout>
