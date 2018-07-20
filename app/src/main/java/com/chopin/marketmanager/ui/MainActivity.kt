@@ -150,11 +150,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initListener() {
         fab.setOnClickListener {
-            val sps = SelectPSFragment()
-            sps.setUpdateFunc {
+            SelectPSFragment().setUpdateFunc {
                 addData(it)
-            }
-            sps.show(fragmentManager, "chopin")
+            }.show(fragmentManager, "chopin")
         }
         m_filter_type_p.setOnValueChangedListener { _, _, type ->
             filterType = type

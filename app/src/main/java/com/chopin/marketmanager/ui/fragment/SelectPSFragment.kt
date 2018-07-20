@@ -15,8 +15,9 @@ class SelectPSFragment : MyDialogFragment() {
 
     private var update: (b:PSBean) -> Unit = {}
 
-    fun setUpdateFunc(update: (b:PSBean) -> Unit) {
+    fun setUpdateFunc(update: (b:PSBean) -> Unit): SelectPSFragment {
         this.update = update
+        return this
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
