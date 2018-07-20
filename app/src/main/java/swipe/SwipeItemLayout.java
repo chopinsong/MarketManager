@@ -357,10 +357,8 @@ public class SwipeItemLayout extends FrameLayout {
         if (mCurrentMenu != null) {
             int contentLeft = getContentView().getLeft();
             int menuWidth = mCurrentMenu.getWidth();
-            if (mIsOpen && ((isLeftMenu() && contentLeft < menuWidth)
-                    || (isRightMenu() && -contentLeft < menuWidth))) {
-                return true;
-            }
+            return mIsOpen && ((isLeftMenu() && contentLeft < menuWidth)
+                    || (isRightMenu() && -contentLeft < menuWidth));
         }
         return false;
     }
@@ -371,9 +369,7 @@ public class SwipeItemLayout extends FrameLayout {
     private boolean isCloseAnimating() {
         if (mCurrentMenu != null) {
             int contentLeft = getContentView().getLeft();
-            if (!mIsOpen && ((isLeftMenu() && contentLeft > 0) || (isRightMenu() && contentLeft < 0))) {
-                return true;
-            }
+            return !mIsOpen && ((isLeftMenu() && contentLeft > 0) || (isRightMenu() && contentLeft < 0));
         }
         return false;
     }
