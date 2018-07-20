@@ -5,20 +5,25 @@ import android.app.DialogFragment
 import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.NumberPicker
 import android.widget.Toast
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.*
+import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.async
+import org.jetbrains.anko.uiThread
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,11 +68,11 @@ fun Any.crTime(): String {
 }
 
 
-fun Any.showStock(fm: FragmentManager){
-    StockFragment().show(fm,"stockFragment")
+fun Any.showStock(fm: FragmentManager) {
+    StockFragment().show(fm, "stockFragment")
 }
 
-fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: (b:PSBean) -> Unit = {}) {
+fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: (b: PSBean) -> Unit = {}) {
     val f = PSFragment()
     f.setCommitListener(func)
     val b = Bundle()
@@ -87,13 +92,13 @@ fun Any.time2long(s: String): Long {
     return fm.parse(s).time
 }
 
-fun Any.time2shorTime(s:String):String{
+fun Any.time2shorTime(s: String): String {
     val fm = SimpleDateFormat("hh:mm", Locale.CHINA)
     return fm.format(time2long(s))
 }
 
-fun Any.showSettings(fm: FragmentManager){
-    SettingsFragment().show(fm,"SettingsFragment")
+fun Any.showSettings(fm: FragmentManager) {
+    SettingsFragment().show(fm, "SettingsFragment")
 }
 
 fun View.slideToUp() {
@@ -116,7 +121,44 @@ fun Activity.snack(msg: String) {
 
 fun PSBean.toPSItemBean(): PSItemBean {
     val goods = DBManager.getGoodsInfo(goodsId)
-    return PSItemBean(goods,psId,isPurchase,price.toString(),customerName,count.toString(),time)
+    return PSItemBean(goods, psId, isPurchase, price.toString(), customerName, count.toString(), time)
+}
+
+fun Activity.showGoodsLeft(b: PSItemBean) {
+    async {
+        val countLeft = DBManager.getGoodsCountLeft(b.g.id)
+        uiThread {
+            snack("${b.g.brand}${b.g.type}${b.g.name}剩余${countLeft}件")
+        }
+    }
+}
+
+fun NumberPicker.refreshValues(content:Array<String>){
+    val oldValues = this.displayedValues
+    if (oldValues != null && oldValues.size > content.size) {
+        minValue = 0
+        maxValue = content.size - 1
+        displayedValues = content
+    } else {
+        displayedValues = content
+        minValue = 0
+        maxValue = content.size - 1
+    }
+}
+
+fun Int.isPurchase(): Boolean {
+    return this==0
+}
+
+fun Int.isShipment():Boolean{
+    return this==1
+}
+
+fun RecyclerView.defaultItemAnimation(){
+    val defaultItemAnimator = DefaultItemAnimator()
+    defaultItemAnimator.addDuration = 400
+    defaultItemAnimator.removeDuration = 400
+    this.itemAnimator = defaultItemAnimator
 }
 
 object Util {

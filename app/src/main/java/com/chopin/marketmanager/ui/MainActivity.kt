@@ -1,16 +1,12 @@
 package com.chopin.marketmanager.ui
 
 import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
-import android.os.Debug
-import android.os.Environment
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -34,23 +30,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var adapter: PSAdapter
     private var filterType = 0
     private var content = arrayOf("")
+    private var brands = arrayOf("")
+    private var types = arrayOf("")
 
     private lateinit var installReceiver: InstallReceiver
+    private var psData: ArrayList<PSItemBean> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         initView()
+        refreshBrandTypes()
         initListener()
         val intentFilter = IntentFilter(Constant.INSTALL_ACTION)
         installReceiver = InstallReceiver(WeakReference(this))
         registerReceiver(installReceiver, intentFilter)
     }
 
+    private fun refreshBrandTypes() {
+        brands = DBManager.brands().toTypedArray()
+        types = DBManager.types().toTypedArray()
+    }
+
     override fun onStart() {
         super.onStart()
         updateList()
+        refreshBrandTypes()
         updatePicker()
         checkUpdate()
     }
@@ -64,6 +70,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onResume() {
         super.onResume()
         updateList()
+        refreshBrandTypes()
     }
 
     override fun onBackPressed() {
@@ -84,17 +91,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_purchase -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    showPsFragment(fragmentManager, true) {
-                        addData(it)
-                    }
+                showPsFragment(fragmentManager, true) {
+                    addData(it)
                 }
             }
             R.id.nav_shipments -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    showPsFragment(fragmentManager, false) {
-                        addData(it)
-                    }
+                showPsFragment(fragmentManager, false) {
+                    addData(it)
                 }
             }
             R.id.stock -> {
@@ -109,62 +112,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    private fun handleFilter(newVal: Int) {
-        async {
-            val psBeans = DBManager.getPSBeans()
-            val data = psBeans.filter {
-                when (filterType) {
-                    1 -> it.g.brand == content[newVal]
-                    2 -> it.g.type == content[newVal]
-                    3 -> newVal == 0 && it.isP || newVal == 1 && !it.isP
-                    else -> true
-                }
-            }
-            val nData = ArrayList<PSItemBean>()
-            nData.addAll(data)
-            uiThread {
-                adapter.setData(nData)
-            }
-        }
-    }
-
-    private fun showGoodsLeft(b: PSItemBean) {
-        async {
-            val countLeft = DBManager.getGoodsCountLeft(b.g.id)
-            uiThread {
-                snack("${b.g.brand}${b.g.type}${b.g.name}剩余${countLeft}件")
-            }
-        }
-    }
-
     private fun updatePicker() {
-        val filterType = arrayOf("无过滤", "品牌", "类型", "进出货")
-        main_filter_type_picker.displayedValues = filterType
-        main_filter_type_picker.minValue = 0
-        main_filter_type_picker.maxValue = filterType.size - 1
+        m_filter_type_p.refreshValues(arrayOf("无过滤", "品牌", "类型", "进出货"))
     }
+
 
     private fun updateList() {
         async {
-            val data = DBManager.getPSBeans()
+            psData = DBManager.getPSBeans()
             uiThread {
-                adapter.setData(data)
+                adapter.setData(psData)
             }
         }
     }
-
 
     private fun initView() {
         ActionBarDrawerToggle(this, drawer_layout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         nav_view.setNavigationItemSelectedListener(this)
+
         val layoutManager = LinearLayoutManager(this)
         purchase_shipment_list.layoutManager = layoutManager
         adapter = PSAdapter(applicationContext)
         purchase_shipment_list.adapter = adapter
-        val defaultItemAnimator = DefaultItemAnimator()
-        defaultItemAnimator.addDuration = 400
-        defaultItemAnimator.removeDuration = 400
-        purchase_shipment_list.itemAnimator = defaultItemAnimator
+
+        purchase_shipment_list.defaultItemAnimation()
     }
 
     private fun addData(b: PSBean) {
@@ -185,62 +156,79 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             sps.show(fragmentManager, "chopin")
         }
-        main_filter_type_picker.setOnValueChangedListener { _, _, newVal ->
-            filterType = newVal
-            async {
-                content = when (newVal) {
-                    1 -> DBManager.brands().toTypedArray()
-                    2 -> DBManager.types().toTypedArray()
-                    3 -> arrayOf("进货", "出货")
-                    else -> {
-                        arrayOf("")
-                    }
-                }
-                uiThread {
-                    if (content.isNotEmpty()) {
-                        val oldValues = main_filter_picker.displayedValues
-                        if (oldValues != null && oldValues.size > content.size) {
-                            main_filter_picker.minValue = 0
-                            main_filter_picker.maxValue = content.size - 1
-                            main_filter_picker.displayedValues = content
-                        } else {
-                            main_filter_picker.displayedValues = content
-                            main_filter_picker.minValue = 0
-                            main_filter_picker.maxValue = content.size - 1
-                        }
-                        handleFilter(main_filter_picker.value)
-                    }
-                }
+        m_filter_type_p.setOnValueChangedListener { _, _, type ->
+            filterType = type
+            content = getTypeContent()
+            if (content.isNotEmpty()) {
+                m_filter_p.refreshValues(content)
+                handleFilter(m_filter_p.value)
             }
         }
 
-        main_filter_picker.setOnValueChangedListener { _, _, newVal ->
+        m_filter_p.setOnValueChangedListener { _, _, newVal ->
             handleFilter(newVal)
         }
         adapter.setOnDelListener { b, i ->
-            val bean = b
-            val id = b.psId
-            Snackbar.make(window.decorView, "确定删除?", Snackbar.LENGTH_INDEFINITE).setAction("确定") {
-                async {
-                    val line = DBManager.setPSEnable(id, false)
-                    i("line=$line")
-                    uiThread {
-                        //                        snack("删除成功")
+            showDelConfirm(i, b)
+        }
+    }
+
+    private fun getTypeContent(): Array<String> {
+        return when (filterType) {
+            1 -> brands
+            2 -> types
+            3 -> arrayOf("进货", "出货")
+            else -> {
+                arrayOf("")
+            }
+        }
+    }
+
+    private fun showDelConfirm(i: Int, b: PSItemBean) {
+        Snackbar.make(window.decorView, "确定删除?", Snackbar.LENGTH_INDEFINITE).setAction("确定") {
+            async {
+                val line = DBManager.setPSEnable(b.psId, false)
+                uiThread {
+                    if (line > 0) {
                         adapter.remove(i)
-                        if (line > 0) {
-                            Snackbar.make(window.decorView, "删除成功，是否撤消?", Snackbar.LENGTH_INDEFINITE).setAction("撤消") {
-                                async {
-                                    DBManager.setPSEnable(id, true)
-                                    uiThread {
-                                        adapter.addData(i, bean)
-                                        snack("撤消成功")
-                                    }
-                                }
-                            }.show()
-                        }
+                        showUndo(i, b)
+                    } else {
+                        snack("删除失败")
                     }
                 }
-            }.show()
+            }
+        }.show()
+    }
+
+    private fun showUndo(i: Int, b: PSItemBean) {
+        Snackbar.make(window.decorView, "删除成功，是否撤消?", Snackbar.LENGTH_INDEFINITE).setAction("撤消") {
+            async {
+                val psEnable = DBManager.setPSEnable(b.psId, true)
+                uiThread {
+                    if (psEnable > 0) {
+                        adapter.addData(i, b)
+                        snack("撤消成功")
+                    }
+                }
+            }
+        }.show()
+    }
+
+    private fun handleFilter(type: Int) {
+        async {
+            val data = psData.filter {
+                when (filterType) {
+                    1 -> it.g.brand == content[type]
+                    2 -> it.g.type == content[type]
+                    3 -> type.isPurchase() && it.isP || type.isShipment() && !it.isP
+                    else -> true
+                }
+            }
+            val nData = ArrayList<PSItemBean>()
+            nData.addAll(data)
+            uiThread {
+                adapter.setData(nData)
+            }
         }
     }
 

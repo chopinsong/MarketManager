@@ -11,6 +11,7 @@ import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.RecycleViewDivider
+import com.chopin.marketmanager.util.defaultItemAnimation
 import kotlinx.android.synthetic.main.stock_layout.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
@@ -44,10 +45,7 @@ class StockFragment : MyDialogFragment() {
         stock_list.layoutManager = layoutManager
         stockAdapter = StockAdapter(dialog.context)
         stock_list.adapter = stockAdapter
-        val defaultItemAnimator = DefaultItemAnimator()
-        defaultItemAnimator.addDuration = 400
-        defaultItemAnimator.removeDuration = 400
-        stock_list.itemAnimator = defaultItemAnimator
+        stock_list.defaultItemAnimation()
     }
 
 

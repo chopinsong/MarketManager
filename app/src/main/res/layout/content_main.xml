@@ -24,14 +24,14 @@
         android:orientation="horizontal">
 
         <NumberPicker
-            android:id="@+id/main_filter_type_picker"
+            android:id="@+id/m_filter_type_p"
             android:layout_width="wrap_content"
             android:minWidth="120dp"
             android:layout_height="wrap_content"
             android:descendantFocusability="blocksDescendants" />
 
         <NumberPicker
-            android:id="@+id/main_filter_picker"
+            android:id="@+id/m_filter_p"
             android:layout_width="wrap_content"
             android:minWidth="120dp"
             android:layout_height="wrap_content"
