@@ -28,6 +28,7 @@
                 android:id="@+id/add_goods_brand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textAutoComplete"
                 android:gravity="center"
                 android:textColor="@color/colorPrimary" />
         </RelativeLayout>
@@ -48,6 +49,7 @@
                 android:id="@+id/add_goods_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textAutoComplete"
                 android:gravity="center"
                 android:textColor="@color/colorPrimary" />
 
@@ -88,6 +90,7 @@
                 android:id="@+id/add_goods_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textAutoComplete"
                 android:gravity="center"
                 android:textColor="@color/colorPrimary" />
 
