@@ -1381,7 +1381,7 @@ public class NumberPickerView extends View{
     }
 
     private void updateWrapStateByContent(){
-        mWrapSelectorWheelCheck = mDisplayedValues.length <= mShowCount ? false : true;
+        mWrapSelectorWheelCheck = mDisplayedValues.length > mShowCount;
     }
 
     private int refineValueByLimit(int value, int minValue, int maxValue, boolean wrap) {
@@ -1441,11 +1441,7 @@ public class NumberPickerView extends View{
     //===tool functions===//
     private boolean isStringEqual(String a, String b){
         if(a == null){
-            if(b == null){
-                return true;
-            }else{
-                return false;
-            }
+            return b == null;
         }else{
             return a.equals(b);
         }
