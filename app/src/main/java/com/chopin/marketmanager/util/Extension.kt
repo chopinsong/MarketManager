@@ -6,7 +6,6 @@ import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
 import android.graphics.Color
-import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
@@ -21,7 +20,6 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.*
-import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
 import java.lang.ref.WeakReference
@@ -72,7 +70,7 @@ fun Any.showStock(fm: FragmentManager) {
     StockFragment().show(fm, "stockFragment")
 }
 
-fun Any.getPSFragment(fm: FragmentManager): PSFragment {
+fun Any.getPSFragment(): PSFragment {
    return PSFragment()
 }
 
@@ -123,7 +121,7 @@ fun Activity.showGoodsLeft(b: PSItemBean) {
     async {
         val countLeft = DBManager.getGoodsCountLeft(b.g.id)
         uiThread {
-            snack("${b.g.brand}${b.g.type}${b.g.name}剩余${countLeft}件")
+            snack("${b.g.brand}${b.g.type}${b.g.remark}剩余${countLeft}件")
         }
     }
 }

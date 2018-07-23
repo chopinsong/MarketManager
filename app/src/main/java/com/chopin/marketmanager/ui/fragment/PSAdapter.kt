@@ -11,7 +11,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSItemBean
-import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.time2shorTime
 import swipe.SwipeItemLayout
 
@@ -41,9 +40,13 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     }
 
     private var listener: (b: PSItemBean, position: Int) -> Unit = { _, _ -> }
-
+    private var editListener: (b: PSItemBean, position: Int) -> Unit = { _, _ -> }
     fun setOnDelListener(listener: (b: PSItemBean, position: Int) -> Unit) {
         this.listener = listener
+    }
+
+    fun setEditListener(listener: (b: PSItemBean, position: Int) -> Unit) {
+        this.editListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -56,6 +59,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         return mData.size
     }
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.i("chopin", "onBindViewHolder")
         val h = holder as PSViewHolder
@@ -63,6 +67,12 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         if (h.mRightMenu != null) {
             h.mRightMenu.setOnClickListener { _ ->
                 listener.invoke(bean, position)
+                holder.mSwipeItemLayout.close()
+            }
+        }
+        h.mLeftMenu?.let {
+            h.mLeftMenu.setOnClickListener { _ ->
+                editListener.invoke(bean, position)
                 holder.mSwipeItemLayout.close()
             }
         }
@@ -76,6 +86,11 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         h.itemTimeTv.text = time2shorTime(bean.time)
     }
 
+    fun updateData(b: PSItemBean, i: Int) {
+        mData[i]=b
+        notifyItemChanged(i)
+    }
+
 }
 
 class PSViewHolder(v: View) : ViewHolder(v) {
@@ -87,6 +102,7 @@ class PSViewHolder(v: View) : ViewHolder(v) {
     val itemCustomerTv = v.findViewById<TextView>(R.id.item_customer_tv)
     val itemCountTv = v.findViewById<TextView>(R.id.item_count_tv)
     val mRightMenu = v.findViewById<TextView>(R.id.right_menu)
+    val mLeftMenu = v.findViewById<TextView>(R.id.left_menu)
     val mSwipeItemLayout = v.findViewById<SwipeItemLayout>(R.id.swipe_layout)
     val itemTimeTv = v.findViewById<TextView>(R.id.time_tv)
 

@@ -39,7 +39,7 @@ class SelectPSFragment : MyDialogFragment() {
 
     private fun showPS(isP: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val ps = getPSFragment(fragmentManager).setCommitListener(update)
+            val ps = getPSFragment().setCommitListener(update)
             val bundle = Bundle()
             bundle.putBoolean("isP", isP)
             ps.arguments = bundle

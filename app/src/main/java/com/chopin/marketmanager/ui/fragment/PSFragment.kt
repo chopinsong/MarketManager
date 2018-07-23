@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
+import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.util.getProgressDialog
@@ -26,14 +27,25 @@ import org.jetbrains.anko.uiThread
 class PSFragment : MyDialogFragment() {
     private var brands = arrayOf<String>()
     private var types = arrayOf<String>()
-    private var names = arrayOf<String>()
+    private var remarks = arrayOf<String>()
     private var commitListener: (b: PSBean) -> Unit = {}
-
+    private var updateListener: (b: PSBean) -> Unit = {}
     private var isP: Boolean? = null
+    private var editBean: PSItemBean? = null
+    private var isEditMode: Boolean = false
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
-        isP = arguments.getBoolean("isP", true)
+        val eb = arguments.getSerializable("editBean")
+        eb?.let {
+            editBean = it as PSItemBean
+        }
+        isEditMode = eb != null
+        isP = if (isEditMode) {
+            editBean?.isP
+        } else {
+            arguments.getBoolean("isP", true)
+        }
     }
 
 
@@ -56,6 +68,9 @@ class PSFragment : MyDialogFragment() {
         }
         is_p_switch.setOnCheckedChangeListener { _, isChecked ->
             add_goods_btn.visibility = if (isChecked) View.VISIBLE else View.GONE
+            if (isChecked){
+                commit_btn.isEnabled=true
+            }
         }
         brand_picker.setOnValueChangedListener { _, _, _ ->
             updateTypes(getSelectBrand())
@@ -81,6 +96,28 @@ class PSFragment : MyDialogFragment() {
 
         })
         select_present_tv.setOnClickListener {
+        }
+        initEditBean()
+    }
+
+    private fun initEditBean() {
+        async {
+            uiThread {
+                if (isEditMode) {
+                    editBean?.let {
+                        customer_et.setText(it.customerName)
+                        price_et.setText(it.price)
+                        purchase_count.setText(it.count)
+                        remark_tv.setText(it.remark)
+                        val index = brands.indexOf(it.g.brand)
+                        brand_picker.value = if (index > -1) index else 0
+                        val indexT = types.indexOf(it.g.type)
+                        type_picker.value = if (indexT > -1) indexT else 0
+                        val indexN = remarks.indexOf(it.g.remark)
+                        name_picker.value = if (indexN > -1) indexN else 0
+                    }
+                }
+            }
         }
     }
 
@@ -128,12 +165,12 @@ class PSFragment : MyDialogFragment() {
     private fun updateNames(brand: String, type: String) {
         async {
             try {
-                names = DBManager.goodsNames("${GoodsTable.BRAND}=\"$brand\" and ${GoodsTable.TYPE} =\"$type\"").toTypedArray()
+                remarks = DBManager.goodsNames("${GoodsTable.BRAND}=\"$brand\" and ${GoodsTable.TYPE} =\"$type\"").toTypedArray()
             } catch (e: Exception) {
             }
             uiThread {
-                if (names.isNotEmpty()) {
-                    name_picker.refreshByNewDisplayedValues(names)
+                if (remarks.isNotEmpty()) {
+                    name_picker.refreshByNewDisplayedValues(remarks)
                 }
             }
         }
@@ -155,10 +192,10 @@ class PSFragment : MyDialogFragment() {
     }
 
     private fun getSelectName(): String {
-        if (names.isEmpty()){
+        if (remarks.isEmpty()) {
             return ""
         }
-        val name = names[name_picker.value]
+        val name = remarks[name_picker.value]
         return if (TextUtils.isEmpty(name)) "" else name.trim()
     }
 
@@ -171,8 +208,11 @@ class PSFragment : MyDialogFragment() {
     }
 
     private fun getSelectType(): String {
-        val type = types[type_picker.value]
-        return if (TextUtils.isEmpty(type)) "" else type.trim()
+        if (types.isNotEmpty()) {
+            val type = types[type_picker.value]
+            return if (TextUtils.isEmpty(type)) "" else type.trim()
+        }
+        return ""
     }
 
     private fun checkLeftGoodsCount() {
@@ -223,15 +263,39 @@ class PSFragment : MyDialogFragment() {
         val isP = is_p_switch.isChecked
         async {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
-            val b = PSBean(psId = -1, goodsId = goodsId, price = inputPrice, customerName = customerName, isPurchase = isP, count = psCount, remark = remark)
-            val id = DBManager.ps(b)
-            b.psId = id.toInt()
+            var line = 0
+            var b: PSBean? = null
+            if (isEditMode) {
+                editBean?.let {
+                    b = PSBean(it.psId, goodsId, inputPrice, customerName, isP, psCount, remark = remark)
+                    b?.let { updateBean ->
+                        line = DBManager.updatePS(updateBean)
+                    }
+                }
+            } else {
+                b = PSBean(psId = -1, goodsId = goodsId, price = inputPrice, customerName = customerName, isPurchase = isP, count = psCount, remark = remark)
+                b?.let { psBean ->
+                    val id = DBManager.ps(psBean)
+                    psBean.psId = id.toInt()
+                }
+            }
             uiThread {
                 progress.dismiss()
-                commitListener.invoke(b)
+                b?.let { it1 ->
+                    commitListener.invoke(it1)
+                    if (isEditMode) {
+                        if (line > 0) {
+                            updateListener.invoke(it1)
+                        }
+                    }
+                }
                 dismiss()
             }
         }
+    }
+
+    fun setUpdateListener(func: (b: PSBean) -> Unit) {
+        this.updateListener = func
     }
 
 

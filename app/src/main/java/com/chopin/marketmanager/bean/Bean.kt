@@ -2,9 +2,10 @@ package com.chopin.marketmanager.bean
 
 import com.chopin.marketmanager.util.Util
 import com.chopin.marketmanager.util.time2long
+import java.io.Serializable
 
 
-class Goods(var id: Int = 0, var name: String, var brand: String, var type: String, var avgPrice: Double, var isEnabled: Boolean = true, var time: String = Util.crTime())
+class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double, var isEnabled: Boolean = true, var time: String = Util.crTime()):Serializable
 open class PSBean(var psId: Int, var goodsId: Int, var price: Double, var customerName: String, val isPurchase: Boolean, var count: Int, var isEnabled: Boolean = true, var remark: String = "", var time: String = Util.crTime())
 
 //class PurchaseBean(var purchaseId:Int,var pGoodsId:Int,var purchasePrice:Double,var pCustomerName:String,var pTime:String= Util.time()):PSBean(purchaseId,pGoodsId,purchasePrice,pCustomerName,pTime)
@@ -17,7 +18,7 @@ class ShipmentsCount(var goodsId: Int, var count: Int)
 
 class StockBean(var goods: Goods, var count: Int)
 
-class PSItemBean(var g: Goods, var psId: Int, var isP: Boolean, var price: String, var customerName: String, var count: String, var remark: String = "", var time: String) {
+class PSItemBean(var g: Goods, var psId: Int, var isP: Boolean, var price: String, var customerName: String, var count: String, var remark: String = "", var time: String):Serializable {
     @Override
     fun compareTo(bean: PSItemBean): Int {
         return (time2long(time) - time2long(bean.time)).toInt()

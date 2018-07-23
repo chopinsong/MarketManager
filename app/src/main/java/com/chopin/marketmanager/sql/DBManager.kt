@@ -80,7 +80,7 @@ object DBManager {
         return db.getGoodsId(selectBrand,selectType,selectName)
     }
     fun getGoodsId(goods:Goods) :Int{
-        return db.getGoodsId(goods.brand,goods.type,goods.name)
+        return db.getGoodsId(goods.brand,goods.type,goods.remark)
     }
     fun addGoods(g:Goods): Long {
       return  db.addGoods(g)
@@ -108,6 +108,10 @@ object DBManager {
 
     fun getGoodsInfo(goodsId: Int): Goods {
         return db.getGood(goodsId)
+    }
+
+    fun updatePS(b: PSBean): Int {
+        return db.updatePS(b)
     }
 
 }

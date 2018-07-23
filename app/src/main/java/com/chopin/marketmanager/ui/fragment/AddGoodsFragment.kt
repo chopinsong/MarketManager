@@ -72,7 +72,7 @@ class AddGoodsFragment : MyDialogFragment() {
         val name = getName()
         val avgPrice = getAvgPrice()
         async {
-            val goods = Goods(brand = brand, type = type, name = name, avgPrice = avgPrice)
+            val goods = Goods(brand = brand, type = type, remark = name, avgPrice = avgPrice)
             val goodsId = DBManager.getGoodsId(brand, type, name)
             if (goodsId == -1) {
                 val id = DBManager.addGoods(goods)

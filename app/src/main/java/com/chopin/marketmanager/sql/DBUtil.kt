@@ -54,7 +54,7 @@ class DBUtil(context: Context) {
             val count = c.getInt(c.getColumnIndex(PSTable.PS_COUNT))
             val remark = c.getString(c.getColumnIndex(PSTable.PS_REMARK))
             val time = c.getString(c.getColumnIndex(PSTable.TIME))
-            list.add(PSBean(psId = purchaseId, goodsId = goodsId, price = purchasePrice,customerName =  customerName, isPurchase = false, count = count,isEnabled =  true, remark = remark, time = time))
+            list.add(PSBean(psId = purchaseId, goodsId = goodsId, price = purchasePrice, customerName = customerName, isPurchase = false, count = count, isEnabled = true, remark = remark, time = time))
         }
         c.close()
         return list
@@ -63,7 +63,8 @@ class DBUtil(context: Context) {
 
     fun psList(): ArrayList<PSBean> {
         val list = ArrayList<PSBean>()
-        val c = db.query(PSTable.NAME,null,"${PSTable.IS_ENABLE}=?", arrayOf("1"),null,null,null)?:return  list
+        val c = db.query(PSTable.NAME, null, "${PSTable.IS_ENABLE}=?", arrayOf("1"), null, null, null)
+                ?: return list
         while (c.moveToNext()) {
             val psId = c.getInt(c.getColumnIndex(PSTable.PS_ID))
             val goodsId = c.getInt(c.getColumnIndex(PSTable.GOODS_ID))
@@ -209,7 +210,7 @@ class DBUtil(context: Context) {
         val cv = ContentValues()
         cv.put(GoodsTable.BRAND, g.brand)
         cv.put(GoodsTable.TYPE, g.type)
-        cv.put(GoodsTable.GOODS_NAME, g.name)
+        cv.put(GoodsTable.GOODS_NAME, g.remark)
         cv.put(GoodsTable.AVERAGE_PRICE, g.avgPrice)
         cv.put(GoodsTable.IS_ENABLE, 1)
         cv.put(GoodsTable.TIME, Util.crTime())
@@ -236,6 +237,19 @@ class DBUtil(context: Context) {
         val cv = ContentValues()
         cv.put(PSTable.IS_ENABLE, if (b) 1 else 0)
         return db.update(PSTable.NAME, cv, "${PSTable.PS_ID}=?", arrayOf(psId.toString()))
+    }
+
+    fun updatePS(b: PSBean): Int {
+        val cv = ContentValues()
+        cv.put(PSTable.GOODS_ID, b.goodsId)
+        cv.put(PSTable.PS_PRICE, b.price)
+        cv.put(PSTable.CUSTOMER_NAME, b.customerName)
+        cv.put(PSTable.TIME, b.time)
+        cv.put(PSTable.IS_PURCHASE, if (b.isPurchase) 1 else 0)
+        cv.put(PSTable.PS_COUNT, b.count)
+        cv.put(PSTable.PS_REMARK, b.remark)
+        cv.put(PSTable.IS_ENABLE, 1)
+        return db.update(PSTable.NAME, cv, "${PSTable.PS_ID}=?", arrayOf(b.psId.toString()))
     }
 
 

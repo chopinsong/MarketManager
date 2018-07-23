@@ -146,7 +146,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+    private fun updateData(b: PSBean, i: Int) {
+        async {
+            val bean = b.toPSItemBean()
+            uiThread {
+                adapter.updateData(bean,i)
+            }
+        }
 
+    }
     private fun initListener() {
         fab.setOnClickListener {
             showPSFragment()
@@ -159,20 +167,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 handleFilter(m_filter_p.value)
             }
         }
-
         m_filter_p.setOnValueChangedListener { _, _, newVal ->
             handleFilter(newVal)
         }
         adapter.setOnDelListener { b, i ->
             showDelConfirm(i, b)
         }
+        adapter.setEditListener { b, i ->
+            showEditPSFragment(b){
+               updateData(it,i)
+            }
+        }
+    }
+
+
+
+    private fun showEditPSFragment(b: PSItemBean, func: (b: PSBean) -> Unit) {
+        val ps = getPSFragment()
+        val bundle = Bundle()
+        bundle.putSerializable("editBean", b)
+        ps.arguments = bundle
+        ps.setUpdateListener(func)
+        ps.show(fragmentManager, "PSFragment")
     }
 
     private fun showPSFragment(isP: Boolean = true) {
-        val ps = getPSFragment(fragmentManager).setCommitListener { addData(it) }
+        val ps = getPSFragment().setCommitListener { addData(it) }
         val bundle = Bundle()
-        bundle.putBoolean("isP",isP)
-        ps.arguments=bundle
+        bundle.putBoolean("isP", isP)
+        ps.arguments = bundle
         ps.show(fragmentManager, "PSFragment")
     }
 
