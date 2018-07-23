@@ -8,5 +8,10 @@
             <enum name="openRight" value="1"/>
         </attr>
     </declare-styleable>
+    <declare-styleable name="GoodsPicker">
+        <attr name="text" format="string" />
+        <attr name="textSize" format="dimension"/>
+        <attr name="text_size" format="dimension"/>
+    </declare-styleable>
 
 </resources>

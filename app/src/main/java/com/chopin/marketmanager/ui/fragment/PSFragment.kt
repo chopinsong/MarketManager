@@ -24,7 +24,6 @@ import org.jetbrains.anko.uiThread
 
 
 class PSFragment : MyDialogFragment() {
-    //    var isP = false
     private var brands = arrayOf("")
     private var types = arrayOf("")
     private var names = arrayOf("")
@@ -82,7 +81,6 @@ class PSFragment : MyDialogFragment() {
 
         })
         select_present_tv.setOnClickListener {
-            toast("选择赠品")
         }
     }
 

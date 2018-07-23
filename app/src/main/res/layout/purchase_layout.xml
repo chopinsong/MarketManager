@@ -147,19 +147,20 @@
                 android:id="@+id/add_goods_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:textColor="@color/bright_blue"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/add_goods_text" />
+                android:text="@string/add_goods_text"
+                android:textColor="@color/bright_blue" />
 
             <TextView
                 android:id="@+id/select_present_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:textColor="@color/bright_blue"
+                android:visibility="gone"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/select_present" />
+                android:text="@string/select_present"
+                android:textColor="@color/bright_blue" />
         </LinearLayout>
 
     </LinearLayout>
