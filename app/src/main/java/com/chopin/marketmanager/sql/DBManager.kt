@@ -35,13 +35,6 @@ object DBManager {
     fun ps(b:PSBean): Long {
        return db.ps(b)
     }
-    fun purchase(b: PSBean) {
-        db.purchase(b)
-    }
-
-    fun shipments(b: PSBean) {
-        db.shipments(b)
-    }
 
     fun purchaseList(): ArrayList<PSBean> {
      return   db.purchaseList()

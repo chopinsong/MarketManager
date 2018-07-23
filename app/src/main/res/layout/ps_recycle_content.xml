@@ -74,10 +74,10 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/item_name_tv"
+                android:id="@+id/item_remark_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="start"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/ps_list_text_size" />
         </LinearLayout>

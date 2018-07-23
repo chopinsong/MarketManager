@@ -155,6 +155,9 @@ class PSFragment : MyDialogFragment() {
     }
 
     private fun getSelectName(): String {
+        if (names.isEmpty()){
+            return ""
+        }
         val name = names[name_picker.value]
         return if (TextUtils.isEmpty(name)) "" else name.trim()
     }
@@ -216,9 +219,11 @@ class PSFragment : MyDialogFragment() {
         psCount = if (psCount == 0) 1 else psCount
         var customerName = getCustomerName()
         customerName = if (customerName.isNotEmpty()) customerName else "未知"
+        val remark = remark_tv.text.toString()
+        val isP = is_p_switch.isChecked
         async {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
-            val b = PSBean(0, goodsId, inputPrice, customerName, is_p_switch.isChecked, psCount)
+            val b = PSBean(psId = -1, goodsId = goodsId, price = inputPrice, customerName = customerName, isPurchase = isP, count = psCount, remark = remark)
             val id = DBManager.ps(b)
             b.psId = id.toInt()
             uiThread {

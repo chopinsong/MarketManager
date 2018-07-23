@@ -114,7 +114,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun updateList() {
         async {
-            psData = DBManager.getPSBeans()
+            try {
+                psData = DBManager.getPSBeans()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             uiThread {
                 adapter.setData(psData)
             }
@@ -184,7 +188,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun showDelConfirm(i: Int, b: PSItemBean) {
-        Snackbar.make(window.decorView, "确定删除?", Snackbar.LENGTH_INDEFINITE).setAction("确定") {
+        Snackbar.make(window.decorView, "确定删除?", Snackbar.LENGTH_LONG).setAction("确定") {
             async {
                 val line = DBManager.setPSEnable(b.psId, false)
                 uiThread {
@@ -200,7 +204,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun showUndo(i: Int, b: PSItemBean) {
-        Snackbar.make(window.decorView, "删除成功，是否撤消?", Snackbar.LENGTH_INDEFINITE).setAction("撤消") {
+        Snackbar.make(window.decorView, "删除成功，是否撤消?", Snackbar.LENGTH_LONG).setAction("撤消") {
             async {
                 val psEnable = DBManager.setPSEnable(b.psId, true)
                 uiThread {

@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSItemBean
+import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.time2shorTime
 import swipe.SwipeItemLayout
 
@@ -19,6 +20,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
     fun setData(data: ArrayList<PSItemBean>) {
         mData.clear()
+        i("data = ${data.size}")
         mData.addAll(data)
         this.notifyDataSetChanged()
     }
@@ -70,7 +72,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         h.itemTypeTv.text = bean.g.type
         h.itemCustomerTv.text = bean.customerName
         h.itemPriceTv.text = bean.price
-        h.itemNameTv.text = bean.g.name
+        h.itemRemarkTv.text = bean.remark
         h.itemCountTv.text = bean.count
         h.itemTimeTv.text = time2shorTime(bean.time)
     }
@@ -81,7 +83,7 @@ class PSViewHolder(v: View) : ViewHolder(v) {
     val img = v.findViewById<ImageView>(R.id.item_is_p_img)
     val itemBrandTv = v.findViewById<TextView>(R.id.item_brand_tv)
     val itemTypeTv = v.findViewById<TextView>(R.id.item_type_tv)
-    val itemNameTv = v.findViewById<TextView>(R.id.item_name_tv)
+    val itemRemarkTv = v.findViewById<TextView>(R.id.item_remark_tv)
     val itemPriceTv = v.findViewById<TextView>(R.id.item_price_tv)
     val itemCustomerTv = v.findViewById<TextView>(R.id.item_customer_tv)
     val itemCountTv = v.findViewById<TextView>(R.id.item_count_tv)

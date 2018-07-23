@@ -116,7 +116,7 @@ fun Activity.snack(msg: String) {
 
 fun PSBean.toPSItemBean(): PSItemBean {
     val goods = DBManager.getGoodsInfo(goodsId)
-    return PSItemBean(goods, psId, isPurchase, price.toString(), customerName, count.toString(), time)
+    return PSItemBean(goods, psId, isPurchase, price.toString(), customerName, count.toString(),remark, time)
 }
 
 fun Activity.showGoodsLeft(b: PSItemBean) {

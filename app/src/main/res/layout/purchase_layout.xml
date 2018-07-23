@@ -99,6 +99,26 @@
                 android:inputType="number"
                 android:textColor="@color/colorPrimary" />
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/remark_tv"
+                android:layout_marginStart="5dp"
+                android:text="@string/remark" />
+
+            <EditText
+                android:id="@+id/remark_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="textAutoComplete"
+                android:textColor="@color/colorPrimary" />
+        </RelativeLayout>
     </LinearLayout>
 
 
@@ -156,11 +176,11 @@
                 android:id="@+id/select_present_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:visibility="gone"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/select_present"
-                android:textColor="@color/bright_blue" />
+                android:textColor="@color/bright_blue"
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>
