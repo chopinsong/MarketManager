@@ -63,7 +63,6 @@ class DBUtil(context: Context) {
 
     fun psList(): ArrayList<PSBean> {
         val list = ArrayList<PSBean>()
-        i("123")
         val c = db.query(PSTable.NAME,null,"${PSTable.IS_ENABLE}=?", arrayOf("1"),null,null,null)?:return  list
         while (c.moveToNext()) {
             val psId = c.getInt(c.getColumnIndex(PSTable.PS_ID))

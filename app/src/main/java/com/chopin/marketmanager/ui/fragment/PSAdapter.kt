@@ -20,7 +20,6 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
     fun setData(data: ArrayList<PSItemBean>) {
         mData.clear()
-        i("data = ${data.size}")
         mData.addAll(data)
         this.notifyDataSetChanged()
     }
