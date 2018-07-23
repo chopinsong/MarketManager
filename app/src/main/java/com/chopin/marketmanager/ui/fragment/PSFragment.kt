@@ -24,9 +24,9 @@ import org.jetbrains.anko.uiThread
 
 
 class PSFragment : MyDialogFragment() {
-    private var brands = arrayOf("")
-    private var types = arrayOf("")
-    private var names = arrayOf("")
+    private var brands = arrayOf<String>()
+    private var types = arrayOf<String>()
+    private var names = arrayOf<String>()
     private var commitListener: (b: PSBean) -> Unit = {}
 
     private var isP: Boolean? = null
