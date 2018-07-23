@@ -24,16 +24,19 @@ import org.jetbrains.anko.uiThread
 
 
 class PSFragment : MyDialogFragment() {
-    var isP = false
+    //    var isP = false
     private var brands = arrayOf("")
     private var types = arrayOf("")
     private var names = arrayOf("")
     private var commitListener: (b: PSBean) -> Unit = {}
 
+    private var isP: Boolean? = null
+
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         isP = arguments.getBoolean("isP", true)
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -44,22 +47,23 @@ class PSFragment : MyDialogFragment() {
     override fun onViewCreated(v: View, b: Bundle?) {
         updateBrands()
         commit_btn.setOnClickListener { commit() }
-        if (isP) {
-            add_goods_btn.setOnClickListener {
-                showAddGoods(fragmentManager) {
-                    updateBrands()
-                }
+        add_goods_btn.setOnClickListener {
+            showAddGoods(fragmentManager) {
+                updateBrands()
             }
-            add_goods_btn.visibility = View.VISIBLE
-        } else {
-            add_goods_btn.visibility = View.GONE
+        }
+        isP?.let {
+            is_p_switch.isChecked = it
+        }
+        is_p_switch.setOnCheckedChangeListener { _, isChecked ->
+            add_goods_btn.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         brand_picker.setOnValueChangedListener { _, _, _ ->
             updateTypes(getSelectBrand())
         }
         type_picker.setOnValueChangedListener { _, _, _ ->
             updateNames(getSelectBrand(), getSelectType())
-            if (!isP) {
+            if (!is_p_switch.isChecked) {
                 checkLeftGoodsCount()
             }
         }
@@ -71,12 +75,15 @@ class PSFragment : MyDialogFragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!TextUtils.isEmpty(s) && !isP) {
+                if (!TextUtils.isEmpty(s) && !is_p_switch.isChecked) {
                     checkLeftGoodsCount()
                 }
             }
 
         })
+        select_present_tv.setOnClickListener {
+            toast("选择赠品")
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -85,8 +92,9 @@ class PSFragment : MyDialogFragment() {
         dialog.setCanceledOnTouchOutside(true)
     }
 
-    fun setCommitListener(commitListener: (b: PSBean) -> Unit = {}) {
+    fun setCommitListener(commitListener: (b: PSBean) -> Unit = {}): PSFragment {
         this.commitListener = commitListener
+        return this
     }
 
 
@@ -212,7 +220,7 @@ class PSFragment : MyDialogFragment() {
         customerName = if (customerName.isNotEmpty()) customerName else "未知"
         async {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
-            val b = PSBean(0, goodsId, inputPrice, customerName, isP, psCount)
+            val b = PSBean(0, goodsId, inputPrice, customerName, is_p_switch.isChecked, psCount)
             val id = DBManager.ps(b)
             b.psId = id.toInt()
             uiThread {

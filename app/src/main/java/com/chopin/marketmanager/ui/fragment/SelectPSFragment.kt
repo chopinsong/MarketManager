@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
-import com.chopin.marketmanager.util.showPsFragment
+import com.chopin.marketmanager.util.getPSFragment
 import kotlinx.android.synthetic.main.select_ps_dialog_layout.*
 
 class SelectPSFragment : MyDialogFragment() {
 
-    private var update: (b:PSBean) -> Unit = {}
+    private var update: (b: PSBean) -> Unit = {}
 
-    fun setUpdateFunc(update: (b:PSBean) -> Unit): SelectPSFragment {
+    fun setUpdateFunc(update: (b: PSBean) -> Unit): SelectPSFragment {
         this.update = update
         return this
     }
@@ -28,18 +28,22 @@ class SelectPSFragment : MyDialogFragment() {
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         select_purchase_btn.setOnClickListener {
-            showPSActivity(true)
+            showPS(true)
             dialog.dismiss()
         }
         select_shipment_btn.setOnClickListener {
-            showPSActivity(false)
+            showPS(false)
             dialog.dismiss()
         }
     }
 
-    private fun showPSActivity(isP: Boolean) {
+    private fun showPS(isP: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            showPsFragment(fragmentManager, isP, update)
+            val ps = getPSFragment(fragmentManager).setCommitListener(update)
+            val bundle = Bundle()
+            bundle.putBoolean("isP", isP)
+            ps.arguments = bundle
+            ps.show(fragmentManager, "PSFragment")
         }
     }
 

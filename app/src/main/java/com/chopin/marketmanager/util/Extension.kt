@@ -72,13 +72,8 @@ fun Any.showStock(fm: FragmentManager) {
     StockFragment().show(fm, "stockFragment")
 }
 
-fun Any.showPsFragment(fm: FragmentManager, isP: Boolean, func: (b: PSBean) -> Unit = {}) {
-    val f = PSFragment()
-    f.setCommitListener(func)
-    val b = Bundle()
-    b.putBoolean("isP", isP)
-    f.arguments = b
-    f.show(fm, "PSFragment")
+fun Any.getPSFragment(fm: FragmentManager): PSFragment {
+   return PSFragment()
 }
 
 fun Any.showAddGoods(fm: FragmentManager, f: (g: Goods) -> Unit = {}) {

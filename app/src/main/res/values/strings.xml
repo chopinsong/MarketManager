@@ -30,4 +30,6 @@
     <string name="del_text">删除</string>
     <string name="plus">+</string>
     <string name="X">X</string>
+    <string name="select_present">选择赠品</string>
+    <string name="add_goods_text">增加货品</string>
 </resources>

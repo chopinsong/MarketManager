@@ -16,7 +16,6 @@ import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.recevier.InstallReceiver
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.PSAdapter
-import com.chopin.marketmanager.ui.fragment.SelectPSFragment
 import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -91,14 +90,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_purchase -> {
-                showPsFragment(fragmentManager, true) {
-                    addData(it)
-                }
+                showPSFragment()
             }
             R.id.nav_shipments -> {
-                showPsFragment(fragmentManager, false) {
-                    addData(it)
-                }
+                showPSFragment(false)
             }
             R.id.stock -> {
                 showStock(fragmentManager)
@@ -150,9 +145,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initListener() {
         fab.setOnClickListener {
-            SelectPSFragment().setUpdateFunc {
-                addData(it)
-            }.show(fragmentManager, "chopin")
+            showPSFragment()
         }
         m_filter_type_p.setOnValueChangedListener { _, _, type ->
             filterType = type
@@ -169,6 +162,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         adapter.setOnDelListener { b, i ->
             showDelConfirm(i, b)
         }
+    }
+
+    private fun showPSFragment(isP: Boolean = true) {
+        val ps = getPSFragment(fragmentManager).setCommitListener { addData(it) }
+        val bundle = Bundle()
+        bundle.putBoolean("isP",isP)
+        ps.arguments=bundle
+        ps.show(fragmentManager, "PSFragment")
     }
 
     private fun getTypeContent(): Array<String> {

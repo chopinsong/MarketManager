@@ -4,7 +4,6 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.widget.LinearLayout
-import android.widget.NumberPicker
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
@@ -19,9 +18,10 @@ class GoodsPicker(context: Context) : LinearLayout(context) {
     private var brands = arrayOf("")
     private var types = arrayOf("")
     private var names = arrayOf("")
-    private val brandPicker = NumberPicker(context)
-    private val typePicker = NumberPicker(context)
-    private val namePicker = NumberPicker(context)
+    private val brandPicker = NumberPickerView(context)
+    private val typePicker = NumberPickerView(context)
+    private val namePicker = NumberPickerView(context)
+    private var checkLeftCount: () -> Unit = {}
 
     init {
         orientation = HORIZONTAL
@@ -34,30 +34,34 @@ class GoodsPicker(context: Context) : LinearLayout(context) {
         }
         typePicker.setOnValueChangedListener { _, _, _ ->
             updateNames(getSelectBrand(), getSelectType())
+            checkLeftCount.invoke()
         }
     }
 
-    fun updateBrands() {
+    private fun updateBrands() {
         async {
-            brands = DBManager.brands().toTypedArray()
+            try {
+                brands = DBManager.brands().toTypedArray()
+            } catch (e: Exception) {
+            }
             uiThread {
                 if (brands.isNotEmpty()) {
-                    brandPicker.displayedValues = brands
-                    typePicker.minValue = 0
-                    namePicker.maxValue = brands.size - 1
+                    brandPicker.refreshByNewDisplayedValues(brands)
                 }
+                updateTypes(getSelectBrand())
             }
         }
     }
 
     private fun updateTypes(brand: String) {
         async {
-            types = DBManager.types("${GoodsTable.BRAND}=$brand").toTypedArray()
+            try {
+                types = DBManager.types("${GoodsTable.BRAND}=\"$brand\"").toTypedArray()
+            } catch (e: Exception) {
+            }
             uiThread {
                 if (types.isNotEmpty()) {
-                    brandPicker.displayedValues = types
-                    typePicker.minValue = 0
-                    namePicker.maxValue = types.size - 1
+                    typePicker.refreshByNewDisplayedValues(types)
                 }
             }
         }
@@ -65,12 +69,13 @@ class GoodsPicker(context: Context) : LinearLayout(context) {
 
     private fun updateNames(brand: String, type: String) {
         async {
-            names = DBManager.goodsNames("${GoodsTable.BRAND}=$brand and ${GoodsTable.TYPE} =$type").toTypedArray()
+            try {
+                names = DBManager.goodsNames("${GoodsTable.BRAND}=\"$brand\" and ${GoodsTable.TYPE} =\"$type\"").toTypedArray()
+            } catch (e: Exception) {
+            }
             uiThread {
                 if (names.isNotEmpty()) {
-                    brandPicker.displayedValues = types
-                    typePicker.minValue = 0
-                    namePicker.maxValue = types.size - 1
+                    namePicker.refreshByNewDisplayedValues(names)
                 }
             }
         }
@@ -78,20 +83,20 @@ class GoodsPicker(context: Context) : LinearLayout(context) {
 
     private fun getSelectName(): String {
         val name = names[namePicker.value]
-        return if (TextUtils.isEmpty(name)) "" else name
+        return if (TextUtils.isEmpty(name)) "" else name.trim()
     }
 
     private fun getSelectBrand(): String {
         if (brands.isNotEmpty()) {
             val brand = brands[brandPicker.value]
-            return if (TextUtils.isEmpty(brand)) "" else brand
+            return if (TextUtils.isEmpty(brand)) "" else brand.trim()
         }
         return ""
     }
 
     private fun getSelectType(): String {
         val type = types[typePicker.value]
-        return if (TextUtils.isEmpty(type)) "" else type
+        return if (TextUtils.isEmpty(type)) "" else type.trim()
     }
 
     fun getSelectGoods(): Goods {
