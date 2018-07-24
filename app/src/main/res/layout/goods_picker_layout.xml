@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="0dp"
-    android:layout_weight="3"
     android:layout_height="wrap_content"
+    android:layout_weight="3"
     android:gravity="center"
     android:orientation="horizontal">
 
@@ -11,24 +12,24 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:layout_weight="1">
-
-    </com.chopin.marketmanager.ui.NumberPickerView>
+        android:layout_weight="1"
+        app:npv_DividerColor="@color/colorAccent"
+        app:npv_TextColorSelected="@color/colorAccent" />
 
     <com.chopin.marketmanager.ui.NumberPickerView
         android:id="@+id/type_picker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
-
-    </com.chopin.marketmanager.ui.NumberPickerView>
+        android:layout_weight="1"
+        app:npv_DividerColor="@color/colorAccent"
+        app:npv_TextColorSelected="@color/colorAccent" />
 
     <com.chopin.marketmanager.ui.NumberPickerView
         android:id="@+id/remark_picker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_weight="1">
-
-    </com.chopin.marketmanager.ui.NumberPickerView>
+        android:layout_weight="1"
+        app:npv_DividerColor="@color/colorAccent"
+        app:npv_TextColorSelected="@color/colorAccent" />
 </LinearLayout>

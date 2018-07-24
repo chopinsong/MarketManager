@@ -164,7 +164,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/add_goods_text"
-                android:textColor="@color/bright_blue" />
+                android:textColor="@color/colorAccent" />
 
             <TextView
                 android:id="@+id/select_present_tv"

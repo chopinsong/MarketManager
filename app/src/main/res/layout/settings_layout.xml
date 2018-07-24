@@ -26,11 +26,12 @@
             android:gravity="center_vertical"
             android:text="@string/del_all_ps_title" />
 
-        <Button
+        <TextView
             android:id="@+id/del_all_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
+            android:textColor="@color/colorAccent"
             android:text="@string/del_all_ps" />
     </LinearLayout>
 </LinearLayout>

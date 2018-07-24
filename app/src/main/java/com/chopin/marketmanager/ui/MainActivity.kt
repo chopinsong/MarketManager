@@ -92,6 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         menuInflater.inflate(R.menu.main, menu)
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
+        searchView.queryHint="在此输入过滤内容"
         searchView.setOnCloseListener {
             isGlobalFilter=false
             return@setOnCloseListener false
