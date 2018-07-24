@@ -14,42 +14,31 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            style="@style/CustomToolbarHeight"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="0dp"
-            android:backgroundTint="@color/bg_gray"
-            android:fitsSystemWindows="true"
-            android:padding="0dp"
-            app:contentInsetStart="0dp"
-            android:background="@color/white"
-
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorAccent"
+            android:backgroundTint="@android:color/transparent"
             >
             <!--android:layout_height="?attr/actionBarSize"-->
+            <!--style="@style/CustomToolbarHeight"-->
             <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
             <!--android:background="?attr/colorPrimary"-->
 
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <!--<TextView-->
+                    <!--android:id="@+id/title_m"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/app_name"-->
+                    <!--android:textColor="@color/gray"-->
+                    <!--android:textSize="18sp"-->
+                    <!--android:textStyle="bold" />-->
+            <!--</RelativeLayout>-->
 
-                <TextView
-                    android:id="@+id/title_m"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/app_name"
-                    android:textColor="@color/gray"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignEnd="@+id/title_m"
-                    android:background="@drawable/ic_search" />
-            </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
 

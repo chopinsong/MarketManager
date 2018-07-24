@@ -5,11 +5,16 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
+import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SearchView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
@@ -80,10 +85,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    private var searchText: String = ""
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
-        return true
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
+        searchView.setOnCloseListener {
+            isGlobalFilter=false
+            return@setOnCloseListener false
+        }
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                isGlobalFilter = true
+                newText?.let {
+                    searchText = it
+                }
+                newText?.let {
+                    handleFilter(0)
+                }
+                return true
+            }
+
+        })
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -146,15 +177,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
     private fun updateData(b: PSBean, i: Int) {
         async {
             val bean = b.toPSItemBean()
             uiThread {
-                adapter.updateData(bean,i)
+                adapter.updateData(bean, i)
             }
         }
 
     }
+
+    private var isGlobalFilter: Boolean = false
+
     private fun initListener() {
         fab.setOnClickListener {
             showPSFragment()
@@ -174,12 +209,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             showDelConfirm(i, b)
         }
         adapter.setEditListener { b, i ->
-            showEditPSFragment(b){
-               updateData(it,i)
+            showEditPSFragment(b) {
+                updateData(it, i)
             }
         }
     }
-
 
 
     private fun showEditPSFragment(b: PSItemBean, func: (b: PSBean) -> Unit) {
@@ -242,12 +276,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun handleFilter(type: Int) {
         async {
+            val gs = searchText
             val data = psData.filter {
-                when (filterType) {
-                    1 -> it.g.brand == content[type]
-                    2 -> it.g.type == content[type]
-                    3 -> type.isPurchase() && it.isP || type.isShipment() && !it.isP
-                    else -> true
+                if (!isGlobalFilter) {
+                    when (filterType) {
+                        1 -> it.g.brand == content[type]
+                        2 -> it.g.type == content[type]
+                        3 -> type.isPurchase() && it.isP || type.isShipment() && !it.isP
+                        else -> true
+                    }
+                } else {
+                    if (gs.isEmpty()) {
+                        true
+                    } else {
+                        it.g.brand.contains(gs) || it.g.type.contains(gs) || it.remark.contains(gs) || it.price.contains(gs) || it.customerName.contains(gs) || it.count.contains(gs)
+                    }
                 }
             }
             val nData = ArrayList<PSItemBean>()

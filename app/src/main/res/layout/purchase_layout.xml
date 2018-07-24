@@ -42,7 +42,7 @@
             android:layout_alignParentEnd="true"
             android:gravity="center"
             android:text="@string/commit_btn"
-            android:textColor="@color/bright_blue" />
+            android:textColor="@color/colorAccent" />
     </RelativeLayout>
 
 
@@ -72,7 +72,7 @@
                 android:gravity="center"
                 android:inputType="textAutoComplete"
                 android:labelFor="@+id/customer_et"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -93,7 +93,7 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:labelFor="@+id/price_et"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:inputType="number"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:inputType="textAutoComplete"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -173,7 +173,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/select_present"
-                android:textColor="@color/bright_blue"
+                android:textColor="@color/colorAccent"
                 android:visibility="gone" />
         </LinearLayout>
 
