@@ -91,14 +91,14 @@ class GoodsPicker : LinearLayout {
             }
             uiThread {
                 if (names.isNotEmpty()) {
-                    goods_picker_name.refreshByNewDisplayedValues(names)
+                    goods_picker_remark.refreshByNewDisplayedValues(names)
                 }
             }
         }
     }
 
     private fun getSelectName(): String {
-        val name = names[goods_picker_name.value]
+        val name = names[goods_picker_remark.value]
         return if (TextUtils.isEmpty(name)) "" else name.trim()
     }
 

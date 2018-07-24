@@ -18,11 +18,11 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="0dp"
-            android:background="@color/zero"
             android:backgroundTint="@color/bg_gray"
             android:fitsSystemWindows="true"
             android:padding="0dp"
             app:contentInsetStart="0dp"
+            android:background="@color/white"
 
             >
             <!--android:layout_height="?attr/actionBarSize"-->

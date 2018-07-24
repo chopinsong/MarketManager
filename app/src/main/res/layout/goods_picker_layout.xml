@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingEnd="20dp"
+    android:paddingStart="20dp">
 
     <com.chopin.marketmanager.ui.NumberPickerView
         android:id="@+id/goods_picker_brand"
@@ -16,9 +22,9 @@
     </com.chopin.marketmanager.ui.NumberPickerView>
 
     <com.chopin.marketmanager.ui.NumberPickerView
-        android:id="@+id/goods_picker_name"
+        android:id="@+id/goods_picker_remark"
         android:layout_width="0dp"
         android:layout_height="wrap_content">
 
     </com.chopin.marketmanager.ui.NumberPickerView>
-</merge>
+</LinearLayout>

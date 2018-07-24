@@ -13,6 +13,8 @@ import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.ui.AddGoodsView
 import com.chopin.marketmanager.util.getProgressDialog
+import com.chopin.marketmanager.util.scaleClose
+import com.chopin.marketmanager.util.scaleDown
 import com.chopin.marketmanager.util.snack
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
@@ -49,7 +51,7 @@ class PSFragment : MyDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window.setWindowAnimations(R.style.dialogAnim)
-        dialog?.setOnKeyListener { dialog, keyCode, event ->
+        dialog?.setOnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (isAddGoodShow) {
                     toggleAddGoods()

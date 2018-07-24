@@ -5,7 +5,7 @@ import com.chopin.marketmanager.util.time2long
 import java.io.Serializable
 
 
-class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double, var isEnabled: Boolean = true, var time: String = Util.crTime()):Serializable
+class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double=0.0, var isEnabled: Boolean = true, var time: String = Util.crTime()):Serializable
 open class PSBean(var psId: Int, var goodsId: Int, var price: Double, var customerName: String, val isPurchase: Boolean, var count: Int, var isEnabled: Boolean = true, var remark: String = "", var time: String = Util.crTime())
 
 //class PurchaseBean(var purchaseId:Int,var pGoodsId:Int,var purchasePrice:Double,var pCustomerName:String,var pTime:String= Util.time()):PSBean(purchaseId,pGoodsId,purchasePrice,pCustomerName,pTime)

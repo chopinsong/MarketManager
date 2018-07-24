@@ -1,17 +1,22 @@
 package com.chopin.marketmanager.util
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.DialogFragment
 import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
 import android.graphics.Color
+import android.renderscript.Sampler
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.widget.NumberPicker
 import android.widget.Toast
@@ -103,6 +108,46 @@ fun View.slideToUp() {
     slide.fillAfter = true
     slide.isFillEnabled = true
     startAnimation(slide)
+}
+
+fun View.scaleDown(f: () -> Unit = {}) {
+    val anim = ObjectAnimator.ofFloat(this, "scaleY", 0f, 1f)
+    anim.addListener(object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            f.invoke()
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+        }
+    })
+    anim.duration = 600
+    anim.start()
+}
+
+fun View.scaleClose(f: () -> Unit = {}) {
+    val anim = ObjectAnimator.ofFloat(this, "scaleY", 1f, 0f)
+    anim.addListener(object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            f.invoke()
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+        }
+    })
+    anim.duration = 600
+    anim.start()
 }
 
 fun DialogFragment.snack(msg: String) {
