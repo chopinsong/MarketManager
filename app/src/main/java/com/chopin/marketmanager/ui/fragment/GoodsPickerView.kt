@@ -11,12 +11,37 @@ import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
 
 class GoodsPickerView(root: View) {
-    private val brandPicker = root.findViewById<NumberPickerView>(R.id.goods_picker_brand)
-    private val typePicker = root.findViewById<NumberPickerView>(R.id.goods_picker_type)
-    private val remarkPicker = root.findViewById<NumberPickerView>(R.id.goods_picker_remark)
+    private val brandPicker = root.findViewById<NumberPickerView>(R.id.brand_picker)
+    private val typePicker = root.findViewById<NumberPickerView>(R.id.type_picker)
+    private val remarkPicker = root.findViewById<NumberPickerView>(R.id.remark_picker)
     private var brands = arrayOf<String>()
     private var types = arrayOf<String>()
     private var remarks = arrayOf<String>()
+
+    private var listener: () -> Unit = {}
+    fun setListener(listener: () -> Unit = {}) {
+        this.listener = listener
+    }
+
+    init {
+        brandPicker.setOnValueChangedListener { _, _, _ ->
+            updateTypes(getSelectBrand())
+        }
+        typePicker.setOnValueChangedListener { _, _, _ ->
+            updateNames(getSelectBrand(), getSelectType())
+            listener.invoke()
+        }
+    }
+
+    fun initValues(brand: String, type: String, remark: String) {
+        val index = brands.indexOf(brand)
+        brandPicker.value = if (index > -1) index else 0
+        val indexT = types.indexOf(type)
+        typePicker.value = if (indexT > -1) indexT else 0
+        val indexN = remarks.indexOf(remark)
+        remarkPicker.value = if (indexN > -1) indexN else 0
+    }
+
     fun updateBrands() {
         async {
             try {

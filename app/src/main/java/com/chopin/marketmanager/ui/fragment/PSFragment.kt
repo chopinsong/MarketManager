@@ -10,11 +10,8 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.ui.AddGoodsView
 import com.chopin.marketmanager.util.getProgressDialog
-import com.chopin.marketmanager.util.scaleClose
-import com.chopin.marketmanager.util.scaleDown
 import com.chopin.marketmanager.util.snack
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
@@ -24,14 +21,12 @@ import org.jetbrains.anko.uiThread
 
 
 class PSFragment : MyDialogFragment() {
-    private var brands = arrayOf<String>()
-    private var types = arrayOf<String>()
-    private var remarks = arrayOf<String>()
     private var commitListener: (b: PSBean) -> Unit = {}
     private var updateListener: (b: PSBean) -> Unit = {}
     private var isP: Boolean? = null
     private var editBean: PSItemBean? = null
     private var isEditMode: Boolean = false
+    private lateinit var goodsPickerView: GoodsPickerView
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
@@ -68,7 +63,8 @@ class PSFragment : MyDialogFragment() {
     private lateinit var addGoodsView: AddGoodsView
 
     override fun onViewCreated(v: View, b: Bundle?) {
-        updateBrands()
+        goodsPickerView = GoodsPickerView(goods_picker_root)
+        goodsPickerView.updateBrands()
         commit_btn.setOnClickListener { commit() }
         addGoodsView = AddGoodsView(add_goods_root)
         add_goods_btn.setOnClickListener {
@@ -81,11 +77,7 @@ class PSFragment : MyDialogFragment() {
             is_p_switch.isChecked = it
             switchPS(it)
         }
-        brand_picker.setOnValueChangedListener { _, _, _ ->
-            updateTypes(getSelectBrand())
-        }
-        type_picker.setOnValueChangedListener { _, _, _ ->
-            updateNames(getSelectBrand(), getSelectType())
+        goodsPickerView.setListener {
             if (!is_p_switch.isChecked) {
                 checkLeftGoodsCount()
             }
@@ -117,7 +109,7 @@ class PSFragment : MyDialogFragment() {
             add_goods_root.visibility = View.GONE
             add_goods_btn.text = getString(R.string.add_goods_text)
             addGoodsView.commit {
-                updateBrands()
+                goodsPickerView.updateBrands()
             }
         }
         isAddGoodShow = add_goods_root.visibility == View.VISIBLE
@@ -139,12 +131,7 @@ class PSFragment : MyDialogFragment() {
                         price_et.setText(it.price)
                         purchase_count.setText(it.count)
                         remark_tv.setText(it.remark)
-                        val index = brands.indexOf(it.g.brand)
-                        brand_picker.value = if (index > -1) index else 0
-                        val indexT = types.indexOf(it.g.type)
-                        type_picker.value = if (indexT > -1) indexT else 0
-                        val indexN = remarks.indexOf(it.g.remark)
-                        name_picker.value = if (indexN > -1) indexN else 0
+                        goodsPickerView.initValues(it.g.brand, it.g.type, it.g.remark)
                     }
                 }
             }
@@ -163,49 +150,6 @@ class PSFragment : MyDialogFragment() {
     }
 
 
-    private fun updateBrands() {
-        async {
-            try {
-                brands = DBManager.brands().toTypedArray()
-            } catch (e: Exception) {
-            }
-            uiThread {
-                if (brands.isNotEmpty()) {
-                    brand_picker.refreshByNewDisplayedValues(brands)
-                }
-                updateTypes(getSelectBrand())
-            }
-        }
-    }
-
-    private fun updateTypes(brand: String) {
-        async {
-            try {
-                types = DBManager.types("${GoodsTable.BRAND}=\"$brand\"").toTypedArray()
-            } catch (e: Exception) {
-            }
-            uiThread {
-                if (types.isNotEmpty()) {
-                    type_picker.refreshByNewDisplayedValues(types)
-                }
-            }
-        }
-    }
-
-    private fun updateNames(brand: String, type: String) {
-        async {
-            try {
-                remarks = DBManager.goodsNames("${GoodsTable.BRAND}=\"$brand\" and ${GoodsTable.TYPE} =\"$type\"").toTypedArray()
-            } catch (e: Exception) {
-            }
-            uiThread {
-                if (remarks.isNotEmpty()) {
-                    name_picker.refreshByNewDisplayedValues(remarks)
-                }
-            }
-        }
-    }
-
     private fun getCustomerName(): String {
         val name = customer_et.text.toString()
         return if (TextUtils.isEmpty(name)) "" else name.trim()
@@ -221,43 +165,17 @@ class PSFragment : MyDialogFragment() {
         return if (TextUtils.isEmpty(count)) 0 else count.toInt()
     }
 
-    private fun getSelectName(): String {
-        if (remarks.isEmpty()) {
-            return ""
-        }
-        val name = remarks[name_picker.value]
-        return if (TextUtils.isEmpty(name)) "" else name.trim()
-    }
-
-    private fun getSelectBrand(): String {
-        if (brands.isNotEmpty()) {
-            val brand = brands[brand_picker.value]
-            return if (TextUtils.isEmpty(brand)) "" else brand.trim()
-        }
-        return ""
-    }
-
-    private fun getSelectType(): String {
-        if (types.isNotEmpty()) {
-            val type = types[type_picker.value]
-            return if (TextUtils.isEmpty(type)) "" else type.trim()
-        }
-        return ""
-    }
-
     private fun checkLeftGoodsCount() {
-        val selectBrand = getSelectBrand()
-        val selectType = getSelectType()
-        val selectName = getSelectName()
+        val selectGoods = goodsPickerView.getSelectGoods()
         val psCount = getPSCount()
         async {
-            val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
+            val goodsId = DBManager.getGoodsId(selectGoods)
             val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
             uiThread {
                 if (psCount > goodsCountLeft) {
                     commit_btn.enabled = false
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        context.toast("当前库存不足,$selectBrand$selectType${selectName}只有${goodsCountLeft}个")
+                        context.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
                     }
                 } else {
                     commit_btn.enabled = true
@@ -267,22 +185,19 @@ class PSFragment : MyDialogFragment() {
     }
 
     private fun commit() {
-        val selectBrand = getSelectBrand()
+        val selectGoods = goodsPickerView.getSelectGoods()
+        val selectBrand = selectGoods.brand
         if (selectBrand.isEmpty()) {
             snack("请选择品牌")
             return
         }
-        val selectType = getSelectType()
+        val selectType = selectGoods.type
         if (selectType.isEmpty()) {
             snack("请选择类型")
             return
         }
-        val selectName = getSelectName()
+        val selectName = selectGoods.remark
         val inputPrice = getInputPrice()
-        if (selectType.isEmpty()) {
-            snack("请输入价格")
-            return
-        }
         val progress = getProgressDialog()
         progress.show(fragmentManager, "PSActivity")
         var psCount = getPSCount()

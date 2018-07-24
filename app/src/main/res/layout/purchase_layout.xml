@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:gravity="center"
     android:orientation="vertical"
-    android:fitsSystemWindows="true"
     android:padding="15dp">
 
     <RelativeLayout
@@ -146,36 +146,14 @@
         android:paddingEnd="20dp"
         android:paddingStart="20dp">
 
-        <com.chopin.marketmanager.ui.NumberPickerView
-            android:id="@+id/brand_picker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1">
-
-        </com.chopin.marketmanager.ui.NumberPickerView>
-
-        <com.chopin.marketmanager.ui.NumberPickerView
-            android:id="@+id/type_picker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-        </com.chopin.marketmanager.ui.NumberPickerView>
-
-        <com.chopin.marketmanager.ui.NumberPickerView
-            android:id="@+id/name_picker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1">
-
-        </com.chopin.marketmanager.ui.NumberPickerView>
+        <include
+            android:id="@+id/goods_picker_root"
+            layout="@layout/goods_picker_layout" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
             android:gravity="center"
             android:orientation="vertical">
 
