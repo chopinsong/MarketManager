@@ -31,6 +31,7 @@ fun Activity.toast(msg: String) {
     Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
 }
 
+
 fun Any.i(msg: String) {
     Log.i("chopin", msg)
 }
@@ -71,7 +72,7 @@ fun Any.showStock(fm: FragmentManager) {
 }
 
 fun Any.getPSFragment(): PSFragment {
-   return PSFragment()
+    return PSFragment()
 }
 
 fun Any.showAddGoods(fm: FragmentManager, f: (g: Goods) -> Unit = {}) {
@@ -112,9 +113,13 @@ fun Activity.snack(msg: String) {
     Snackbar.make(window.decorView, msg, Snackbar.LENGTH_LONG).show()
 }
 
+fun Any.snack(v: View, msg: String) {
+    Snackbar.make(v, msg, Snackbar.LENGTH_LONG).show()
+}
+
 fun PSBean.toPSItemBean(): PSItemBean {
     val goods = DBManager.getGoodsInfo(goodsId)
-    return PSItemBean(goods, psId, isPurchase, price.toString(), customerName, count.toString(),remark, time)
+    return PSItemBean(goods, psId, isPurchase, price.toString(), customerName, count.toString(), remark, time)
 }
 
 fun Activity.showGoodsLeft(b: PSItemBean) {
@@ -126,7 +131,7 @@ fun Activity.showGoodsLeft(b: PSItemBean) {
     }
 }
 
-fun NumberPicker.refreshValues(content:Array<String>){
+fun NumberPicker.refreshValues(content: Array<String>) {
     val oldValues = this.displayedValues
     if (oldValues != null && oldValues.size > content.size) {
         minValue = 0
@@ -140,14 +145,14 @@ fun NumberPicker.refreshValues(content:Array<String>){
 }
 
 fun Int.isPurchase(): Boolean {
-    return this==0
+    return this == 0
 }
 
-fun Int.isShipment():Boolean{
-    return this==1
+fun Int.isShipment(): Boolean {
+    return this == 1
 }
 
-fun RecyclerView.defaultItemAnimation(){
+fun RecyclerView.defaultItemAnimation() {
     val defaultItemAnimator = DefaultItemAnimator()
     defaultItemAnimator.addDuration = 400
     defaultItemAnimator.removeDuration = 400

@@ -5,17 +5,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
+import com.chopin.marketmanager.ui.AddGoodsView
 import com.chopin.marketmanager.util.getProgressDialog
-import com.chopin.marketmanager.util.showAddGoods
 import com.chopin.marketmanager.util.snack
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
@@ -52,25 +49,35 @@ class PSFragment : MyDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window.setWindowAnimations(R.style.dialogAnim)
+        dialog?.setOnKeyListener { dialog, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (isAddGoodShow) {
+                    toggleAddGoods()
+                    return@setOnKeyListener true
+                }
+            }
+            return@setOnKeyListener false
+        }
         return inflater.inflate(R.layout.purchase_layout, container)
     }
+
+    private var isAddGoodShow: Boolean = false
+
+    private lateinit var addGoodsView: AddGoodsView
 
     override fun onViewCreated(v: View, b: Bundle?) {
         updateBrands()
         commit_btn.setOnClickListener { commit() }
+        addGoodsView = AddGoodsView(add_goods_root)
         add_goods_btn.setOnClickListener {
-            showAddGoods(fragmentManager) {
-                updateBrands()
-            }
+            toggleAddGoods()
+        }
+        is_p_switch.setOnCheckedChangeListener { _, isChecked ->
+            switchPS(isChecked)
         }
         isP?.let {
             is_p_switch.isChecked = it
-        }
-        is_p_switch.setOnCheckedChangeListener { _, isChecked ->
-            add_goods_btn.visibility = if (isChecked) View.VISIBLE else View.GONE
-            if (isChecked){
-                commit_btn.isEnabled=true
-            }
+            switchPS(it)
         }
         brand_picker.setOnValueChangedListener { _, _, _ ->
             updateTypes(getSelectBrand())
@@ -98,6 +105,27 @@ class PSFragment : MyDialogFragment() {
         select_present_tv.setOnClickListener {
         }
         initEditBean()
+    }
+
+    private fun toggleAddGoods() {
+        if (!isAddGoodShow) {
+            add_goods_root.visibility = View.VISIBLE
+            add_goods_btn.text = getString(R.string.commit_add_good)
+        } else {
+            add_goods_root.visibility = View.GONE
+            add_goods_btn.text = getString(R.string.add_goods_text)
+            addGoodsView.commit {
+                updateBrands()
+            }
+        }
+        isAddGoodShow = add_goods_root.visibility == View.VISIBLE
+    }
+
+    private fun switchPS(isChecked: Boolean) {
+        add_goods_btn.visibility = if (isChecked) View.VISIBLE else View.GONE
+        if (isChecked) {
+            commit_btn.isEnabled = true
+        }
     }
 
     private fun initEditBean() {
@@ -297,6 +325,5 @@ class PSFragment : MyDialogFragment() {
     fun setUpdateListener(func: (b: PSBean) -> Unit) {
         this.updateListener = func
     }
-
 
 }

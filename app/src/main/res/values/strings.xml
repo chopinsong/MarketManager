@@ -34,4 +34,6 @@
     <string name="add_goods_text">增加货品</string>
     <string name="remark">备注</string>
     <string name="edit_text">编辑</string>
+    <string name="commit_add_good">提交</string>
+    <string name="show_add_good_layout">增加货品</string>
 </resources>

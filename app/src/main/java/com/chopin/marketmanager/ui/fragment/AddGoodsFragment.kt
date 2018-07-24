@@ -11,7 +11,7 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.getProgressDialog
 import com.chopin.marketmanager.util.snack
-import kotlinx.android.synthetic.main.add_goods_activity.*
+import kotlinx.android.synthetic.main.add_goods_layout.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
 
@@ -26,7 +26,7 @@ class AddGoodsFragment : MyDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window.setWindowAnimations(R.style.dialogAnim)
-        return inflater.inflate(R.layout.add_goods_activity, container)
+        return inflater.inflate(R.layout.add_goods_layout, container)
     }
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
@@ -52,7 +52,7 @@ class AddGoodsFragment : MyDialogFragment() {
     }
 
     private fun getName(): String {
-        val str = add_goods_name.text.toString()
+        val str = add_goods_remark.text.toString()
         return if (TextUtils.isEmpty(str)) "" else str
     }
 
