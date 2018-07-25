@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/purchase_layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:gravity="center"
-    android:id="@+id/purchase_layout_root"
     android:orientation="vertical"
     android:padding="15dp">
 
@@ -12,12 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+            android:id="@+id/purchase_cancel_btn"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/colorAccent" />
+
         <LinearLayout
             android:id="@+id/ps_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="end"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -142,8 +150,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:baselineAligned="false"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <include
@@ -151,10 +159,10 @@
             layout="@layout/goods_picker_layout" />
 
         <LinearLayout
-            android:layout_width="0dp"
             android:id="@+id/add_goods_btn_layout"
-            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -181,9 +189,9 @@
     </LinearLayout>
 
     <!--<include-->
-        <!--android:id="@+id/add_goods_root"-->
-        <!--layout="@layout/add_goods_layout"-->
-        <!--android:visibility="gone" />-->
+    <!--android:id="@+id/add_goods_root"-->
+    <!--layout="@layout/add_goods_layout"-->
+    <!--android:visibility="gone" />-->
 
 
 </LinearLayout>
