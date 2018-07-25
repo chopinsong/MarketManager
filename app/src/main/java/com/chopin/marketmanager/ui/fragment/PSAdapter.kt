@@ -1,6 +1,7 @@
 package com.chopin.marketmanager.ui.fragment
 
 import android.content.Context
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.util.Log
@@ -12,10 +13,25 @@ import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.util.time2shorTime
+import org.jetbrains.anko.image
 import swipe.SwipeItemLayout
+
 
 class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     var mData = ArrayList<PSItemBean>()
+    lateinit var s: VectorDrawableCompat
+    lateinit var p: VectorDrawableCompat
+
+    init {
+        VectorDrawableCompat.create(context.resources, R.drawable.ic_shipment, context.theme)?.let {
+            it.setTint(context.getColor(R.color.black))
+            s = it
+        }
+        VectorDrawableCompat.create(context.resources, R.drawable.ic_purchase, context.theme)?.let {
+            it.setTint(context.getColor(R.color.black))
+            p = it
+        }
+    }
 
     fun setData(data: ArrayList<PSItemBean>) {
         mData.clear()
@@ -76,7 +92,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
                 holder.mSwipeItemLayout.close()
             }
         }
-        h.img.setImageDrawable(context.getDrawable(if (bean.isP) R.mipmap.menu_purchase else R.mipmap.menu_shipment))
+        h.img.image = if (bean.isP) p else s
         h.itemBrandTv.text = bean.g.brand
         h.itemTypeTv.text = bean.g.type
         h.itemCustomerTv.text = bean.customerName
@@ -87,7 +103,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     }
 
     fun updateData(b: PSItemBean, i: Int) {
-        mData[i]=b
+        mData[i] = b
         notifyItemChanged(i)
     }
 
