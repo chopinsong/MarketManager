@@ -3,6 +3,7 @@ package com.chopin.marketmanager.ui
 import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
@@ -16,8 +17,8 @@ class AddGoodsView(var root: View) {
     var typeEt: EditText = root.findViewById(R.id.add_goods_type)
     var avgPriceEt: EditText = root.findViewById(R.id.add_goods_avg_price)
     var remarkEt: EditText = root.findViewById(R.id.add_goods_remark)
-    var commitBtn: TextView = root.findViewById(R.id.add_goods_commit_btn)
-    var cancelBtn: TextView = root.findViewById(R.id.add_goods_cancel_btn)
+    var commitBtn: ImageView = root.findViewById(R.id.add_goods_commit_btn)
+    var cancelBtn: ImageView = root.findViewById(R.id.add_goods_cancel_btn)
 
     init {
         commitBtn.setOnClickListener {

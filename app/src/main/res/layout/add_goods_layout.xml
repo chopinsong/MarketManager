@@ -12,23 +12,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <ImageView
             android:id="@+id/add_goods_cancel_btn"
             android:layout_width="50dp"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:layout_alignParentStart="true"
             android:gravity="center"
-            android:text="@string/cancel"
-            android:textColor="@color/colorAccent" />
+            android:src="@drawable/ic_close" />
 
-        <TextView
+        <ImageView
             android:id="@+id/add_goods_commit_btn"
             android:layout_width="50dp"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:layout_alignParentEnd="true"
             android:gravity="center"
-            android:text="@string/add_goods_commit_text"
-            android:textColor="@color/colorAccent" />
+            android:src="@drawable/ic_check"
+            />
     </RelativeLayout>
 
 

@@ -66,12 +66,12 @@ class PresentFragment : MyDialogFragment() {
             val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
             uiThread {
                 if (psCount > goodsCountLeft) {
-                    commit_btn.enabled = false
+                    commit_btn.isClickable = false
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         context.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
                     }
                 } else {
-                    commit_btn.enabled = true
+                    commit_btn.isClickable = true
                 }
             }
         }
