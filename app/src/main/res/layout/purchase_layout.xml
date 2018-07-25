@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:gravity="center"
+    android:id="@+id/purchase_layout_root"
     android:orientation="vertical"
     android:padding="15dp">
 
@@ -142,9 +143,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingEnd="20dp"
-        android:paddingStart="20dp">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <include
             android:id="@+id/goods_picker_root"
@@ -152,6 +152,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
+            android:id="@+id/add_goods_btn_layout"
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -179,10 +180,10 @@
 
     </LinearLayout>
 
-    <include
-        android:id="@+id/add_goods_root"
-        layout="@layout/add_goods_layout"
-        android:visibility="gone" />
+    <!--<include-->
+        <!--android:id="@+id/add_goods_root"-->
+        <!--layout="@layout/add_goods_layout"-->
+        <!--android:visibility="gone" />-->
 
 
 </LinearLayout>

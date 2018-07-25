@@ -10,8 +10,8 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.ui.AddGoodsView
 import com.chopin.marketmanager.util.getProgressDialog
+import com.chopin.marketmanager.util.showAddGoods
 import com.chopin.marketmanager.util.snack
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
@@ -48,27 +48,21 @@ class PSFragment : MyDialogFragment() {
         dialog.window.setWindowAnimations(R.style.dialogAnim)
         dialog?.setOnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                if (isAddGoodShow) {
-                    toggleAddGoods()
-                    return@setOnKeyListener true
-                }
             }
             return@setOnKeyListener false
         }
         return inflater.inflate(R.layout.purchase_layout, container)
     }
 
-    private var isAddGoodShow: Boolean = false
-
-    private lateinit var addGoodsView: AddGoodsView
 
     override fun onViewCreated(v: View, b: Bundle?) {
         goodsPickerView = GoodsPickerView(goods_picker_root)
         goodsPickerView.updateBrands()
         commit_btn.setOnClickListener { commit() }
-        addGoodsView = AddGoodsView(add_goods_root)
         add_goods_btn.setOnClickListener {
-            toggleAddGoods()
+            showAddGoods(fragmentManager) {
+                goodsPickerView.updateBrands()
+            }
         }
         is_p_switch.setOnCheckedChangeListener { _, isChecked ->
             switchPS(isChecked)
@@ -101,19 +95,6 @@ class PSFragment : MyDialogFragment() {
         initEditBean()
     }
 
-    private fun toggleAddGoods() {
-        if (!isAddGoodShow) {
-            add_goods_root.visibility = View.VISIBLE
-            add_goods_btn.text = getString(R.string.commit_add_good)
-        } else {
-            add_goods_root.visibility = View.GONE
-            add_goods_btn.text = getString(R.string.add_goods_text)
-            addGoodsView.commit {
-                goodsPickerView.updateBrands()
-            }
-        }
-        isAddGoodShow = add_goods_root.visibility == View.VISIBLE
-    }
 
     private fun switchPS(isChecked: Boolean) {
         add_goods_btn.visibility = if (isChecked) View.VISIBLE else View.GONE
