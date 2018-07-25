@@ -121,8 +121,16 @@ class DBUtil(context: Context) {
         val pcList = purchaseGoodsCount()
         val map = shipmentsGoodsCountMap()
         val stockList = arrayListOf<StockBean>()
+        val stockIds= arrayListOf<Int>()
         for (p in pcList) {
+            stockIds.add(p.goodsId)
             stockList.add(StockBean(getGood(p.goodsId), p.count - (map[p.goodsId] ?: 0)))
+        }
+        val goodsList = goods()
+        for (goods in goodsList) {
+            if (!stockIds.contains(goods.id)) {
+                stockList.add(StockBean(goods, 0))
+            }
         }
         i("list=$stockList")
         return stockList
@@ -170,11 +178,29 @@ class DBUtil(context: Context) {
     fun goodsNames(where: String = ""): ArrayList<String> {
         val w = if (where != "") (" where $where") else where
         val list = ArrayList<String>()
-        val c = db.query(GoodsTable.NAME, arrayOf(GoodsTable.GOODS_NAME), w, null, GoodsTable.GOODS_NAME, null, null)
+        val c = db.query(GoodsTable.NAME, arrayOf(GoodsTable.GOODS_NAME), w, null, null, null, null)
         while (c.moveToNext()) {
             val brand = c.getString(0)
             Log.i("chopin", brand.toString())
             list.add(brand)
+        }
+        c.close()
+        return list
+    }
+
+//    class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double=0.0, var isEnabled: Boolean = true, var time: String = Util.crTime()):Serializable
+
+    fun goods(): ArrayList<Goods> {
+        val list = ArrayList<Goods>()
+        val c = db.query(GoodsTable.NAME, null, "${GoodsTable.IS_ENABLE}=?", arrayOf("1"), null, null, null)
+        while (c.moveToNext()) {
+            val id = c.getInt(c.getColumnIndex(GoodsTable.Goods_ID))
+            val b = c.getString(c.getColumnIndex(GoodsTable.BRAND))
+            val type = c.getString(c.getColumnIndex(GoodsTable.TYPE))
+            val n = c.getString(c.getColumnIndex(GoodsTable.GOODS_NAME))
+            val p = c.getDouble(c.getColumnIndex(GoodsTable.AVERAGE_PRICE))
+            val t = c.getString(c.getColumnIndex(GoodsTable.TIME))
+            list.add(Goods(id, n, b, type, p, true, t))
         }
         c.close()
         return list
