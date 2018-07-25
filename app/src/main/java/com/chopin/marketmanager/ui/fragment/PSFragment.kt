@@ -7,17 +7,13 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
 import com.chopin.marketmanager.R
+import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.getProgressDialog
-import com.chopin.marketmanager.util.showAddGoods
-import com.chopin.marketmanager.util.snack
+import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.purchase_layout.*
-import org.jetbrains.anko.async
-import org.jetbrains.anko.enabled
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
+import org.jetbrains.anko.*
 
 
 class PSFragment : MyDialogFragment() {
@@ -56,9 +52,12 @@ class PSFragment : MyDialogFragment() {
 
 
     override fun onViewCreated(v: View, b: Bundle?) {
+        img_switch_purchase.image = context.purchaseDrawable()
+        img_switch_shipment.image = context.shipmentDrawable()
         goodsPickerView = GoodsPickerView(goods_picker_root)
         goodsPickerView.updateBrands()
         commit_btn.setOnClickListener { commit() }
+        purchase_cancel_btn.setOnClickListener { dismiss() }
         add_goods_btn.setOnClickListener {
             showAddGoods(fragmentManager) {
                 goodsPickerView.updateBrands()
@@ -91,8 +90,22 @@ class PSFragment : MyDialogFragment() {
 
         })
         select_present_tv.setOnClickListener {
+            val pf = PresentFragment()
+            pf.setCommitListener { presentGoods, presentCount ->
+                setPresentGoods(presentGoods, presentCount)
+            }
+            pf.show(fragmentManager, "PresentFragment")
         }
         initEditBean()
+    }
+
+    private var presentGoods: Goods? = null
+
+    private var presentCount: Int = 1
+
+    private fun setPresentGoods(it: Goods, presentCount: Int) {
+        this.presentGoods = it
+        this.presentCount = presentCount
     }
 
 
@@ -191,6 +204,7 @@ class PSFragment : MyDialogFragment() {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
             var line = 0
             var b: PSBean? = null
+            var presentBean: PSBean?=null
             if (isEditMode) {
                 editBean?.let {
                     b = PSBean(it.psId, goodsId, inputPrice, customerName, isP, psCount, remark = remark)
@@ -204,6 +218,14 @@ class PSFragment : MyDialogFragment() {
                     val id = DBManager.ps(psBean)
                     psBean.psId = id.toInt()
                 }
+                presentGoods?.let {
+                    val presentId = DBManager.getGoodsId(it)
+                    presentBean = PSBean(psId = -1, goodsId = presentId, price = 0.0, customerName = customerName, isPurchase = false, count = presentCount, remark = "赠品")
+                    presentBean?.let { pBean ->
+                        val id = DBManager.ps(pBean)
+                        pBean.psId = id.toInt()
+                    }
+                }
             }
             uiThread {
                 progress.dismiss()
@@ -214,6 +236,9 @@ class PSFragment : MyDialogFragment() {
                             updateListener.invoke(it1)
                         }
                     }
+                }
+                presentBean?.let{presentB->
+                    commitListener.invoke(presentB)
                 }
                 dismiss()
             }

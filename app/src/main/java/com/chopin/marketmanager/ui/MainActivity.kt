@@ -174,6 +174,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val pib = b.toPSItemBean()
             uiThread {
                 adapter.addData(b = pib)
+                psData.add(pib)
                 showGoodsLeft(pib)
             }
         }
@@ -184,6 +185,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val bean = b.toPSItemBean()
             uiThread {
                 adapter.updateData(bean, i)
+                psData[i] = bean
             }
         }
 
@@ -212,6 +214,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         adapter.setEditListener { b, i ->
             showEditPSFragment(b) {
                 updateData(it, i)
+                refreshBrandTypes()
             }
         }
     }
@@ -227,7 +230,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun showPSFragment(isP: Boolean = true) {
-        val ps = getPSFragment().setCommitListener { addData(it) }
+        val ps = getPSFragment().setCommitListener {
+            addData(it)
+            refreshBrandTypes()
+        }
         val bundle = Bundle()
         bundle.putBoolean("isP", isP)
         ps.arguments = bundle

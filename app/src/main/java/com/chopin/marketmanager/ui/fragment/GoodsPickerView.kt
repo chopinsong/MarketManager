@@ -1,5 +1,6 @@
 package com.chopin.marketmanager.ui.fragment
 
+import android.os.Build
 import android.text.TextUtils
 import android.view.View
 import com.chopin.marketmanager.R
@@ -7,7 +8,10 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.ui.NumberPickerView
+import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
+import org.jetbrains.anko.enabled
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 class GoodsPickerView(root: View) {
@@ -115,4 +119,5 @@ class GoodsPickerView(root: View) {
         val selectRemark = getSelectName()
         return Goods(brand = selectBrand, type = selectType, remark = selectRemark)
     }
+
 }

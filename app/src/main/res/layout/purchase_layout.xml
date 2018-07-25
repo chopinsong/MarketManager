@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="20dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,20 +28,21 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/drawer_shipment" />
+            <ImageView
+                android:id="@+id/img_switch_shipment"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
 
             <Switch
                 android:id="@+id/is_p_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/drawer_purchase" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_marginStart="3dp"
+                android:id="@+id/img_switch_purchase"
+                android:layout_height="24dp" />
         </LinearLayout>
 
         <TextView
@@ -59,20 +60,22 @@
         android:id="@+id/input_info_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingEnd="50dp"
-        android:paddingStart="50dp">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/customer_et"
                 android:layout_marginStart="5dp"
-                android:text="@string/customer_hint" />
+                android:text="@string/customer_hint"
+                android:textColor="@color/black2" />
 
             <EditText
                 android:id="@+id/customer_et"
@@ -86,14 +89,18 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/price_et"
                 android:layout_marginStart="5dp"
-                android:text="@string/price_hint" />
+                android:text="@string/price_hint"
+                android:textColor="@color/black2" />
 
             <EditText
                 android:id="@+id/price_et"
@@ -107,14 +114,18 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/purchase_count"
                 android:layout_marginStart="5dp"
-                android:text="@string/purchase_count" />
+                android:text="@string/purchase_count"
+                android:textColor="@color/black2" />
 
             <EditText
                 android:id="@+id/purchase_count"
@@ -127,14 +138,18 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/remark_tv"
                 android:layout_marginStart="5dp"
-                android:text="@string/remark" />
+                android:text="@string/remark"
+                android:textColor="@color/black2" />
 
             <EditText
                 android:id="@+id/remark_tv"
@@ -150,6 +165,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal">
@@ -158,40 +174,33 @@
             android:id="@+id/goods_picker_root"
             layout="@layout/goods_picker_layout" />
 
-        <LinearLayout
-            android:id="@+id/add_goods_btn_layout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/add_goods_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/add_goods_text"
-                android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/select_present_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/select_present"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone" />
-        </LinearLayout>
-
     </LinearLayout>
 
-    <!--<include-->
-    <!--android:id="@+id/add_goods_root"-->
-    <!--layout="@layout/add_goods_layout"-->
-    <!--android:visibility="gone" />-->
+    <LinearLayout
+        android:id="@+id/add_goods_btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/add_goods_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/add_goods_text"
+            android:textColor="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/select_present_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/select_present"
+            android:textColor="@color/colorAccent" />
+    </LinearLayout>
 
 </LinearLayout>

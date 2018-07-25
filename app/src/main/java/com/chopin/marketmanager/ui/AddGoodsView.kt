@@ -88,6 +88,7 @@ class AddGoodsView(var root: View) {
                         snack(root, "添加成功")
                         clearET()
                         func.invoke(goods)
+                        l.invoke(goods)
                     }
                 }
             }

@@ -27,7 +27,10 @@ class AddGoodsFragment : MyDialogFragment() {
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         addGoodsView = AddGoodsView(add_goods_layout_root)
-        addGoodsView.setCommitListener(l)
+        addGoodsView.setCommitListener{
+            l.invoke(it)
+            dismiss()
+        }
         addGoodsView.setCancelListener { dismiss() }
     }
 

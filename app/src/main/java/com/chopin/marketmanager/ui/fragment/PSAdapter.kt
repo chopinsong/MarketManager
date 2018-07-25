@@ -12,6 +12,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSItemBean
+import com.chopin.marketmanager.util.purchaseDrawable
+import com.chopin.marketmanager.util.shipmentDrawable
 import com.chopin.marketmanager.util.time2shorTime
 import org.jetbrains.anko.image
 import swipe.SwipeItemLayout
@@ -19,19 +21,8 @@ import swipe.SwipeItemLayout
 
 class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     var mData = ArrayList<PSItemBean>()
-    lateinit var s: VectorDrawableCompat
-    lateinit var p: VectorDrawableCompat
-
-    init {
-        VectorDrawableCompat.create(context.resources, R.drawable.ic_shipment, context.theme)?.let {
-            it.setTint(context.getColor(R.color.black))
-            s = it
-        }
-        VectorDrawableCompat.create(context.resources, R.drawable.ic_purchase, context.theme)?.let {
-            it.setTint(context.getColor(R.color.black))
-            p = it
-        }
-    }
+    var s: VectorDrawableCompat? = context.shipmentDrawable()
+    var p: VectorDrawableCompat? = context.purchaseDrawable()
 
     fun setData(data: ArrayList<PSItemBean>) {
         mData.clear()

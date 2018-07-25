@@ -7,4 +7,5 @@ object Constant {
     const val APKNAME="MarketManager.apk"
     const val INSTALL_ACTION = "install_action"
 
+
 }

@@ -2,24 +2,23 @@ package com.chopin.marketmanager.util
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.DialogFragment
 import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
 import android.graphics.Color
-import android.renderscript.Sampler
 import android.support.design.widget.Snackbar
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
-import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.widget.NumberPicker
 import android.widget.Toast
+import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
@@ -36,6 +35,21 @@ fun Activity.toast(msg: String) {
     Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
 }
 
+fun Context.purchaseDrawable(c: Int = R.color.black2): VectorDrawableCompat? {
+    VectorDrawableCompat.create(resources, R.drawable.ic_purchase, theme)?.let {
+        it.setTint(getColor(c))
+        return it
+    }
+    return null
+}
+
+fun Context.shipmentDrawable(c: Int = R.color.black2): VectorDrawableCompat? {
+    VectorDrawableCompat.create(resources, R.drawable.ic_shipment, theme)?.let {
+        it.setTint(getColor(c))
+        return it
+    }
+    return null
+}
 
 fun Any.i(msg: String) {
     Log.i("chopin", msg)
@@ -209,4 +223,6 @@ object Util {
         val fm = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
         return fm.format(System.currentTimeMillis())
     }
+
+    var hasChangeBrand=false
 }

@@ -10,5 +10,6 @@
     <color name="bg_gray">#06000000</color>
     <color name="bg_blue">#FF404979</color>
     <color name="bright_blue">#031CFF</color>
+    <color name="black2">#aa000000</color>
 
 </resources>
