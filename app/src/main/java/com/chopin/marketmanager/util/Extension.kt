@@ -16,7 +16,9 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.ArrayAdapter
 import android.widget.NumberPicker
+import android.widget.Spinner
 import android.widget.Toast
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
@@ -24,11 +26,13 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.*
+import kotlinx.android.synthetic.main.profit_layout.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 fun Activity.toast(msg: String) {
@@ -105,7 +109,8 @@ fun Any.time2long(s: String): Long {
     return fm.parse(s).time
 }
 
-fun Any.time2shorTime(s: String): String {
+
+fun Any.time2shortTime(s: String): String {
     val fm = SimpleDateFormat("hh:mm", Locale.CHINA)
     return fm.format(time2long(s))
 }
@@ -216,6 +221,11 @@ fun RecyclerView.defaultItemAnimation() {
     defaultItemAnimator.addDuration = 400
     defaultItemAnimator.removeDuration = 400
     this.itemAnimator = defaultItemAnimator
+}
+
+fun <T> Spinner.setValues(l:ArrayList<T>){
+    val yAdapter = ArrayAdapter<T>(context, android.R.layout.simple_list_item_1, l)
+    adapter = yAdapter
 }
 
 object Util {

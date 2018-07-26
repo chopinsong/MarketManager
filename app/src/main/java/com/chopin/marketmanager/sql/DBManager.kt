@@ -3,6 +3,8 @@ package com.chopin.marketmanager.sql
 import android.content.Context
 import com.chopin.marketmanager.bean.*
 import java.lang.ref.WeakReference
+import java.sql.Timestamp
+import java.util.*
 
 /**
  * Created by viking on 11/7/17.
@@ -112,6 +114,10 @@ object DBManager {
 
     fun updatePS(b: PSBean): Int {
         return db.updatePS(b)
+    }
+
+    fun profits(): ArrayList<ProfitBean> {
+        return db.goodsProfit()
     }
 
 }

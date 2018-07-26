@@ -14,7 +14,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.util.purchaseDrawable
 import com.chopin.marketmanager.util.shipmentDrawable
-import com.chopin.marketmanager.util.time2shorTime
+import com.chopin.marketmanager.util.time2shortTime
 import org.jetbrains.anko.image
 import swipe.SwipeItemLayout
 
@@ -90,7 +90,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         h.itemPriceTv.text = bean.price
         h.itemRemarkTv.text = bean.remark
         h.itemCountTv.text = bean.count
-        h.itemTimeTv.text = time2shorTime(bean.time)
+        h.itemTimeTv.text = time2shortTime(bean.time)
     }
 
     fun updateData(b: PSItemBean, i: Int) {
