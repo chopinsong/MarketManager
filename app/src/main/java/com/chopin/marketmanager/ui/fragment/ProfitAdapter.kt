@@ -1,7 +1,6 @@
 package com.chopin.marketmanager.ui.fragment
 
 import android.content.Context
-import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.util.Log
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.ProfitBean
-import com.chopin.marketmanager.bean.StockBean
 
 class ProfitAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
     var mData = ArrayList<ProfitBean>()
@@ -34,7 +32,7 @@ class ProfitAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.i("chopin", "onCreateViewHolder")
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.stock_item_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.profit_item_layout, parent, false)
         return ProfitViewHolder(view)
     }
 
@@ -46,12 +44,13 @@ class ProfitAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         Log.i("chopin", "onBindViewHolder")
         val h = holder as ProfitViewHolder
         val bean = mData[position]
-//        h.itemBrandTypeTv.text = String.format("%s%s", bean.goods.brand, bean.goods.type)
+        h.itemBrandTypeTv.text = String.format("%s%s", bean.g.brand, bean.g.type)
+        h.itemPriceTv.text=bean.price.toString()
     }
 
 }
 
 class ProfitViewHolder(v: View) : ViewHolder(v) {
-    val itemBrandTypeTv = v.findViewById<TextView>(R.id.stock_item_brand_type_tv)
-    val itemCountTv = v.findViewById<TextView>(R.id.stock_item_count_tv)
+    val itemBrandTypeTv = v.findViewById<TextView>(R.id.profit_item_brand_type_tv)
+    val itemPriceTv = v.findViewById<TextView>(R.id.profit_item_price_tv)
 }

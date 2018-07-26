@@ -127,6 +127,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.stock -> {
                 showStock(fragmentManager)
             }
+            R.id.profit->{
+                showProfit(fragmentManager)
+            }
             R.id.nav_settings -> {
                 showSettings(fragmentManager)
             }

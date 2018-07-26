@@ -17,6 +17,10 @@
             android:icon="@drawable/ic_view_list"
             android:title="@string/menu_stock" />
         <item
+            android:id="@+id/profit"
+            android:icon="@drawable/ic_profit"
+            android:title="@string/menu_profit" />
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/action_settings" />

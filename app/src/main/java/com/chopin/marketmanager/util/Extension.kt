@@ -94,6 +94,10 @@ fun Any.showStock(fm: FragmentManager) {
     StockFragment().show(fm, "stockFragment")
 }
 
+fun Any.showProfit(fm: FragmentManager) {
+    ProfitFragment().show(fm, "ProfitFragment")
+}
+
 fun Any.getPSFragment(): PSFragment {
     return PSFragment()
 }
@@ -223,7 +227,7 @@ fun RecyclerView.defaultItemAnimation() {
     this.itemAnimator = defaultItemAnimator
 }
 
-fun <T> Spinner.setValues(l:ArrayList<T>){
+fun <T> Spinner.setValues(l: ArrayList<T>) {
     val yAdapter = ArrayAdapter<T>(context, android.R.layout.simple_list_item_1, l)
     adapter = yAdapter
 }
@@ -234,5 +238,4 @@ object Util {
         return fm.format(System.currentTimeMillis())
     }
 
-    var hasChangeBrand=false
 }

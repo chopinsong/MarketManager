@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.AdapterView
 import com.chopin.marketmanager.R
+import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.ProfitBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.defaultItemAnimation
 import com.chopin.marketmanager.util.setValues
 import kotlinx.android.synthetic.main.profit_layout.*
 import org.jetbrains.anko.async
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 class ProfitFragment : MyDialogFragment() {
@@ -30,6 +32,30 @@ class ProfitFragment : MyDialogFragment() {
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         initViews()
         initListener()
+        initData()
+    }
+
+    private fun initData() {
+        async {
+            profits = DBManager.profits()
+            for (p in profits) {
+                val y = p.d.year.toString()
+                val m = p.d.month.toString()
+                if (!ymMap.containsKey(y)) {
+                    ymMap[y] = arrayListOf(m)
+                } else {
+                    ymMap[y]?.let {
+                        it.add(m)
+                        ymMap[y] = it
+                    }
+                }
+            }
+            val years = arrayListOf<String>()
+            years.addAll(ymMap.keys)
+            uiThread {
+                year_spinner.setValues(years)
+            }
+        }
     }
 
     private fun initListener() {
@@ -63,9 +89,20 @@ class ProfitFragment : MyDialogFragment() {
             val ps = profits.filter {
                 it.d.year == year && it.d.month == month
             }
+            val m = HashMap<Goods, ProfitBean>()
+            for (p in ps) {
+                if (m.containsKey(p.g)) {
+                    m[p.g]?.let {
+                        it.price=it.price+p.price
+                        m[p.g] = it
+                    }
+                } else {
+                    m[p.g] = p
+                }
+            }
+            val newProfits = ArrayList<ProfitBean>()
+            newProfits.addAll(m.values)
             uiThread {
-                val newProfits = ArrayList<ProfitBean>()
-                newProfits.addAll(ps)
                 pAdapter.setData(newProfits)
             }
         }
@@ -85,26 +122,7 @@ class ProfitFragment : MyDialogFragment() {
         pAdapter = ProfitAdapter(dialog.context)
         profit_list.adapter = pAdapter
         profit_list.defaultItemAnimation()
-        async {
-            profits = DBManager.profits()
-            for (p in profits) {
-                val y = p.d.year.toString()
-                val m = p.d.month.toString()
-                if (!ymMap.containsKey(y)) {
-                    ymMap[y] = arrayListOf(m)
-                } else {
-                    ymMap[y]?.let {
-                        it.add(m)
-                        ymMap[y] = it
-                    }
-                }
-            }
-            val years = arrayListOf<String>()
-            years.addAll(ymMap.keys)
-            uiThread {
-                year_spinner.setValues(years)
-            }
-        }
+
     }
 
 
