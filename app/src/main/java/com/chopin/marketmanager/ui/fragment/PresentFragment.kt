@@ -1,8 +1,6 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.os.Build
 import android.os.Bundle
-import android.support.graphics.drawable.VectorDrawableCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +8,11 @@ import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.i
-import com.chopin.marketmanager.util.purchaseDrawable
-import com.chopin.marketmanager.util.shipmentDrawable
-import kotlinx.android.synthetic.main.add_goods_layout.*
 import kotlinx.android.synthetic.main.present_select_layout.*
 import kotlinx.android.synthetic.main.purchase_layout.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.async
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 
 class PresentFragment : MyDialogFragment() {
     lateinit var gpicker: GoodsPickerView
@@ -67,9 +63,7 @@ class PresentFragment : MyDialogFragment() {
             uiThread {
                 if (psCount > goodsCountLeft) {
                     commit_btn.isClickable = false
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        context.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
-                    }
+                    context.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
                 } else {
                     commit_btn.isClickable = true
                 }

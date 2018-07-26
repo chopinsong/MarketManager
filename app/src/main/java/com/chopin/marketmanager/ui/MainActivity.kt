@@ -10,11 +10,8 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
@@ -91,7 +88,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         val searchItem = menu.findItem(R.id.action_search)
-        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
+        val searchView = MenuItemCompat.getActionView(searchItem) as android.support.v7.widget.SearchView
         searchView.queryHint="在此输入过滤内容"
         searchView.setOnCloseListener {
             isGlobalFilter=false
@@ -172,6 +169,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun addData(b: PSBean) {
         async {
             val pib = b.toPSItemBean()
+            i("addData=${pib.g.brand}${pib.g.type}")
             uiThread {
                 adapter.addData(b = pib)
                 psData.add(pib)

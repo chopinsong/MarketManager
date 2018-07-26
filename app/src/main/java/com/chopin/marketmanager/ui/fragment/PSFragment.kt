@@ -1,6 +1,5 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -13,7 +12,10 @@ import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.purchase_layout.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.async
+import org.jetbrains.anko.image
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 
 
 class PSFragment : MyDialogFragment() {
@@ -168,9 +170,7 @@ class PSFragment : MyDialogFragment() {
             uiThread {
                 if (psCount > goodsCountLeft) {
                     commit_btn.isClickable = false
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        context.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
-                    }
+                    context.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
                 } else {
                     commit_btn.isClickable = true
                 }
@@ -204,7 +204,7 @@ class PSFragment : MyDialogFragment() {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
             var line = 0
             var b: PSBean? = null
-            var presentBean: PSBean?=null
+            var presentBean: PSBean? = null
             if (isEditMode) {
                 editBean?.let {
                     b = PSBean(it.psId, goodsId, inputPrice, customerName, isP, psCount, remark = remark)
@@ -237,7 +237,7 @@ class PSFragment : MyDialogFragment() {
                         }
                     }
                 }
-                presentBean?.let{presentB->
+                presentBean?.let { presentB ->
                     commitListener.invoke(presentB)
                 }
                 dismiss()
