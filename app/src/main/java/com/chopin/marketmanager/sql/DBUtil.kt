@@ -8,6 +8,7 @@ import com.chopin.marketmanager.util.Util
 import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.toPSItemBean
 import java.sql.Date
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -112,14 +113,16 @@ class DBUtil(context: Context) {
 
     fun goodsProfit(): ArrayList<ProfitBean> {
         val l = ArrayList<ProfitBean>()
-        val c = db.rawQuery("select ${PSTable.GOODS_ID},${PSTable.PS_COUNT},${PSTable.PS_PRICE},${PSTable.TIME},${PSTable.IS_PURCHASE} from ${PSTable.NAME} where ${PSTable.IS_ENABLE}=1", null)
+        val c = db.query(PSTable.NAME, null, "${PSTable.IS_ENABLE}=?", arrayOf("1"), null, null, null)
         while (c.moveToNext()) {
             val id = c.getInt(c.getColumnIndex(PSTable.GOODS_ID))
             val count = c.getInt(c.getColumnIndex(PSTable.PS_COUNT))
             val price = c.getDouble(c.getColumnIndex(PSTable.PS_PRICE))
             val time = c.getString(c.getColumnIndex(PSTable.TIME))
             val isP = c.getInt(c.getColumnIndex(PSTable.IS_PURCHASE))
-            val pb = ProfitBean(getGood(id), count * price, Date(time),isP==1)
+            val good = getGood(id)
+            val split = time.split(" ")[0].split("-")
+            val pb = ProfitBean(good, count * price, split[0].toInt(),split[1].toInt(),isP==1)
             l.add(pb)
         }
         c.close()

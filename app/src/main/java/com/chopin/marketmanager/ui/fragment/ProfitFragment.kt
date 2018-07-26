@@ -12,10 +12,10 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.ProfitBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.defaultItemAnimation
+import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.setValues
 import kotlinx.android.synthetic.main.profit_layout.*
 import org.jetbrains.anko.async
-import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 class ProfitFragment : MyDialogFragment() {
@@ -27,7 +27,7 @@ class ProfitFragment : MyDialogFragment() {
 
     private lateinit var pAdapter: ProfitAdapter
     private lateinit var profits: ArrayList<ProfitBean>
-    private val ymMap = HashMap<String, ArrayList<String>>()
+    private val ymMap = HashMap<Int, ArrayList<Int>>()
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         initViews()
@@ -39,19 +39,21 @@ class ProfitFragment : MyDialogFragment() {
         async {
             profits = DBManager.profits()
             for (p in profits) {
-                val y = p.d.year.toString()
-                val m = p.d.month.toString()
+                val y = p.year
+                val m = p.month
                 if (!ymMap.containsKey(y)) {
                     ymMap[y] = arrayListOf(m)
                 } else {
                     ymMap[y]?.let {
-                        it.add(m)
-                        ymMap[y] = it
+                        if (!it.contains(m)) {
+                            it.add(m)
+                            ymMap[y] = it
+                        }
                     }
                 }
             }
-            val years = arrayListOf<String>()
-            years.addAll(ymMap.keys)
+            val years = arrayListOf<Int>()
+            years.addAll(ymMap.keys.sorted())
             uiThread {
                 year_spinner.setValues(years)
             }
@@ -64,7 +66,7 @@ class ProfitFragment : MyDialogFragment() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                ymMap[year_spinner.selectedItem.toString()]?.let {
+                ymMap[year_spinner.selectedItem]?.let {
                     month_spinner.setValues(it)
                 }
             }
@@ -87,17 +89,24 @@ class ProfitFragment : MyDialogFragment() {
         val month = getSelectMonth()
         async {
             val ps = profits.filter {
-                it.d.year == year && it.d.month == month
+                it.year == year && it.month == month
             }
             val m = HashMap<Goods, ProfitBean>()
             for (p in ps) {
                 if (m.containsKey(p.g)) {
                     m[p.g]?.let {
-                        it.price=it.price+p.price
+                        if (p.isP){
+                            it.price = it.price - p.price
+                        }else{
+                            it.price=it.price+p.price
+                        }
                         m[p.g] = it
                     }
                 } else {
-                    m[p.g] = p
+                    if (p.isP){
+                        p.price=0-p.price
+                    }
+                    m[p.g]=p
                 }
             }
             val newProfits = ArrayList<ProfitBean>()

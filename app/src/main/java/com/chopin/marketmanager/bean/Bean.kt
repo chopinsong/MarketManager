@@ -6,7 +6,25 @@ import java.io.Serializable
 import java.util.*
 
 
-class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double = 0.0, var isEnabled: Boolean = true, var time: String = Util.crTime()) : Serializable
+class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double = 0.0, var isEnabled: Boolean = true, var time: String = Util.crTime()) : Serializable{
+    override fun equals(other: Any?): Boolean {
+        if (other is Goods){
+            return other.brand==this.brand&&other.type==this.type&&other.remark==this.remark&&other.avgPrice==this.avgPrice&&other.isEnabled==this.isEnabled&&other.time==this.time
+        }
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + remark.hashCode()
+        result = 31 * result + brand.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + avgPrice.hashCode()
+        result = 31 * result + isEnabled.hashCode()
+        result = 31 * result + time.hashCode()
+        return result
+    }
+}
 open class PSBean(var psId: Int, var goodsId: Int, var price: Double, var customerName: String, val isPurchase: Boolean, var count: Int, var isEnabled: Boolean = true, var remark: String = "", var time: String = Util.crTime())
 
 //class PurchaseBean(var purchaseId:Int,var pGoodsId:Int,var purchasePrice:Double,var pCustomerName:String,var pTime:String= Util.time()):PSBean(purchaseId,pGoodsId,purchasePrice,pCustomerName,pTime)
@@ -26,6 +44,6 @@ class PSItemBean(var g: Goods, var psId: Int, var isP: Boolean, var price: Strin
     }
 }
 
-data class ProfitBean(var g: Goods, var price: Double, var d: Date,var isP: Boolean)
+class ProfitBean(var g: Goods, var price: Double, var year:Int,var month:Int,var isP: Boolean)
 
 class PickerBean(var brand: String, var type: String, var name: String)
