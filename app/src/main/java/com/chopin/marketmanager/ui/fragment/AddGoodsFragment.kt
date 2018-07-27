@@ -14,9 +14,17 @@ class AddGoodsFragment : MyDialogFragment() {
 
     lateinit var addGoodsView: AddGoodsView
     private var l: (g: Goods) -> Unit = {}
+    private var goods: Goods? = null
 
     fun setCommitListener(func: (g: Goods) -> Unit) {
         this.l = func
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+         arguments?.getSerializable("goods_edit_bean") ?.let {
+             goods=it as Goods
+         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,11 +35,20 @@ class AddGoodsFragment : MyDialogFragment() {
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         addGoodsView = AddGoodsView(add_goods_layout_root)
-        addGoodsView.setCommitListener{
+        addGoodsView.setCommitListener {
             l.invoke(it)
             dismiss()
         }
         addGoodsView.setCancelListener { dismiss() }
+        goods?.let {
+            initEditBean()
+        }
+    }
+
+    private fun initEditBean() {
+        goods?.let {
+            addGoodsView.initEditBean(it)
+        }
     }
 
 

@@ -3,8 +3,8 @@ package com.chopin.marketmanager.sql
 import android.content.Context
 import com.chopin.marketmanager.bean.*
 import java.lang.ref.WeakReference
-import java.sql.Timestamp
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by viking on 11/7/17.
@@ -100,8 +100,8 @@ object DBManager {
         return db.goodsCountLeft(goodsId)
     }
 
-    fun setAllDisable() {
-        db.setAllDisable()
+    fun setAllPSDisable(): Int {
+        return db.setAllPSDisable()
     }
 
     fun setPSEnable(psId:Int,b:Boolean): Int {
@@ -118,6 +118,22 @@ object DBManager {
 
     fun profits(): ArrayList<ProfitBean> {
         return db.goodsProfit()
+    }
+
+    fun setAllGoodsDisable(): Int {
+        return db.setAllGoodsDisable()
+    }
+
+    fun goods(): ArrayList<Goods> {
+        return db.goods()
+    }
+
+    fun setGoodsEnable(id: Int, b: Boolean): Int {
+        return db.setGoodsEnable(id,b)
+    }
+
+    fun updateGoods(goods: Goods): Int {
+        return db.updateGoods(goods)
     }
 
 }

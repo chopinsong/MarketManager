@@ -19,3 +19,4 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file remark.
 #-renamesourcefileattribute SourceFile
+-keep class !android.support.v7.internal.view.menu.**,android.support.** {*;}

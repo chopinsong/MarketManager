@@ -14,12 +14,16 @@
             android:title="@string/shipment" />
         <item
             android:id="@+id/stock"
-            android:icon="@drawable/ic_view_list"
+            android:icon="@drawable/ic_stock"
             android:title="@string/stock" />
         <item
             android:id="@+id/profit"
             android:icon="@drawable/ic_profit"
             android:title="@string/profit" />
+        <item
+            android:id="@+id/goods_list"
+            android:icon="@drawable/ic_goods"
+            android:title="@string/goods_list" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"

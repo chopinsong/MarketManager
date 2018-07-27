@@ -39,6 +39,10 @@ fun Activity.toast(msg: String) {
     Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
 }
 
+fun Any.toast(context: Context,msg:String){
+    Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+}
+
 fun Context.purchaseDrawable(c: Int = R.color.black2): VectorDrawableCompat? {
     VectorDrawableCompat.create(resources, R.drawable.ic_purchase, theme)?.let {
         it.setTint(getColor(c))
@@ -106,6 +110,10 @@ fun Any.showAddGoods(fm: FragmentManager, f: (g: Goods) -> Unit = {}) {
     val af = AddGoodsFragment()
     af.setCommitListener(f)
     af.show(fm, "AddGoods")
+}
+fun Any.showEditGoodsFragment(fm: FragmentManager){
+    val ge = GoodsEditFragment()
+    ge.show(fm,"showEditGoodsFragment")
 }
 
 fun Any.time2long(s: String): Long {

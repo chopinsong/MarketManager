@@ -88,7 +88,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         h.itemTypeTv.text = bean.g.type
         h.itemCustomerTv.text = bean.customerName
         h.itemPriceTv.text = bean.price
-        h.itemRemarkTv.text = bean.remark
+        h.itemRemarkTv.text = if (bean.remark.isEmpty()) "无备注" else bean.remark
         h.itemCountTv.text = bean.count
         h.itemTimeTv.text = time2shortTime(bean.time)
     }

@@ -13,12 +13,10 @@ import android.support.design.widget.BaseTransientBottomBar
 import android.support.design.widget.Snackbar
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
-import java.util.*
 import android.app.AlarmManager
 import android.app.PendingIntent
 import org.jetbrains.anko.async
@@ -38,7 +36,7 @@ object UpdateHelper {
 
     fun showInstall(activity: Activity) {
         Snackbar.make(activity.window.decorView, "下载完成，是否马上安装", Snackbar.LENGTH_LONG).setAction("安装") {
-            install(activity.applicationContext, "${Environment.getExternalStorageDirectory()}${File.separator}download${File.separator + Constant.APKNAME + remoteVersion}")
+            install(activity.applicationContext, "${Environment.getExternalStorageDirectory()}${File.separator}download${File.separator + Constant.APK_NAME + remoteVersion}")
         }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
@@ -58,7 +56,7 @@ object UpdateHelper {
 
     fun download(context: Context, downloadUrl: String = apkUrl, todo: (c: Context) -> Unit) {
         val request = DownloadManager.Request(Uri.parse(downloadUrl))
-        request.setDestinationInExternalPublicDir("/download/", Constant.APKNAME + remoteVersion)
+        request.setDestinationInExternalPublicDir("/download/", Constant.APK_NAME + remoteVersion)
         request.setTitle("销售管理")
         request.setDescription("销售管理更新版本")
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager

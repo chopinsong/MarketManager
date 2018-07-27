@@ -7,12 +7,6 @@ import com.chopin.marketmanager.bean.*
 import com.chopin.marketmanager.util.Util
 import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.toPSItemBean
-import java.sql.Date
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class DBUtil(context: Context) {
     private val db = DBHelper(context).writableDatabase
@@ -122,7 +116,7 @@ class DBUtil(context: Context) {
             val isP = c.getInt(c.getColumnIndex(PSTable.IS_PURCHASE))
             val good = getGood(id)
             val split = time.split(" ")[0].split("-")
-            val pb = ProfitBean(good, count * price, split[0].toInt(),split[1].toInt(),isP==1)
+            val pb = ProfitBean(good, count * price, split[0].toInt(), split[1].toInt(), isP == 1)
             l.add(pb)
         }
         c.close()
@@ -141,6 +135,30 @@ class DBUtil(context: Context) {
         return map
     }
 
+    fun setAllPSDisable(): Int {
+        val cv = ContentValues()
+        cv.put(PSTable.IS_ENABLE, 0)
+        return db.update(PSTable.NAME, cv, null, null)
+    }
+
+    fun setPSEnable(psId: Int, b: Boolean): Int {
+        val cv = ContentValues()
+        cv.put(PSTable.IS_ENABLE, if (b) 1 else 0)
+        return db.update(PSTable.NAME, cv, "${PSTable.PS_ID}=?", arrayOf(psId.toString()))
+    }
+
+    fun updatePS(b: PSBean): Int {
+        val cv = ContentValues()
+        cv.put(PSTable.GOODS_ID, b.goodsId)
+        cv.put(PSTable.PS_PRICE, b.price)
+        cv.put(PSTable.CUSTOMER_NAME, b.customerName)
+        cv.put(PSTable.TIME, b.time)
+        cv.put(PSTable.IS_PURCHASE, if (b.isPurchase) 1 else 0)
+        cv.put(PSTable.PS_COUNT, b.count)
+        cv.put(PSTable.PS_REMARK, b.remark)
+        cv.put(PSTable.IS_ENABLE, 1)
+        return db.update(PSTable.NAME, cv, "${PSTable.PS_ID}=?", arrayOf(b.psId.toString()))
+    }
 
     fun stock(): ArrayList<StockBean> {
         val pcList = purchaseGoodsCount()
@@ -177,9 +195,9 @@ class DBUtil(context: Context) {
     }
 
     fun brands(where: String = ""): ArrayList<String> {
-        val w = if (where != "") (" where $where") else where
+        val w = "${GoodsTable.IS_ENABLE}=1 " + if (where == "") "" else "and $where"
         val list = ArrayList<String>()
-        val c = db.rawQuery("select ${GoodsTable.BRAND} from ${GoodsTable.NAME} $w group by ${GoodsTable.BRAND}", null)
+        val c = db.query(GoodsTable.NAME, arrayOf(GoodsTable.BRAND), w, null, GoodsTable.BRAND, null, null)
         while (c.moveToNext()) {
             val brand = c.getString(0)
             list.add(brand)
@@ -189,9 +207,9 @@ class DBUtil(context: Context) {
     }
 
     fun types(where: String = ""): ArrayList<String> {
-        val w = if (where != "") (" where $where ") else where
+        val w = "${GoodsTable.IS_ENABLE}=1 " + if (where == "") "" else "and $where"
         val list = ArrayList<String>()
-        val c = db.rawQuery("select ${GoodsTable.TYPE} from ${GoodsTable.NAME} $w group by ${GoodsTable.TYPE}", null)
+        val c = db.query(GoodsTable.NAME, arrayOf(GoodsTable.TYPE), w, null, GoodsTable.TYPE, null, null)
         while (c.moveToNext()) {
             val brand = c.getString(0)
             list.add(brand)
@@ -201,7 +219,7 @@ class DBUtil(context: Context) {
     }
 
     fun goodsNames(where: String = ""): ArrayList<String> {
-        val w = if (where != "") (" where $where") else where
+        val w = "${GoodsTable.IS_ENABLE}=1 " + if (where == "") "" else "and $where"
         val list = ArrayList<String>()
         val c = db.query(GoodsTable.NAME, arrayOf(GoodsTable.GOODS_NAME), w, null, null, null, null)
         while (c.moveToNext()) {
@@ -232,7 +250,7 @@ class DBUtil(context: Context) {
     }
 
     fun getGoodsId(selectBrand: String, selecttype: String, selectName: String): Int {
-        val c = db.query(GoodsTable.NAME, null, "${GoodsTable.BRAND}=? and ${GoodsTable.TYPE}=? and ${GoodsTable.GOODS_NAME}=?", arrayOf(selectBrand, selecttype, selectName), null, null, null)
+        val c = db.query(GoodsTable.NAME, null, "${GoodsTable.BRAND}=? and ${GoodsTable.TYPE}=? and ${GoodsTable.GOODS_NAME}=? and ${GoodsTable.IS_ENABLE}=?", arrayOf(selectBrand, selecttype, selectName, "1"), null, null, null)
         if (c == null || c.count == 0) {
             return -1
         }
@@ -244,7 +262,7 @@ class DBUtil(context: Context) {
     }
 
     fun getGood(id: Int): Goods {
-        val c = db.rawQuery("select * from ${GoodsTable.NAME} where ${GoodsTable.Goods_ID}=$id ", null)
+        val c = db.rawQuery("select * from ${GoodsTable.NAME} where ${GoodsTable.Goods_ID}=$id and ${GoodsTable.IS_ENABLE}=1", null)
                 ?: return Goods(-1, "", "", "", 0.0)
         if (c.moveToNext()) {
             val brand = c.getString(c.getColumnIndex(GoodsTable.BRAND))
@@ -277,30 +295,26 @@ class DBUtil(context: Context) {
         return list
     }
 
-
-    fun setAllDisable() {
+    fun setAllGoodsDisable(): Int {
         val cv = ContentValues()
-        cv.put(PSTable.IS_ENABLE, 0)
-        db.update(PSTable.NAME, cv, null, null)
+        cv.put(GoodsTable.IS_ENABLE, 0)
+        return db.update(GoodsTable.NAME, cv, null, null)
     }
 
-    fun setPSEnable(psId: Int, b: Boolean): Int {
+    fun setGoodsEnable(id: Int, b: Boolean): Int {
         val cv = ContentValues()
-        cv.put(PSTable.IS_ENABLE, if (b) 1 else 0)
-        return db.update(PSTable.NAME, cv, "${PSTable.PS_ID}=?", arrayOf(psId.toString()))
+        cv.put(GoodsTable.IS_ENABLE, if (b) 1 else 0)
+        return db.update(GoodsTable.NAME, cv, "${GoodsTable.Goods_ID}=?", arrayOf(id.toString()))
     }
 
-    fun updatePS(b: PSBean): Int {
-        val cv = ContentValues()
-        cv.put(PSTable.GOODS_ID, b.goodsId)
-        cv.put(PSTable.PS_PRICE, b.price)
-        cv.put(PSTable.CUSTOMER_NAME, b.customerName)
-        cv.put(PSTable.TIME, b.time)
-        cv.put(PSTable.IS_PURCHASE, if (b.isPurchase) 1 else 0)
-        cv.put(PSTable.PS_COUNT, b.count)
-        cv.put(PSTable.PS_REMARK, b.remark)
-        cv.put(PSTable.IS_ENABLE, 1)
-        return db.update(PSTable.NAME, cv, "${PSTable.PS_ID}=?", arrayOf(b.psId.toString()))
+    fun updateGoods(g: Goods): Int {
+        val cv=ContentValues()
+        cv.put(GoodsTable.BRAND, g.brand)
+        cv.put(GoodsTable.TYPE, g.type)
+        cv.put(GoodsTable.GOODS_NAME, g.remark)
+        cv.put(GoodsTable.AVERAGE_PRICE, g.avgPrice)
+        cv.put(GoodsTable.IS_ENABLE, 1)
+        return db.update(GoodsTable.NAME, cv,"${GoodsTable.Goods_ID}=?", arrayOf(g.id.toString()))
     }
 
 

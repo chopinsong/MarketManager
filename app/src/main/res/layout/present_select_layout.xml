@@ -49,6 +49,7 @@
         <NumberPicker
             android:id="@+id/present_count_picker"
             android:layout_width="100dp"
+            android:layout_marginBottom="10dp"
             android:layout_height="100dp"
             android:layout_gravity="center" />
     </LinearLayout>

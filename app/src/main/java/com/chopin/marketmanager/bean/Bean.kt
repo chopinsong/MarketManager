@@ -24,6 +24,10 @@ class Goods(var id: Int = 0, var remark: String, var brand: String, var type: St
         result = 31 * result + time.hashCode()
         return result
     }
+
+    fun contains(s:String):Boolean{
+        return remark.contains(s)||brand.contains(s)||type.contains(s)||avgPrice.toString().contains(s)
+    }
 }
 open class PSBean(var psId: Int, var goodsId: Int, var price: Double, var customerName: String, val isPurchase: Boolean, var count: Int, var isEnabled: Boolean = true, var remark: String = "", var time: String = Util.crTime())
 
@@ -41,6 +45,10 @@ class PSItemBean(var g: Goods, var psId: Int, var isP: Boolean, var price: Strin
     @Override
     fun compareTo(bean: PSItemBean): Int {
         return (time2long(time) - time2long(bean.time)).toInt()
+    }
+
+    fun contains(s:String):Boolean{
+        return g.contains(s)||price.contains(s)||customerName.contains(s)||count.contains(s)||remark.contains(s)
     }
 }
 

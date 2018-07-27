@@ -48,4 +48,6 @@
     <string name="brand_hint"><font size="13">品牌</font></string>
     <string name="name_hint"><font size="13">名字</font></string>
     <string name="price_hint"><font size="13">价格</font></string>
+    <string name="del_all_data">进阶所有数据(包含进出货和货品)</string>
+    <string name="goods_list">商品</string>
 </resources>

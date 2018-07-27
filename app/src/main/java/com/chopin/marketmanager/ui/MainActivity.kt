@@ -1,9 +1,13 @@
 package com.chopin.marketmanager.ui
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -36,6 +40,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var installReceiver: InstallReceiver
     private var psData: ArrayList<PSItemBean> = arrayListOf()
+    private val mReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.action?.let {
+                when (it) {
+                    Constant.ACTION_CLEAR_ALL_PS -> updateList()
+                    Constant.ACTION_CLEAR_ALL_DATA -> {
+                        updateList()
+                        refreshBrandTypes()
+                    }
+                    Constant.ACTION_UPDATE_GOODS -> {
+                        updateList()
+                        refreshBrandTypes()
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +68,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val intentFilter = IntentFilter(Constant.INSTALL_ACTION)
         installReceiver = InstallReceiver(WeakReference(this))
         registerReceiver(installReceiver, intentFilter)
+        val i = IntentFilter(Constant.ACTION_CLEAR_ALL_PS)
+        i.addAction(Constant.ACTION_UPDATE_GOODS)
+        i.addAction(Constant.ACTION_CLEAR_ALL_DATA)
+        LocalBroadcastManager.getInstance(applicationContext).registerReceiver(mReceiver, i)
     }
 
     private fun refreshBrandTypes() {
@@ -65,6 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(installReceiver)
+        LocalBroadcastManager.getInstance(applicationContext).unregisterReceiver(mReceiver)
     }
 
 
@@ -89,9 +115,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         menuInflater.inflate(R.menu.main, menu)
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = MenuItemCompat.getActionView(searchItem) as android.support.v7.widget.SearchView
-        searchView.queryHint="在此输入过滤内容"
+        searchView.queryHint = "在此输入过滤内容"
         searchView.setOnCloseListener {
-            isGlobalFilter=false
+            isGlobalFilter = false
             return@setOnCloseListener false
         }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -127,8 +153,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.stock -> {
                 showStock(fragmentManager)
             }
-            R.id.profit->{
+            R.id.profit -> {
                 showProfit(fragmentManager)
+            }
+            R.id.goods_list -> {
+                showEditGoodsFragment(fragmentManager)
             }
             R.id.nav_settings -> {
                 showSettings(fragmentManager)
@@ -276,7 +305,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 uiThread {
                     if (psEnable > 0) {
                         adapter.addData(i, b)
-                        psData.add(i,b)
+                        psData.add(i, b)
                         snack("撤消成功")
                     }
                 }
@@ -299,7 +328,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     if (gs.isEmpty()) {
                         true
                     } else {
-                        it.g.brand.contains(gs) || it.g.type.contains(gs) || it.remark.contains(gs) || it.price.contains(gs) || it.customerName.contains(gs) || it.count.contains(gs)
+                        it.contains(gs)
                     }
                 }
             }

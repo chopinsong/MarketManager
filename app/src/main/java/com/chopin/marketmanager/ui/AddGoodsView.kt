@@ -4,7 +4,6 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
@@ -22,17 +21,17 @@ class AddGoodsView(var root: View) {
 
     init {
         commitBtn.setOnClickListener {
-            commit(l)
+                commit(commitListener)
         }
-        cancelBtn.setOnClickListener{
+        cancelBtn.setOnClickListener {
             cancelListener.invoke()
         }
     }
 
-    private var l: (g: Goods) -> Unit = {}
+    private var commitListener: (g: Goods) -> Unit = {}
 
     fun setCommitListener(func: (g: Goods) -> Unit) {
-        this.l = func
+        this.commitListener = func
     }
 
     private var cancelListener: () -> Unit = {}
@@ -77,18 +76,35 @@ class AddGoodsView(var root: View) {
         async {
             val goods = Goods(brand = brand, type = type, remark = name, avgPrice = avgPrice)
             val goodsId = DBManager.getGoodsId(brand, type, name)
-            if (goodsId == -1) {
-                val id = DBManager.addGoods(goods)
-                goods.id = id.toInt()
+            if (isEditMode) {
+                if (goodsId == editBean.id || goodsId == -1) {
+                    goods.id = editBean.id
+                    DBManager.updateGoods(goods)
+                }
+            } else {
+                if (goodsId == -1) {
+                    val id = DBManager.addGoods(goods)
+                    goods.id = id.toInt()
+                }
             }
             uiThread {
-                if (goodsId != -1) {
-                    snack(root, "商品重复")
+                if (!isEditMode) {
+                    if (goodsId != -1) {
+                        snack(root, "商品重复")
+                    } else {
+                        if (goods.id > -1) {
+                            snack(root, "添加成功")
+                            clearET()
+                            func.invoke(goods)
+                        }
+                    }
                 } else {
-                    if (goods.id > -1) {
-                        snack(root, "添加成功")
+                    if (goods.id == editBean.id) {
+                        snack(root, "更新成功")
                         clearET()
                         func.invoke(goods)
+                    }else{
+                        snack(root, "商品重复")
                     }
                 }
             }
@@ -103,5 +119,18 @@ class AddGoodsView(var root: View) {
         remarkEt.setText("")
     }
 
+
+    private var isEditMode = false
+
+    private lateinit var editBean: Goods
+
+    fun initEditBean(g: Goods) {
+        editBean = g
+        brandEt.setText(g.brand)
+        typeEt.setText(g.type)
+        avgPriceEt.setText(g.avgPrice.toString())
+        remarkEt.setText(g.remark)
+        isEditMode = true
+    }
 
 }
