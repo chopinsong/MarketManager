@@ -78,14 +78,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/ps_layout_input_ed_margin"
                 android:layout_marginStart="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="15dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
-                    android:contentDescription="@string/customer_hint_text"
+                    android:contentDescription="@string/customer_hint"
                     android:src="@drawable/ic_user" />
 
                 <EditText
@@ -93,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:hint="@string/customer_hint_text"
+                    android:hint="@string/customer_hint"
                     android:inputType="textAutoComplete"
                     android:labelFor="@+id/customer_et"
                     android:textColor="@color/colorAccent"
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/ps_layout_input_ed_margin"
                 android:layout_marginStart="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="8dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -132,14 +132,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/ps_layout_input_ed_margin"
                 android:layout_marginStart="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="8dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="21dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="2dp"
-                    android:contentDescription="@string/purchase_count_hint"
+                    android:contentDescription="@string/count_hint"
                     android:src="@drawable/ic_count" />
 
                 <EditText
@@ -147,7 +147,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:hint="@string/purchase_count_hint"
+                    android:hint="@string/count_hint"
                     android:inputType="number"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/ps_et_text_size" />
@@ -158,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/ps_layout_input_ed_margin"
                 android:layout_marginStart="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="8dp">
 
                 <ImageView
                     android:layout_width="wrap_content"

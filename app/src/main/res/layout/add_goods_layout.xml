@@ -26,18 +26,18 @@
                 android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:layout_alignParentStart="true"
+                android:contentDescription="@string/cancel_button"
                 android:gravity="center"
-                android:src="@drawable/ic_close"
-                android:contentDescription="@string/cancel_button" />
+                android:src="@drawable/ic_close" />
 
             <ImageView
                 android:id="@+id/add_goods_commit_btn"
                 android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:layout_alignParentEnd="true"
+                android:contentDescription="@string/commit_button"
                 android:gravity="center"
-                android:src="@drawable/ic_check"
-                android:contentDescription="@string/commit_button" />
+                android:src="@drawable/ic_check" />
         </RelativeLayout>
 
 
@@ -53,20 +53,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/add_goods_brand"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
-                    android:text="@string/add_goods_brand_text" />
+                    android:src="@drawable/ic_brand" />
 
                 <EditText
                     android:id="@+id/add_goods_brand"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="textAutoComplete"
-                    android:textColor="@color/colorPrimary" />
+                    android:hint="@string/brand_hint"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/ps_et_text_size" />
             </RelativeLayout>
 
 
@@ -75,20 +76,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="26dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/add_goods_type"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
-                    android:text="@string/add_goods_type_text" />
+                    android:src="@drawable/ic_type"
+                    android:text="@string/type" />
 
                 <EditText
                     android:id="@+id/add_goods_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="textAutoComplete"
-                    android:textColor="@color/colorPrimary" />
+                    android:hint="@string/type_hint"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/ps_et_text_size" />
 
             </RelativeLayout>
 
@@ -97,20 +100,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/add_goods_avg_price"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/add_goods_avg_price_text" />
+                    android:layout_height="27dp"
+                    android:src="@drawable/ic_price"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"/>
 
                 <EditText
                     android:id="@+id/add_goods_avg_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="number|numberDecimal"
-                    android:textColor="@color/colorPrimary" />
+                    android:hint="@string/price_hint"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/ps_et_text_size" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -119,20 +123,21 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/add_goods_remark"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/add_goods_name_text" />
+                    android:src="@drawable/ic_remark"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp" />
 
                 <EditText
+                    android:hint="@string/remark_hint"
                     android:id="@+id/add_goods_remark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="textAutoComplete"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/ps_et_text_size" />
 
             </RelativeLayout>
         </LinearLayout>

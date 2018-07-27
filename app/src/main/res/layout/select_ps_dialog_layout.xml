@@ -13,7 +13,7 @@
         android:background="@color/white"
         android:textColor="@color/gray"
         android:minWidth="200dp"
-        android:text="@string/select_ps_purchase"
+        android:text="@string/purchase"
         android:textSize="50sp" />
     <View
         android:layout_width="2px"
@@ -29,7 +29,7 @@
         android:background="@color/white"
         android:minHeight="300dp"
         android:minWidth="200dp"
-        android:text="@string/select_ps_shipment"
+        android:text="@string/shipment"
         android:textSize="50sp" />
 
 </LinearLayout>

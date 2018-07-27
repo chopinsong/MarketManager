@@ -7,23 +7,23 @@
         <item
             android:id="@+id/nav_purchase"
             android:icon="@drawable/ic_purchase"
-            android:title="@string/drawer_purchase" />
+            android:title="@string/purchase" />
         <item
             android:id="@+id/nav_shipments"
             android:icon="@drawable/ic_shipment"
-            android:title="@string/drawer_shipment" />
+            android:title="@string/shipment" />
         <item
             android:id="@+id/stock"
             android:icon="@drawable/ic_view_list"
-            android:title="@string/menu_stock" />
+            android:title="@string/stock" />
         <item
             android:id="@+id/profit"
             android:icon="@drawable/ic_profit"
-            android:title="@string/menu_profit" />
+            android:title="@string/profit" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="@string/action_settings" />
+            android:title="@string/setting" />
     </group>
 
     <!--<item android:title="Communicate">-->

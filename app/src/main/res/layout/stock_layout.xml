@@ -6,7 +6,7 @@
 
     <TextView
         style="@style/title_style"
-        android:text="@string/title_stock" />
+        android:text="@string/stock" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/stock_list"
