@@ -259,6 +259,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 uiThread {
                     if (line > 0) {
                         adapter.remove(i)
+                        psData.removeAt(i)
                         showUndo(i, b)
                     } else {
                         snack("删除失败")
@@ -275,6 +276,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 uiThread {
                     if (psEnable > 0) {
                         adapter.addData(i, b)
+                        psData.add(i,b)
                         snack("撤消成功")
                     }
                 }
