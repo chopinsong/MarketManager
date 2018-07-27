@@ -7,6 +7,9 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="ps_list_text_size">14sp</dimen>
     <dimen name="ps_list_price_text_size">20sp</dimen>
-    <dimen name="ps_layout_input_ed_margin">50dp</dimen>
+    <dimen name="ps_layout_input_ed_margin">40dp</dimen>
+    <dimen name="ps_et_text_size">16sp</dimen>
+    <dimen name="ps_et_content_padding_start">40dp</dimen>
+    <dimen name="title_height">35dp</dimen>
 
 </resources>

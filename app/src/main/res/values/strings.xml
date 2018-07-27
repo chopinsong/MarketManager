@@ -5,11 +5,14 @@
     <string name="navigation_drawer_close">关闭侧栏</string>
     <string name="action_settings">设置</string>
     <string name="name_text">名字</string>
-    <string name="name_hint">名字</string>
-    <string name="price_hint">价格</string>
+    <string name="name_hint"><font size="13">名字</font>></string>
+    <string name="price_hint"><font size="13">价格</font></string>
+    <string name="price">价格</string>
     <string name="commit_btn">提交</string>
     <string name="purchase_count">数量</string>
+    <string name="purchase_count_hint"><font size="13">数量</font></string>
     <string name="customer_hint">客户</string>
+    <string name="customer_hint_text"><font size="13">客户</font></string>
     <string name="add_goods_brand_text">品牌</string>
     <string name="add_goods_type_text">类型</string>
     <string name="add_goods_name_text">备注</string>
@@ -33,6 +36,7 @@
     <string name="select_present">选择赠品</string>
     <string name="add_goods_text">增加货品</string>
     <string name="remark">备注</string>
+    <string name="remark_hint"><font size="13">备注</font></string>
     <string name="edit_text">编辑</string>
     <string name="commit_add_good">提交</string>
     <string name="show_add_good_layout">增加货品</string>
@@ -43,4 +47,9 @@
     <string name="year">年</string>
     <string name="month">月</string>
     <string name="profit">利润</string>
+    <string name="cancel_button">取消按钮</string>
+    <string name="shipment_button">出货按钮</string>
+    <string name="purchase_button">进货按钮</string>
+    <string name="commit_button">提交按钮</string>
+    <string name="ps_title">进出货</string>
 </resources>
