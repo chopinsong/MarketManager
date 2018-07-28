@@ -28,7 +28,7 @@ class PSFragment : MyDialogFragment() {
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
-        val eb = arguments.getSerializable("editBean")
+        val eb = arguments?.getSerializable("editBean")
         eb?.let {
             editBean = it as PSItemBean
         }
@@ -119,17 +119,13 @@ class PSFragment : MyDialogFragment() {
     }
 
     private fun initEditBean() {
-        async {
-            uiThread {
-                if (isEditMode) {
-                    editBean?.let {
-                        customer_et.setText(it.customerName)
-                        price_et.setText(it.price)
-                        purchase_count.setText(it.count)
-                        remark_tv.setText(it.remark)
-                        goodsPickerView.initValues(it.g.brand, it.g.type, it.g.remark)
-                    }
-                }
+        if (isEditMode) {
+            editBean?.let {
+                customer_et.setText(it.customerName)
+                price_et.setText(it.price)
+                purchase_count.setText(it.count)
+                remark_tv.setText(it.remark)
+                goodsPickerView.initValues(it.g.brand, it.g.type, it.g.remark)
             }
         }
     }

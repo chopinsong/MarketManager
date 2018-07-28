@@ -40,11 +40,23 @@ class GoodsPickerView(root: View) {
 
     fun initValues(brand: String, type: String, remark: String) {
         val index = brands.indexOf(brand)
-        brandPicker.value = if (index > -1) index else 0
+        try {
+            brandPicker.value = if (index > -1) index else 0
+        } catch (e: Exception) {
+            i(e.toString())
+        }
         val indexT = types.indexOf(type)
-        typePicker.value = if (indexT > -1) indexT else 0
+        try {
+            typePicker.value = if (indexT > -1) indexT else 0
+        } catch (e: Exception) {
+            i(e.toString())
+        }
         val indexN = remarks.indexOf(remark)
-        remarkPicker.value = if (indexN > -1) indexN else 0
+        try {
+            remarkPicker.value = if (indexN > -1) indexN else 0
+        } catch (e: Exception) {
+            i(e.toString())
+        }
     }
 
     fun updateBrands() {
