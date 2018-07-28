@@ -1,5 +1,6 @@
 package com.chopin.marketmanager.util
 
+import android.Manifest
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
@@ -7,9 +8,11 @@ import android.app.DialogFragment
 import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.support.design.widget.Snackbar
 import android.support.graphics.drawable.VectorDrawableCompat
+import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -39,7 +42,7 @@ fun Activity.toast(msg: String) {
     Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
 }
 
-fun Any.toast(context: Context,msg:String){
+fun Any.toast(context: Context, msg: String) {
     Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
 }
 
@@ -111,9 +114,10 @@ fun Any.showAddGoods(fm: FragmentManager, f: (g: Goods) -> Unit = {}) {
     af.setCommitListener(f)
     af.show(fm, "AddGoods")
 }
-fun Any.showEditGoodsFragment(fm: FragmentManager){
+
+fun Any.showEditGoodsFragment(fm: FragmentManager) {
     val ge = GoodsEditFragment()
-    ge.show(fm,"showEditGoodsFragment")
+    ge.show(fm, "showEditGoodsFragment")
 }
 
 fun Any.time2long(s: String): Long {
@@ -240,10 +244,23 @@ fun <T> Spinner.setValues(l: ArrayList<T>) {
     adapter = yAdapter
 }
 
+fun Activity.verifyStoragePermissions() {
+    val permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    if (permission != PackageManager.PERMISSION_GRANTED) {
+        // We don't have permission so prompt the user
+        ActivityCompat.requestPermissions(this, Util.PERMISSIONS_STORAGE, Util.REQUEST_EXTERNAL_STORAGE)
+    }
+}
+
 object Util {
     fun crTime(): String {
         val fm = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
         return fm.format(System.currentTimeMillis())
     }
+
+    const val REQUEST_EXTERNAL_STORAGE = 1
+    val PERMISSIONS_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+
 
 }
