@@ -8,6 +8,7 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.ui.NumberPickerView
+import com.chopin.marketmanager.util.i
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.enabled
@@ -54,7 +55,11 @@ class GoodsPickerView(root: View) {
             }
             uiThread {
                 if (brands.isNotEmpty()) {
-                    brandPicker.refreshByNewDisplayedValues(brands)
+                    try {
+                        brandPicker.refreshByNewDisplayedValues(brands)
+                    } catch (e: Exception) {
+                        i(e.toString())
+                    }
                 }
                 updateTypes(getSelectBrand())
             }
@@ -69,7 +74,11 @@ class GoodsPickerView(root: View) {
             }
             uiThread {
                 if (types.isNotEmpty()) {
-                    typePicker.refreshByNewDisplayedValues(types)
+                    try {
+                        typePicker.refreshByNewDisplayedValues(types)
+                    } catch (e: Exception) {
+                        i(e.toString())
+                    }
                 }
             }
         }

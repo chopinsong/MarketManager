@@ -230,11 +230,12 @@ class PSFragment : MyDialogFragment() {
             uiThread {
                 progress.dismiss()
                 b?.let { it1 ->
-                    commitListener.invoke(it1)
                     if (isEditMode) {
                         if (line > 0) {
                             updateListener.invoke(it1)
                         }
+                    } else {
+                        commitListener.invoke(it1)
                     }
                 }
                 presentBean?.let { presentB ->
