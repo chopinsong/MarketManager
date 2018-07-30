@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var brands = arrayOf("")
     private var types = arrayOf("")
 
-    private lateinit var installReceiver: InstallReceiver
     private var psData: ArrayList<PSItemBean> = arrayListOf()
     private val mReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -66,9 +65,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initView()
         refreshBrandTypes()
         initListener()
-        val intentFilter = IntentFilter(Constant.INSTALL_ACTION)
-        installReceiver = InstallReceiver(WeakReference(this))
-        registerReceiver(installReceiver, intentFilter)
         val i = IntentFilter(Constant.ACTION_CLEAR_ALL_PS)
         i.addAction(Constant.ACTION_UPDATE_GOODS)
         i.addAction(Constant.ACTION_CLEAR_ALL_DATA)
@@ -90,7 +86,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(installReceiver)
         LocalBroadcastManager.getInstance(applicationContext).unregisterReceiver(mReceiver)
     }
 

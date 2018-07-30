@@ -8,6 +8,7 @@ import android.app.DialogFragment
 import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.support.design.widget.Snackbar
@@ -29,13 +30,11 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.*
-import kotlinx.android.synthetic.main.profit_layout.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 fun Activity.toast(msg: String) {
@@ -244,6 +243,24 @@ fun <T> Spinner.setValues(l: ArrayList<T>) {
     adapter = yAdapter
 }
 
+fun <T> Context.setConfig(key: String, value: T) {
+    val sp = getSharedPreferences("marketManager", MODE_PRIVATE)
+    val e = sp.edit()
+    when (value) {
+        is Int -> e.putInt(key, value)
+        is String -> e.putString(key, value)
+        is Boolean -> e.putBoolean(key, value)
+        is Long -> e.putLong(key, value)
+        is Float -> e.putFloat(key, value)
+    }
+    e.apply()
+}
+
+fun <T> Context.getConfig(key: String): T {
+    val sp = getSharedPreferences("marketManager", MODE_PRIVATE)
+    return sp.all[key] as T
+}
+
 fun Activity.verifyStoragePermissions() {
     val permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -260,7 +277,6 @@ object Util {
 
     const val REQUEST_EXTERNAL_STORAGE = 1
     val PERMISSIONS_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
 
 
 }

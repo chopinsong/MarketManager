@@ -1,7 +1,9 @@
 package com.chopin.marketmanager.util
 
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.DownloadManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -13,14 +15,12 @@ import android.support.design.widget.BaseTransientBottomBar
 import android.support.design.widget.Snackbar
 import android.text.TextUtils
 import android.util.Log
+import org.jetbrains.anko.async
 import java.io.*
+import java.lang.ref.WeakReference
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
-import android.app.AlarmManager
-import android.app.PendingIntent
-import org.jetbrains.anko.async
-import java.lang.ref.WeakReference
 
 
 object UpdateHelper {
@@ -160,14 +160,19 @@ object UpdateHelper {
         return String(bos.toByteArray(), Charset.forName("utf-8"))
     }
 
-    fun update(weak:WeakReference<Activity>) {
+    fun update(weak: WeakReference<Activity>) {
         async {
             weak.get()?.let {
-                val ac=it
-                if (UpdateHelper.check(it.applicationContext)) {
-                    UpdateHelper.showDownload(ac) {
-                        UpdateHelper.download(ac) {
-                            UpdateHelper.showInstall(ac)
+                val ac = it
+                if (ac.getConfig("isDownload")) {
+                    showInstall(ac)
+                } else {
+                    if (check(it.applicationContext)) {
+                        showDownload(ac) {
+                            download(ac) {
+                                ac.setConfig("isDownload", true)
+                                showInstall(ac)
+                            }
                         }
                     }
                 }
