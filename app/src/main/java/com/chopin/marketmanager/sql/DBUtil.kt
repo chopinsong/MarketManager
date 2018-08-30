@@ -130,7 +130,7 @@ class DBUtil(context: Context) {
             val isP = c.getInt(c.getColumnIndex(PSTable.IS_PURCHASE))
             val good = getGood(id)
             val split = time.split(" ")[0].split("-")
-            val pb = ProfitBean(good, count * price, split[0].toInt(), split[1].toInt(), isP == 1)
+            val pb = ProfitBean(good, count , price, split[0].toInt(), split[1].toInt(), isP == 1)
             l.add(pb)
         }
         c.close()

@@ -52,6 +52,6 @@ class PSItemBean(var g: Goods, var psId: Int, var isP: Boolean, var price: Strin
     }
 }
 
-class ProfitBean(var g: Goods, var price: Double, var year:Int,var month:Int,var isP: Boolean)
+class ProfitBean(var g: Goods,var count:Int, var price: Double, var year:Int,var month:Int,var isP: Boolean)
 
 class PickerBean(var brand: String, var type: String, var name: String)

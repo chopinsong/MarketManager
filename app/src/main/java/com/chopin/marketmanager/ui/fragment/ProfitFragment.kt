@@ -12,6 +12,7 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.ProfitBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.defaultItemAnimation
+import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.setValues
 import kotlinx.android.synthetic.main.profit_layout.*
 import org.jetbrains.anko.async
@@ -27,7 +28,7 @@ class ProfitFragment : MyDialogFragment() {
     private lateinit var pAdapter: ProfitAdapter
     private lateinit var profits: ArrayList<ProfitBean>
     private val ymMap = HashMap<Int, ArrayList<Int>>()
-    private val stock_avg_price = HashMap<Goods, Double>()
+    private val stockAvgPrice = HashMap<Goods, Double>()
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         initViews()
@@ -73,16 +74,18 @@ class ProfitFragment : MyDialogFragment() {
 
     private fun generateAvgMap(stockPrice: HashMap<Goods, Array<Double>>) {
         for (key in stockPrice.keys) {
-            var sum = 0.0
             var avg = 0.0
-            val prices = stockPrice[key]
-            prices?.forEach {
-                sum += it
-            }
-            prices?.let {
+            stockPrice[key]?.let {
+                var sum = 0.0
+                for (i in it) {
+                    sum += i
+                    i("$i  $sum ")
+                }
                 avg = sum / it.size
+                i("it.size =${it.size}")
             }
-            stock_avg_price[key] = avg
+            i("avg$avg")
+            stockAvgPrice[key] = avg
         }
     }
 
@@ -119,18 +122,16 @@ class ProfitFragment : MyDialogFragment() {
             }
             val m = HashMap<Goods, ProfitBean>()
             for (p in ps) {
-                if (m.containsKey(p.g)) {
-                    m[p.g]?.let {
-                        if (!p.isP) {
-                            it.price = it.price + (p.price - (stock_avg_price[p.g] ?: 0.0))
+                if (!p.isP) {
+                    if (m.containsKey(p.g)) {
+                        m[p.g]?.let {
+                            it.price = it.price + (p.price - (stockAvgPrice[p.g] ?: 0.0))
+                            m[p.g] = it
                         }
-                        m[p.g] = it
+                    } else {
+                        p.price = p.price - (stockAvgPrice[p.g] ?: 0.0)
+                        m[p.g] = p
                     }
-                } else {
-                    if (!p.isP) {
-                        p.price = p.price-(stock_avg_price[p.g]?:0.0)
-                    }
-                    m[p.g] = p
                 }
             }
             val newProfits = ArrayList<ProfitBean>()
