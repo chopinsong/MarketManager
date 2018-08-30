@@ -12,7 +12,6 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.ProfitBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.defaultItemAnimation
-import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.setValues
 import kotlinx.android.synthetic.main.profit_layout.*
 import org.jetbrains.anko.async
@@ -28,6 +27,7 @@ class ProfitFragment : MyDialogFragment() {
     private lateinit var pAdapter: ProfitAdapter
     private lateinit var profits: ArrayList<ProfitBean>
     private val ymMap = HashMap<Int, ArrayList<Int>>()
+    private val stock_avg_price = HashMap<Goods, Double>()
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         initViews()
@@ -38,6 +38,7 @@ class ProfitFragment : MyDialogFragment() {
     private fun initData() {
         async {
             profits = DBManager.profits()
+            val stockPrice = HashMap<Goods, Array<Double>>()
             for (p in profits) {
                 val y = p.year
                 val m = p.month
@@ -51,12 +52,37 @@ class ProfitFragment : MyDialogFragment() {
                         }
                     }
                 }
+                if (p.isP) {
+                    if (stockPrice.containsKey(p.g)) {
+                        stockPrice[p.g]?.let {
+                            stockPrice[p.g] = it.plus(p.price)
+                        }
+                    } else {
+                        stockPrice[p.g] = arrayOf(p.price)
+                    }
+                }
             }
             val years = arrayListOf<Int>()
             years.addAll(ymMap.keys.sorted())
+            generateAvgMap(stockPrice)
             uiThread {
                 year_spinner.setValues(years)
             }
+        }
+    }
+
+    private fun generateAvgMap(stockPrice: HashMap<Goods, Array<Double>>) {
+        for (key in stockPrice.keys) {
+            var sum = 0.0
+            var avg = 0.0
+            val prices = stockPrice[key]
+            prices?.forEach {
+                sum += it
+            }
+            prices?.let {
+                avg = sum / it.size
+            }
+            stock_avg_price[key] = avg
         }
     }
 
@@ -95,18 +121,16 @@ class ProfitFragment : MyDialogFragment() {
             for (p in ps) {
                 if (m.containsKey(p.g)) {
                     m[p.g]?.let {
-                        if (p.isP){
-                            it.price = it.price - p.price
-                        }else{
-                            it.price=it.price+p.price
+                        if (!p.isP) {
+                            it.price = it.price + (p.price - (stock_avg_price[p.g] ?: 0.0))
                         }
                         m[p.g] = it
                     }
                 } else {
-                    if (p.isP){
-                        p.price=0-p.price
+                    if (!p.isP) {
+                        p.price = p.price-(stock_avg_price[p.g]?:0.0)
                     }
-                    m[p.g]=p
+                    m[p.g] = p
                 }
             }
             val newProfits = ArrayList<ProfitBean>()

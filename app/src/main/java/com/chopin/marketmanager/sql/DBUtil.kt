@@ -11,6 +11,20 @@ import com.chopin.marketmanager.util.toPSItemBean
 class DBUtil(context: Context) {
     private val db = DBHelper(context).writableDatabase
 
+    fun select(sql:String):Array<Array<String>>{
+        val q = db.rawQuery(sql, null)
+        val data = emptyArray<Array<String>>()
+        while (q.moveToNext()){
+            val row = emptyArray<String>()
+            for (cn in q.columnNames) {
+                    row.plus(q.getString(q.getColumnIndex(cn))?:"")
+            }
+            data.plus(row)
+        }
+        q.close()
+        return data
+    }
+
     fun ps(b: PSBean): Long {
         val cv = ContentValues()
         cv.put(PSTable.GOODS_ID, b.goodsId)
