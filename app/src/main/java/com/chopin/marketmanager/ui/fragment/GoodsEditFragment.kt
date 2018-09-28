@@ -11,13 +11,12 @@ import android.view.ViewGroup
 import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
-import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.Constant
 import com.chopin.marketmanager.util.defaultItemAnimation
 import com.chopin.marketmanager.util.snack
 import kotlinx.android.synthetic.main.goods_edit_layout.*
-import org.jetbrains.anko.async
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class GoodsEditFragment : MyDialogFragment() {
@@ -34,7 +33,7 @@ class GoodsEditFragment : MyDialogFragment() {
     }
 
     private fun showStockList() {
-        async {
+        doAsync {
             val goods = DBManager.goods()
             uiThread {
                 geAdapter.setData(goods)
@@ -54,18 +53,20 @@ class GoodsEditFragment : MyDialogFragment() {
         }
 
         geAdapter.setEditListener { g, i ->
-            showEditGoodsFragment(g,i)
+            showEditGoodsFragment(g, i)
         }
     }
 
-    private fun showEditGoodsFragment(g: Goods,i:Int) {
+    private fun showEditGoodsFragment(g: Goods, i: Int) {
         val adf = AddGoodsFragment()
         val b = Bundle()
         b.putSerializable("goods_edit_bean", g)
         adf.arguments = b
-        adf.setCommitListener {
-            geAdapter.updateData(i,it)
-            LocalBroadcastManager.getInstance(context).sendBroadcast(Intent(Constant.ACTION_UPDATE_GOODS))
+        adf.setCommitListener { it ->
+            geAdapter.updateData(i, it)
+            context?.let {
+                LocalBroadcastManager.getInstance(it).sendBroadcast(Intent(Constant.ACTION_UPDATE_GOODS))
+            }
         }
         adf.show(fragmentManager, "EditGoodsFragment")
     }
@@ -77,8 +78,8 @@ class GoodsEditFragment : MyDialogFragment() {
     }
 
     private fun showDelConfirm(g: Goods, i: Int) {
-        Snackbar.make(dialog.window.decorView, "确定删除?", Snackbar.LENGTH_LONG).setAction("确定") {
-            async {
+        Snackbar.make(dialog.window.decorView, "确定删除?", Snackbar.LENGTH_LONG).setAction("确定") { _ ->
+            doAsync {
                 val line = DBManager.setGoodsEnable(g.id, false)
                 uiThread {
                     if (line > 0) {

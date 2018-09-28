@@ -1,6 +1,5 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.os.Build
 import android.text.TextUtils
 import android.view.View
 import com.chopin.marketmanager.R
@@ -9,10 +8,7 @@ import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.sql.GoodsTable
 import com.chopin.marketmanager.ui.NumberPickerView
 import com.chopin.marketmanager.util.i
-import kotlinx.android.synthetic.main.purchase_layout.*
-import org.jetbrains.anko.async
-import org.jetbrains.anko.enabled
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class GoodsPickerView(root: View) {
@@ -60,7 +56,7 @@ class GoodsPickerView(root: View) {
     }
 
     fun updateBrands() {
-        async {
+        doAsync {
             try {
                 brands = DBManager.brands().toTypedArray()
             } catch (e: Exception) {
@@ -79,7 +75,7 @@ class GoodsPickerView(root: View) {
     }
 
     private fun updateTypes(brand: String) {
-        async {
+        doAsync {
             try {
                 types = DBManager.types("${GoodsTable.BRAND}=\"$brand\"").toTypedArray()
             } catch (e: Exception) {
@@ -97,7 +93,7 @@ class GoodsPickerView(root: View) {
     }
 
     private fun updateNames(brand: String, type: String) {
-        async {
+        doAsync {
             try {
                 remarks = DBManager.goodsNames("${GoodsTable.BRAND}=\"$brand\" and ${GoodsTable.TYPE} =\"$type\"").toTypedArray()
             } catch (e: Exception) {

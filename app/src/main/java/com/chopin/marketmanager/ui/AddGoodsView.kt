@@ -8,7 +8,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.snack
-import org.jetbrains.anko.async
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class AddGoodsView(var root: View) {
@@ -21,7 +21,7 @@ class AddGoodsView(var root: View) {
 
     init {
         commitBtn.setOnClickListener {
-                commit(commitListener)
+            commit(commitListener)
         }
         cancelBtn.setOnClickListener {
             cancelListener.invoke()
@@ -73,7 +73,7 @@ class AddGoodsView(var root: View) {
         }
         val name = getName()
         val avgPrice = getAvgPrice()
-        async {
+        doAsync {
             val goods = Goods(brand = brand, type = type, remark = name, avgPrice = avgPrice)
             val goodsId = DBManager.getGoodsId(brand, type, name)
             if (isEditMode) {
@@ -103,7 +103,7 @@ class AddGoodsView(var root: View) {
                         snack(root, "更新成功")
                         clearET()
                         func.invoke(goods)
-                    }else{
+                    } else {
                         snack(root, "商品重复")
                     }
                 }

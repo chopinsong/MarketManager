@@ -9,7 +9,6 @@ import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.GravityCompat
-import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -19,16 +18,14 @@ import android.view.MenuItem
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
-import com.chopin.marketmanager.recevier.InstallReceiver
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.PSAdapter
 import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import org.jetbrains.anko.async
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import java.lang.ref.WeakReference
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -110,7 +107,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         val searchItem = menu.findItem(R.id.action_search)
-        val searchView = MenuItemCompat.getActionView(searchItem) as android.support.v7.widget.SearchView
+        val searchView = searchItem.actionView as android.support.v7.widget.SearchView
         searchView.queryHint = "在此输入过滤内容"
         searchView.setOnCloseListener {
             isGlobalFilter = false
@@ -147,16 +144,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 showPSFragment(false)
             }
             R.id.stock -> {
-                showStock(fragmentManager)
+                showStock(supportFragmentManager)
             }
             R.id.profit -> {
-                showProfit(fragmentManager)
+                showProfit(supportFragmentManager)
             }
             R.id.goods_list -> {
-                showEditGoodsFragment(fragmentManager)
+                showEditGoodsFragment(supportFragmentManager)
             }
             R.id.nav_settings -> {
-                showSettings(fragmentManager)
+                showSettings(supportFragmentManager)
             }
         }
         item.isChecked = false
@@ -170,7 +167,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     private fun updateList() {
-        async {
+        doAsync {
             try {
                 psData = DBManager.getPSBeans()
             } catch (e: Exception) {
@@ -195,7 +192,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun addData(b: PSBean) {
-        async {
+        doAsync {
             val pib = b.toPSItemBean()
             i("addData=${pib.g.brand}${pib.g.type}")
             uiThread {
@@ -207,7 +204,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun updateData(b: PSBean, i: Int) {
-        async {
+        doAsync {
             val bean = b.toPSItemBean()
             uiThread {
                 adapter.updateData(bean, i)
@@ -252,7 +249,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bundle.putSerializable("editBean", b)
         ps.arguments = bundle
         ps.setUpdateListener(func)
-        ps.show(fragmentManager, "PSFragment")
+        ps.show(supportFragmentManager, "PSFragment")
     }
 
     private fun showPSFragment(isP: Boolean = true) {
@@ -263,7 +260,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val bundle = Bundle()
         bundle.putBoolean("isP", isP)
         ps.arguments = bundle
-        ps.show(fragmentManager, "PSFragment")
+        ps.show(supportFragmentManager, "PSFragment")
     }
 
     private fun getTypeContent(): Array<String> {
@@ -278,8 +275,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun showDelConfirm(i: Int, b: PSItemBean) {
-        Snackbar.make(window.decorView, "确定删除?", Snackbar.LENGTH_LONG).setAction("确定") {
-            async {
+        Snackbar.make(window.decorView, "确定删除?", Snackbar.LENGTH_LONG).setAction("确定") { _ ->
+            doAsync {
                 val line = DBManager.setPSEnable(b.psId, false)
                 uiThread {
                     if (line > 0) {
@@ -295,8 +292,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun showUndo(i: Int, b: PSItemBean) {
-        Snackbar.make(window.decorView, "删除成功，是否撤消?", Snackbar.LENGTH_LONG).setAction("撤消") {
-            async {
+        Snackbar.make(window.decorView, "删除成功，是否撤消?", Snackbar.LENGTH_LONG).setAction("撤消") { _ ->
+            doAsync {
                 val psEnable = DBManager.setPSEnable(b.psId, true)
                 uiThread {
                     if (psEnable > 0) {
@@ -310,7 +307,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun handleFilter(type: Int) {
-        async {
+        doAsync {
             val gs = searchText
             val data = psData.filter {
                 if (!isGlobalFilter) {

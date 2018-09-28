@@ -1,8 +1,6 @@
 package com.chopin.marketmanager.ui.fragment
 
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +8,9 @@ import android.view.ViewGroup
 import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.RecycleViewDivider
 import com.chopin.marketmanager.util.defaultItemAnimation
 import kotlinx.android.synthetic.main.stock_layout.*
-import org.jetbrains.anko.async
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class StockFragment : MyDialogFragment() {
@@ -31,7 +28,7 @@ class StockFragment : MyDialogFragment() {
     }
 
     private fun showStockList() {
-        async {
+        doAsync {
             val stock = DBManager.stock()
             stock.sortBy { it.count }
             uiThread {

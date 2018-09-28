@@ -1,12 +1,11 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.app.DialogFragment
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
-import android.view.*
-import com.chopin.marketmanager.R
+import android.support.v4.app.DialogFragment
+import android.view.Gravity
+import android.view.WindowManager
 
 abstract class MyDialogFragment : DialogFragment() {
     private var listener: (dialog: DialogInterface?) -> Unit = {}
@@ -19,6 +18,7 @@ abstract class MyDialogFragment : DialogFragment() {
         super.onDismiss(dialog)
         listener.invoke(dialog)
     }
+
     override fun onStart() {
         super.onStart()
         val params = dialog.window.attributes

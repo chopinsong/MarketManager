@@ -10,7 +10,7 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import kotlinx.android.synthetic.main.present_select_layout.*
 import kotlinx.android.synthetic.main.purchase_layout.*
-import org.jetbrains.anko.async
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
@@ -57,13 +57,13 @@ class PresentFragment : MyDialogFragment() {
     private fun checkLeftGoodsCount() {
         val selectGoods = gpicker.getSelectGoods()
         val psCount = getPresentCount()
-        async {
+        doAsync {
             val goodsId = DBManager.getGoodsId(selectGoods)
             val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
             uiThread {
                 if (psCount > goodsCountLeft) {
                     commit_btn.isClickable = false
-                    context.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
+                    context?.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
                 } else {
                     commit_btn.isClickable = true
                 }

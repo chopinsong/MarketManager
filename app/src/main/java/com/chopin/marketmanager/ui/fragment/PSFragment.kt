@@ -12,7 +12,7 @@ import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.purchase_layout.*
-import org.jetbrains.anko.async
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.image
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
@@ -36,7 +36,7 @@ class PSFragment : MyDialogFragment() {
         isP = if (isEditMode) {
             editBean?.isP
         } else {
-            arguments.getBoolean("isP", true)
+            arguments?.getBoolean("isP", true)
         }
     }
 
@@ -54,15 +54,17 @@ class PSFragment : MyDialogFragment() {
 
 
     override fun onViewCreated(v: View, b: Bundle?) {
-        img_switch_purchase.image = context.purchaseDrawable()
-        img_switch_shipment.image = context.shipmentDrawable()
+        img_switch_purchase.image = context?.purchaseDrawable()
+        img_switch_shipment.image = context?.shipmentDrawable()
         goodsPickerView = GoodsPickerView(goods_picker_root)
         goodsPickerView.updateBrands()
         commit_btn.setOnClickListener { commit() }
         purchase_cancel_btn.setOnClickListener { dismiss() }
-        add_goods_btn.setOnClickListener {
-            showAddGoods(fragmentManager) {
-                goodsPickerView.updateBrands()
+        add_goods_btn.setOnClickListener { _ ->
+            fragmentManager?.let { it ->
+                showAddGoods(it) {
+                    goodsPickerView.updateBrands()
+                }
             }
         }
         is_p_switch.setOnCheckedChangeListener { _, isChecked ->
@@ -160,13 +162,13 @@ class PSFragment : MyDialogFragment() {
     private fun checkLeftGoodsCount() {
         val selectGoods = goodsPickerView.getSelectGoods()
         val psCount = getPSCount()
-        async {
+        doAsync {
             val goodsId = DBManager.getGoodsId(selectGoods)
             val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
             uiThread {
                 if (psCount > goodsCountLeft) {
                     commit_btn.isClickable = false
-                    context.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
+                    context?.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
                 } else {
                     commit_btn.isClickable = true
                 }
@@ -196,7 +198,7 @@ class PSFragment : MyDialogFragment() {
         customerName = if (customerName.isNotEmpty()) customerName else "未知"
         val remark = remark_tv.text.toString()
         val isP = is_p_switch.isChecked
-        async {
+        doAsync {
             val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
             var line = 0
             var b: PSBean? = null

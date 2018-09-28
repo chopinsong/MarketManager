@@ -4,9 +4,6 @@ import android.Manifest
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.app.Activity
-import android.app.DialogFragment
-import android.app.Fragment
-import android.app.FragmentManager
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
@@ -14,6 +11,9 @@ import android.graphics.Color
 import android.support.design.widget.Snackbar
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -30,7 +30,7 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.*
-import org.jetbrains.anko.async
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -202,7 +202,7 @@ fun PSBean.toPSItemBean(): PSItemBean {
 }
 
 fun Activity.showGoodsLeft(b: PSItemBean) {
-    async {
+    doAsync {
         val countLeft = DBManager.getGoodsCountLeft(b.g.id)
         uiThread {
             snack("${b.g.brand}${b.g.type}${b.g.remark}剩余${countLeft}件")

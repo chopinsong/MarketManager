@@ -1,16 +1,16 @@
 package com.chopin.marketmanager.sql
 
 object PSTable {
-    val NAME = "PS"
-    val PS_ID = "PSId"
-    val GOODS_ID = "GoodsId"
-    val PS_PRICE = "PSPrice"
-    val CUSTOMER_NAME = "CustomerName"
-    val IS_PURCHASE = "isPurchase"
-    val PS_COUNT = "count"
-    val IS_ENABLE = "isEnabled"
-    val TIME = "Time"
-    val PS_REMARK="remark"
+    const val NAME = "PS"
+    const val PS_ID = "PSId"
+    const val GOODS_ID = "GoodsId"
+    const val PS_PRICE = "PSPrice"
+    const val CUSTOMER_NAME = "CustomerName"
+    const val IS_PURCHASE = "isPurchase"
+    const val PS_COUNT = "count"
+    const val IS_ENABLE = "isEnabled"
+    const val TIME = "Time"
+    const val PS_REMARK = "remark"
 
     fun getCommand(): String {
         return "CREATE TABLE $NAME($PS_ID  INTEGER PRIMARY KEY,$GOODS_ID INTEGER,$PS_PRICE DOUBLE,$CUSTOMER_NAME text,$IS_PURCHASE INTEGER,$PS_COUNT INTEGER,$IS_ENABLE INTEGER,$PS_REMARK TEXT,$TIME TIMESTAMP(14));"

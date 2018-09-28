@@ -15,7 +15,7 @@ import android.support.design.widget.BaseTransientBottomBar
 import android.support.design.widget.Snackbar
 import android.text.TextUtils
 import android.util.Log
-import org.jetbrains.anko.async
+import org.jetbrains.anko.doAsync
 import java.io.*
 import java.lang.ref.WeakReference
 import java.net.HttpURLConnection
@@ -48,13 +48,13 @@ object UpdateHelper {
         }).show()
     }
 
-    fun showDownload(activity: Activity, function: (c: Context) -> Unit) {
+    private fun showDownload(activity: Activity, function: (c: Context) -> Unit) {
         Snackbar.make(activity.window.decorView, "有新版本，是否下载", Snackbar.LENGTH_LONG).setAction("下载") {
             function(activity.applicationContext)
         }.show()
     }
 
-    fun download(context: Context, downloadUrl: String = apkUrl, todo: (c: Context) -> Unit) {
+    private fun download(context: Context, downloadUrl: String = apkUrl, todo: (c: Context) -> Unit) {
         val request = DownloadManager.Request(Uri.parse(downloadUrl))
         request.setDestinationInExternalPublicDir("/download/", Constant.APK_NAME + remoteVersion)
         request.setTitle("销售管理")
@@ -161,17 +161,16 @@ object UpdateHelper {
     }
 
     fun update(weak: WeakReference<Activity>) {
-        async {
-            weak.get()?.let {
-                val ac = it
-                if (ac.getConfig("isDownload")) {
-                    showInstall(ac)
+        doAsync {
+            weak.get()?.let { it ->
+                if (it.getConfig("isDownload")) {
+                    showInstall(it)
                 } else {
                     if (check(it.applicationContext)) {
-                        showDownload(ac) {
-                            download(ac) {
-                                ac.setConfig("isDownload", true)
-                                showInstall(ac)
+                        showDownload(it) { _ ->
+                            download(it) { _ ->
+                                it.setConfig("isDownload", true)
+                                showInstall(it)
                             }
                         }
                     }

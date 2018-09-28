@@ -15,7 +15,7 @@ import com.chopin.marketmanager.util.defaultItemAnimation
 import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.setValues
 import kotlinx.android.synthetic.main.profit_layout.*
-import org.jetbrains.anko.async
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class ProfitFragment : MyDialogFragment() {
@@ -37,7 +37,7 @@ class ProfitFragment : MyDialogFragment() {
     }
 
     private fun initData() {
-        async {
+        doAsync {
             profits = DBManager.profits()
             val stockPrice = HashMap<Goods, Array<Double>>()
             for (p in profits) {
@@ -116,7 +116,7 @@ class ProfitFragment : MyDialogFragment() {
     private fun showProfitList() {
         val year = getSelectYear()
         val month = getSelectMonth()
-        async {
+        doAsync {
             val ps = profits.filter {
                 it.year == year && it.month == month
             }
