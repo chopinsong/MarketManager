@@ -163,7 +163,7 @@ object UpdateHelper {
     fun update(weak: WeakReference<Activity>) {
         doAsync {
             weak.get()?.let { it ->
-                if (it.getConfig("isDownload")) {
+                if (it.getConfig("isDownload") as Boolean) {
                     showInstall(it)
                 } else {
                     if (check(it.applicationContext)) {

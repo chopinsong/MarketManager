@@ -31,6 +31,7 @@ class ProfitFragment : MyDialogFragment() {
     private val stockAvgPrice = HashMap<Goods, Double>()
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
+        setTouch(profit_root_layout)
         initViews()
         initListener()
         initData()

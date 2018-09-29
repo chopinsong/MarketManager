@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="400dp"
+    android:id="@+id/goods_edit_root_layout"
     android:orientation="vertical">
 
     <TextView

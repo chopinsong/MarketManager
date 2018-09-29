@@ -11,7 +11,7 @@ import com.chopin.marketmanager.util.i
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class GoodsPickerView(root: View) {
+class GoodsPickerView(root: View,showRemark:Boolean=true) {
     private val brandPicker = root.findViewById<NumberPickerView>(R.id.brand_picker)
     private val typePicker = root.findViewById<NumberPickerView>(R.id.type_picker)
     private val remarkPicker = root.findViewById<NumberPickerView>(R.id.remark_picker)
@@ -32,6 +32,7 @@ class GoodsPickerView(root: View) {
             updateNames(getSelectBrand(), getSelectType())
             listener.invoke()
         }
+        remarkPicker.visibility= if (showRemark) View.VISIBLE else View.GONE
     }
 
     fun initValues(brand: String, type: String, remark: String) {

@@ -29,6 +29,7 @@ class PresentFragment : MyDialogFragment() {
     }
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
+        setTouch(present_root_layout)
         present_count_picker.minValue = 1
         present_count_picker.maxValue = 99
         gpicker = GoodsPickerView(present_goods_picker)

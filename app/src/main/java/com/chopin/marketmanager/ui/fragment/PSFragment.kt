@@ -52,11 +52,15 @@ class PSFragment : MyDialogFragment() {
         return inflater.inflate(R.layout.purchase_layout, container)
     }
 
-
     override fun onViewCreated(v: View, b: Bundle?) {
+        setTouch(ps_root_layout)
         img_switch_purchase.image = context?.purchaseDrawable()
         img_switch_shipment.image = context?.shipmentDrawable()
-        goodsPickerView = GoodsPickerView(goods_picker_root)
+        var isShow = true
+        context?.let {
+            isShow = it.getConfig(Constant.SHOW_GOODS_REMARK)?:false
+        }
+        goodsPickerView = GoodsPickerView(goods_picker_root, isShow)
         goodsPickerView.updateBrands()
         commit_btn.setOnClickListener { commit() }
         purchase_cancel_btn.setOnClickListener { dismiss() }

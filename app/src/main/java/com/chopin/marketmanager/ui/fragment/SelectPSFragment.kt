@@ -27,6 +27,7 @@ class SelectPSFragment : MyDialogFragment() {
     }
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
+        setTouch(select_ps_root_layout)
         select_purchase_btn.setOnClickListener {
             showPS(true)
             dialog.dismiss()

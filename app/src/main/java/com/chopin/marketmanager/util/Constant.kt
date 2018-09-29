@@ -9,6 +9,5 @@ object Constant {
     const val ACTION_CLEAR_ALL_PS = "action_clear_all_ps"
     const val ACTION_CLEAR_ALL_DATA = "action_clear_all_data"
     const val ACTION_UPDATE_GOODS="action_update_goods"
-
-
+    const val SHOW_GOODS_REMARK = "showGoodsRemark"
 }

@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v4.app.DialogFragment
 import android.view.Gravity
+import android.view.MotionEvent
+import android.view.View
 import android.view.WindowManager
 
 abstract class MyDialogFragment : DialogFragment() {
@@ -17,6 +19,42 @@ abstract class MyDialogFragment : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
         listener.invoke(dialog)
+    }
+
+    var sx = 0f
+    var sy = 0f
+    var x = 0f
+    var y = 0f
+    fun setTouch(v: View) {
+        v.setOnTouchListener { _, event ->
+            if (event != null) {
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    sx = event.rawX
+                    sy = event.rawY
+                    x = event.rawX
+                    y = event.rawY
+                }
+                if (event.action == MotionEvent.ACTION_MOVE) {
+                    //当手指离开的时候
+                    offset((x - event.rawX).toInt(), (y - event.rawY).toInt())
+                    x = event.rawX
+                    y = event.rawY
+                }
+                if (event.action == MotionEvent.ACTION_UP) {
+                    if (event.rawY - sy > 50) {
+                        dismiss()
+                    }
+                }
+            }
+            true
+        }
+    }
+
+    fun offset(x: Int, y: Int) {
+        val params = dialog.window.attributes
+        params.x += x
+        params.y += y
+        dialog.window.attributes = params
     }
 
     override fun onStart() {

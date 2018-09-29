@@ -28,6 +28,7 @@ class GoodsEditFragment : MyDialogFragment() {
 
     private lateinit var geAdapter: GoodsEditAdapter
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
+        setTouch(goods_edit_root_layout)
         initViews()
         showStockList()
     }

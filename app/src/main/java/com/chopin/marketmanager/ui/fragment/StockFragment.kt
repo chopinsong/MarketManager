@@ -23,6 +23,7 @@ class StockFragment : MyDialogFragment() {
     private lateinit var stockAdapter: StockAdapter
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
+        setTouch(stock_root_layout)
         initViews()
         showStockList()
     }
