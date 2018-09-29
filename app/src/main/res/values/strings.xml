@@ -51,4 +51,6 @@
     <string name="del_all_data">进阶所有数据(包含进出货和货品)</string>
     <string name="goods_list">商品</string>
     <string name="goods_remark_show">显示货品备注</string>
+    <string name="default_version">1.0</string>
+    <string name="version_text">版本</string>
 </resources>

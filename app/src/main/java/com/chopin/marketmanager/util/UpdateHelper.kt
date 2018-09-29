@@ -35,21 +35,26 @@ object UpdateHelper {
     }
 
     fun showInstall(activity: Activity) {
-        Snackbar.make(activity.window.decorView, "下载完成，是否马上安装", Snackbar.LENGTH_LONG).setAction("安装") {
-            install(activity.applicationContext, "${Environment.getExternalStorageDirectory()}${File.separator}download${File.separator + Constant.APK_NAME + remoteVersion}")
-        }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                super.onDismissed(transientBottomBar, event)
-                val alarmManager = activity.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                val intent2 = Intent().setAction(Constant.INSTALL_ACTION)
-                val uploadIntent = PendingIntent.getService(activity.applicationContext, 0, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10 * 60 * 60, AlarmManager.INTERVAL_DAY, uploadIntent)
+        if (check(activity)) {
+            Snackbar.make(activity.window.decorView, "下载完成，是否马上安装", Snackbar.LENGTH_LONG).setAction("安装") {
+                install(activity.applicationContext, "${Environment.getExternalStorageDirectory()}${File.separator}download${File.separator + Constant.APK_NAME + remoteVersion}")
             }
-        }).show()
+//                .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+//            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+//                super.onDismissed(transientBottomBar, event)
+//                val alarmManager = activity.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//                val intent2 = Intent().setAction(Constant.INSTALL_ACTION)
+//                val uploadIntent = PendingIntent.getService(activity.applicationContext, 0, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
+//                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10 * 60 * 60, AlarmManager.INTERVAL_DAY, uploadIntent)
+//            }
+//        }
+//    )
+                    .show()
+        }
     }
 
     private fun showDownload(activity: Activity, function: (c: Context) -> Unit) {
-        Snackbar.make(activity.window.decorView, "有新版本，是否下载", Snackbar.LENGTH_LONG).setAction("下载") {
+        Snackbar.make(activity.window.decorView, "有新版本${remoteVersion}，是否下载", Snackbar.LENGTH_LONG).setAction("下载") {
             function(activity.applicationContext)
         }.show()
     }
@@ -163,7 +168,8 @@ object UpdateHelper {
     fun update(weak: WeakReference<Activity>) {
         doAsync {
             weak.get()?.let { it ->
-                if (it.getConfig("isDownload") as Boolean) {
+                val isDownload = it.getConfig("isDownload") ?: false
+                if (isDownload) {
                     showInstall(it)
                 } else {
                     if (check(it.applicationContext)) {

@@ -16,6 +16,7 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
@@ -25,6 +26,7 @@ import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -192,6 +194,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         purchase_shipment_list.adapter = adapter
 
         purchase_shipment_list.defaultItemAnimation()
+        val hv = nav_view?.getHeaderView(nav_view.headerCount-1)
+        val vv =hv?.findViewById<TextView>(R.id.version_tv)
+        vv?.text =  UpdateHelper.getVersion(context =this).toString()
     }
 
     private fun addData(b: PSBean) {
