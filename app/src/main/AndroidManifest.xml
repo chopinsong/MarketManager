@@ -30,7 +30,7 @@
         </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="包名"
+            android:authorities="com.chopin.marketmanager.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

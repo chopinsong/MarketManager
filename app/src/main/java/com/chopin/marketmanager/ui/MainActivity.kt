@@ -380,6 +380,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun checkUpdate() {
-        UpdateHelper.update(this@MainActivity.toWeak())
+        try {
+            UpdateHelper.update(this@MainActivity.toWeak())
+        } catch (e: Exception) {
+            i(e.toString())
+        }
     }
 }

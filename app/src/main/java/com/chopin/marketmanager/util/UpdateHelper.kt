@@ -1,20 +1,20 @@
 package com.chopin.marketmanager.util
 
 import android.app.Activity
-import android.app.AlarmManager
 import android.app.DownloadManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
-import android.support.design.widget.BaseTransientBottomBar
 import android.support.design.widget.Snackbar
+import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import android.util.Log
+import com.chopin.marketmanager.BuildConfig
 import org.jetbrains.anko.doAsync
 import java.io.*
 import java.lang.ref.WeakReference
@@ -111,10 +111,18 @@ object UpdateHelper {
     }
 
     fun install(context: Context, apkFilePath: String) {
-        val apkfile = File(apkFilePath)
+        val apkFile = File(apkFilePath)
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive")
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            val contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile)
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
+        } else {
+            intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive")
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+//        intent.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive")
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
         android.os.Process.killProcess(android.os.Process.myPid())
     }
