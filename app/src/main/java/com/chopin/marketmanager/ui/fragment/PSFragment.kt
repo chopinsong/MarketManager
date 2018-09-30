@@ -53,7 +53,7 @@ class PSFragment : MyDialogFragment() {
     }
 
     override fun onViewCreated(v: View, b: Bundle?) {
-        setTouch(ps_root_layout)
+        setTouch(purchase_layout_root)
         img_switch_purchase.image = context?.purchaseDrawable()
         img_switch_shipment.image = context?.shipmentDrawable()
         var isShow = true
