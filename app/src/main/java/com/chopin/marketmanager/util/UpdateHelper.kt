@@ -88,7 +88,6 @@ object UpdateHelper {
         val bytes = ByteArray(1024)
         ism.read(bytes)
         val str = String(bytes, Charset.forName("utf-8"))
-        Log.i("chopin", "ver =$str")
         return if (TextUtils.isEmpty(str)) 0.0 else str.toDouble()
     }
 

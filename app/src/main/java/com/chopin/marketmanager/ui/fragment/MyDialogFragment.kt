@@ -25,7 +25,7 @@ abstract class MyDialogFragment : DialogFragment() {
     var sy = 0f
     var x = 0f
     var y = 0f
-    var hasSwipeUp=false
+    var hasSwipeUp = false
     fun setTouch(v: View) {
         v.setOnTouchListener { _, event ->
             if (event != null) {
@@ -40,15 +40,15 @@ abstract class MyDialogFragment : DialogFragment() {
                     offset((x - event.rawX).toInt(), (y - event.rawY).toInt())
                     x = event.rawX
                     y = event.rawY
-                    if (sy-event.rawY>8){
-                        hasSwipeUp=true
+                    if (sy - event.rawY > 8) {
+                        hasSwipeUp = true
                     }
                 }
                 if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawY - sy > 50&&hasSwipeUp) {
-                        hasSwipeUp=false
+                    if (hasSwipeUp && event.rawY - sy > 150 || !hasSwipeUp && event.rawY - sy > 50) {
                         dismiss()
                     }
+                    hasSwipeUp = false
                 }
             }
             true

@@ -166,7 +166,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-
     private fun updatePicker() {
         m_filter_type_p.refreshValues(arrayOf("无过滤", "品牌", "类型", "进出货"))
     }
@@ -195,9 +194,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         purchase_shipment_list.adapter = adapter
 
         purchase_shipment_list.defaultItemAnimation()
-        val hv = nav_view?.getHeaderView(nav_view.headerCount-1)
-        val vv =hv?.findViewById<TextView>(R.id.version_tv)
-        vv?.text =  UpdateHelper.getVersion(context =this).toString()
+        val hv = nav_view?.getHeaderView(nav_view.headerCount - 1)
+        val vv = hv?.findViewById<TextView>(R.id.version_tv)
+        vv?.text = UpdateHelper.getVersion(context = this).toString()
+        vv?.setOnClickListener {
+            checkUpdate()
+            vv.scaleDown()
+        }
     }
 
     private fun addData(b: PSBean) {
@@ -226,28 +229,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var isGlobalFilter: Boolean = false
     var x = 0f
     var y = 0f
+    var x2 = 0f
     var y2 = 0f
     var is_touch = false
     private fun initListener() {
         main_num_picker_layout.setOnTouchListener { v, event ->
-            i("onTouchEvent ${event==null} " )
-            if (event!=null){
+            i("onTouchEvent ${event == null} ")
+            if (event != null) {
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     x = event.rawX
                     y = event.rawY
-                    is_touch=false
+                    is_touch = false
                 }
-                if (event.action == MotionEvent.ACTION_MOVE&&!is_touch) {
+                if (event.action == MotionEvent.ACTION_MOVE && !is_touch) {
                     //当手指离开的时候
                     y2 = event.rawY
+                    x2 = event.rawX
                     i("x $x width ${v.display.width} y $y y2$y2")
-                    if ((x < v.display.width / 3) && ((y - y2 )> 50)) {
+                    if ((x < v.display.width / 3) && ((y - y2) > 50)) {
                         showPSFragment()
-                        is_touch=true
-                    }
-                    if ((x > v.display.width *2/ 3) && ((y - y2 )> 50)) {
+                        is_touch = true
+                    } else if ((x > v.display.width * 2 / 3) && ((y - y2) > 50)) {
                         showPSFragment(false)
-                        is_touch=true
+                        is_touch = true
+                    } else if (x2 - x > 50 && (Math.abs(y - y2) < 10)) {
+                        showStock(supportFragmentManager)
+                        is_touch = true
+                    } else if (x - x2 > 50 && (Math.abs(y - y2) < 10)) {
+                        showSettings(supportFragmentManager)
+                        is_touch = true
                     }
                 }
             }

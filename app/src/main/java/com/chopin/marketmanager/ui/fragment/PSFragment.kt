@@ -58,7 +58,7 @@ class PSFragment : MyDialogFragment() {
         img_switch_shipment.image = context?.shipmentDrawable()
         var isShow = true
         context?.let {
-            isShow = it.getConfig(Constant.SHOW_GOODS_REMARK)?:false
+            isShow = it.getConfig(Constant.SHOW_GOODS_REMARK) ?: false
         }
         goodsPickerView = GoodsPickerView(goods_picker_root, isShow)
         goodsPickerView.updateBrands()
@@ -123,6 +123,7 @@ class PSFragment : MyDialogFragment() {
         if (isChecked) {
             commit_btn.isEnabled = true
         }
+        setSelectFocus(isChecked)
     }
 
     private fun initEditBean() {
@@ -148,6 +149,11 @@ class PSFragment : MyDialogFragment() {
         return this
     }
 
+    private fun setSelectFocus(isP: Boolean) {
+        img_switch_purchase.image = context?.purchaseDrawable(if (isP) R.color.colorAccent else R.color.black2)
+        img_switch_shipment.image = context?.shipmentDrawable(if (!isP) R.color.colorAccent else R.color.black2)
+    }
+
 
     private fun getCustomerName(): String {
         val name = customer_et.text.toString()
@@ -171,12 +177,12 @@ class PSFragment : MyDialogFragment() {
             val goodsId = DBManager.getGoodsId(selectGoods)
             val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
             uiThread {
-                if (!is_p_switch.isChecked&&psCount > goodsCountLeft) {
+                if (!is_p_switch.isChecked && psCount > goodsCountLeft) {
                     commit_btn.isClickable = false
-                    purchase_count_Layout.error="当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个"
+                    purchase_count_Layout.error = "当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个"
                 } else {
                     commit_btn.isClickable = true
-                    purchase_count_Layout.error=null
+                    purchase_count_Layout.error = null
                 }
             }
         }
