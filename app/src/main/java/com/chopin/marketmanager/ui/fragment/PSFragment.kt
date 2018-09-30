@@ -200,11 +200,18 @@ class PSFragment : MyDialogFragment() {
             snack("请选择类型")
             return
         }
+
         val selectName = selectGoods.remark
         val inputPrice = getInputPrice()
+        var psCount = getPSCount()
+        if (psCount==0){
+            purchase_count_Layout.error="请至少输入数量 1"
+            return
+        }else{
+            purchase_count_Layout.error=null
+        }
         val progress = getProgressDialog()
         progress.show(fragmentManager, "PSActivity")
-        var psCount = getPSCount()
         psCount = if (psCount == 0) 1 else psCount
         var customerName = getCustomerName()
         customerName = if (customerName.isNotEmpty()) customerName else "未知"

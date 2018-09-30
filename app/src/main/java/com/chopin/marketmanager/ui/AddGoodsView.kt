@@ -1,5 +1,6 @@
 package com.chopin.marketmanager.ui
 
+import android.support.design.widget.TextInputLayout
 import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
@@ -18,6 +19,10 @@ class AddGoodsView(var root: View) {
     var remarkEt: EditText = root.findViewById(R.id.add_goods_remark)
     var commitBtn: ImageView = root.findViewById(R.id.add_goods_commit_btn)
     var cancelBtn: ImageView = root.findViewById(R.id.add_goods_cancel_btn)
+    var agbl: TextInputLayout = root.findViewById(R.id.add_goods_brand_Layout)
+    var agtl: TextInputLayout = root.findViewById(R.id.add_goods_type_Layout)
+    var agpl: TextInputLayout = root.findViewById(R.id.add_goods_avg_price_Layout)
+    var agrl: TextInputLayout = root.findViewById(R.id.add_goods_remark_Layout)
 
     init {
         commitBtn.setOnClickListener {
@@ -63,13 +68,17 @@ class AddGoodsView(var root: View) {
     fun commit(func: (g: Goods) -> Unit = {}) {
         val brand = getBrand()
         if (brand.isEmpty()) {
-            snack(root, "请输入品牌")
+            agbl.error="请输入品牌"
             return
+        }else{
+            agbl.error=null
         }
         val type = getType()
         if (type.isEmpty()) {
-            snack(root, "请输入类型")
+            agtl.error="请输入类型"
             return
+        }else{
+            agtl.error=null
         }
         val name = getName()
         val avgPrice = getAvgPrice()
