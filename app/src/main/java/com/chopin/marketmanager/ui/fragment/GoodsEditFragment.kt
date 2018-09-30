@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.AdapterView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
@@ -56,6 +57,8 @@ class GoodsEditFragment : MyDialogFragment() {
         geAdapter.setEditListener { g, i ->
             showEditGoodsFragment(g, i)
         }
+
+
     }
 
     private fun showEditGoodsFragment(g: Goods, i: Int) {

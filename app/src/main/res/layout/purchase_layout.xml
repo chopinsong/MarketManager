@@ -11,10 +11,10 @@
         android:text="@string/ps_title" />
 
     <LinearLayout
+        android:id="@+id/ps_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:id="@+id/ps_root_layout"
         android:orientation="vertical"
         android:padding="20dp">
 
@@ -53,7 +53,6 @@
                     android:id="@+id/img_switch_purchase"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="2dp"
                     android:contentDescription="@string/shipment_button" />
             </LinearLayout>
 
@@ -74,121 +73,95 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/customer_et_Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginStart="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginTop="15dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="5dp"
-                    android:contentDescription="@string/customer_hint"
-                    android:src="@drawable/ic_user" />
+                android:layout_marginLeft="@dimen/ps_layout_input_ed_margin"
+                android:layout_marginRight="@dimen/ps_layout_input_ed_margin"
+                android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top">
 
                 <EditText
                     android:id="@+id/customer_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:hint="@string/customer_hint"
                     android:inputType="textAutoComplete"
-                    android:labelFor="@+id/customer_et"
                     android:textColor="@color/colorAccent"
+                    android:textColorHint="@color/gray"
                     android:textSize="@dimen/ps_et_text_size" />
-            </RelativeLayout>
+            </android.support.design.widget.TextInputLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginStart="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginTop="8dp">
+                android:layout_marginLeft="@dimen/ps_layout_input_ed_margin"
+                android:layout_marginRight="@dimen/ps_layout_input_ed_margin"
+                android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="27dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="5dp"
-                    android:contentDescription="@string/price_hint"
-                    android:src="@drawable/ic_price" />
-
-                <EditText
-                    android:id="@+id/price_et"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/price_et_Layout"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/price_hint"
-                    android:inputType="number|numberDecimal"
-                    android:labelFor="@+id/price_et"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/ps_et_text_size" />
-            </RelativeLayout>
+                    android:layout_weight="1">
 
-            <RelativeLayout
+                    <EditText
+                        android:id="@+id/price_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/price_hint"
+                        android:inputType="number|numberDecimal"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHint="@color/gray"
+                        android:textSize="@dimen/ps_et_text_size" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/purchase_count_Layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/purchase_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/count_hint"
+                        android:inputType="number"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHint="@color/gray"
+                        android:textSize="@dimen/ps_et_text_size" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/remark_tv_Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginStart="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginTop="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="21dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="2dp"
-                    android:contentDescription="@string/count_hint"
-                    android:src="@drawable/ic_count" />
-
-                <EditText
-                    android:id="@+id/purchase_count"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/count_hint"
-                    android:inputType="number"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/ps_et_text_size" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginStart="@dimen/ps_layout_input_ed_margin"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="5dp"
-                    android:contentDescription="@string/remark_hint"
-                    android:src="@drawable/ic_remark" />
+                android:layout_marginLeft="@dimen/ps_layout_input_ed_margin"
+                android:layout_marginRight="@dimen/ps_layout_input_ed_margin"
+                android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top">
 
                 <EditText
                     android:id="@+id/remark_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:hint="@string/remark_hint"
                     android:inputType="textAutoComplete"
                     android:textColor="@color/colorAccent"
+                    android:textColorHint="@color/gray"
                     android:textSize="@dimen/ps_et_text_size" />
-            </RelativeLayout>
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="15dp"
             android:baselineAligned="false"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
             android:gravity="center"
             android:orientation="horizontal">
 

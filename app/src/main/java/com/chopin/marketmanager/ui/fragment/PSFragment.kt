@@ -73,6 +73,7 @@ class PSFragment : MyDialogFragment() {
         }
         is_p_switch.setOnCheckedChangeListener { _, isChecked ->
             switchPS(isChecked)
+            checkLeftGoodsCount()
         }
         isP?.let {
             is_p_switch.isChecked = it
@@ -170,11 +171,12 @@ class PSFragment : MyDialogFragment() {
             val goodsId = DBManager.getGoodsId(selectGoods)
             val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
             uiThread {
-                if (psCount > goodsCountLeft) {
+                if (!is_p_switch.isChecked&&psCount > goodsCountLeft) {
                     commit_btn.isClickable = false
-                    context?.toast("当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个")
+                    purchase_count_Layout.error="当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个"
                 } else {
                     commit_btn.isClickable = true
+                    purchase_count_Layout.error=null
                 }
             }
         }
