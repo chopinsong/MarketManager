@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <declare-styleable name="SwipeLayout">
         <attr name="preview" format="enum">
             <enum name="noPreview" value="-1"/>
