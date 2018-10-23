@@ -12,5 +12,6 @@
     <dimen name="ps_et_text_size">14sp</dimen>
     <dimen name="ps_et_content_padding_start">40dp</dimen>
     <dimen name="title_height">35dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 </resources>

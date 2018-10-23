@@ -30,12 +30,47 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.*
+import net.sourceforge.pinyin4j.PinyinHelper
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
+fun String.toPY(): String {
+    var convert = ""
+    if (this.length < 0) {
+        return ""
+    }
+    val word = this.toCharArray()[0]
+    val pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word)
+    convert += if (pinyinArray != null) {
+        pinyinArray[0].toCharArray()[0]
+    } else {
+        word
+    }
+    return convert
+}
+
+fun Int.px2dp(context: Context): Int {
+    val density = context.resources.displayMetrics.density//得到设备的密度
+    return (this / density + 0.5f).toInt()
+}
+
+fun Int.dp2px(context: Context): Int {
+    val density = context.resources.displayMetrics.density
+    return (this * density + 0.5f).toInt()
+}
+
+fun Int.px2sp(context: Context): Int {
+    val scaleDensity = context.resources.displayMetrics.scaledDensity//缩放密度
+    return (this / scaleDensity + 0.5f).toInt()
+}
+
+fun Int.sp2px(context: Context): Int {
+    val scaleDensity = context.resources.displayMetrics.scaledDensity
+    return (this * scaleDensity + 0.5f).toInt()
+}
 
 fun Activity.toast(msg: String) {
     Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()

@@ -16,18 +16,17 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.View
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.PSAdapter
+import com.chopin.marketmanager.ui.fragment.PSParseFragment
 import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.nav_header_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -247,10 +246,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     x2 = event.rawX
                     i("x $x width ${v.display.width} y $y y2$y2")
                     if ((x < v.display.width / 3) && ((y - y2) > 50)) {
-                        showPSFragment()
+//                        showPSFragment()
+                        showPsParseFragment()
                         is_touch = true
                     } else if ((x > v.display.width * 2 / 3) && ((y - y2) > 50)) {
-                        showPSFragment(false)
+                        showPsParseFragment(false)
                         is_touch = true
                     } else if (x2 - x > 50 && (Math.abs(y - y2) < 10)) {
                         showStock(supportFragmentManager)
@@ -296,6 +296,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ps.arguments = bundle
         ps.setUpdateListener(func)
         ps.show(supportFragmentManager, "PSFragment")
+    }
+
+    private fun showPsParseFragment(isP: Boolean = true) {
+        val ppf = PSParseFragment()
+        val b = Bundle()
+        b.putStringArray("brandsArray",brands)
+        b.putStringArray("typesArray",types)
+        ppf.arguments=b
+        ppf.show(supportFragmentManager, "PSParseFragment")
+        ppf.setCancelListener {
+            showPSFragment(isP)
+        }
+        ppf.setCommitListener { it ->
+            val pm = PSManager()
+            pm.ps(brand = it[1],type=it[2],count=it[3].toInt(),price = it[4].toDouble(),isP = it[0].toInt()==1){b->
+                addData(b)
+                refreshBrandTypes()
+            }
+        }
     }
 
     private fun showPSFragment(isP: Boolean = true) {

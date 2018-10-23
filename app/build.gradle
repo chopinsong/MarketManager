@@ -16,7 +16,7 @@ android {
         resConfigs "en", "cn"
     }
     buildTypes {
-        debug{
+        debug {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -46,7 +47,8 @@ dependencies {
 //    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20'
 
     implementation 'org.jetbrains.anko:anko-sdk15:0.10.5' // sdk19, sdk21, sdk23 are also available
-    implementation 'org.jetbrains.anko:anko-support-v4:0.10.5' // In case you need support-v4 bindings
+    implementation 'org.jetbrains.anko:anko-support-v4:0.10.5'
+    // In case you need support-v4 bindings
     implementation 'org.jetbrains.anko:anko-appcompat-v7:0.10.5' // For appcompat-v7 bindings
-
+    implementation 'com.github.open-android:pinyin4j:2.5.0'
 }

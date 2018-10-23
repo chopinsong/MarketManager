@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:huahua="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:name="com.chopin.marketmanager.ui.fragment.StockPage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.StockPage"
+        tools:listitem="@layout/stock_page_item" />
+
+    <com.chopin.marketmanager.ui.LetterIndexer
+        android:id="@+id/letter_index"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        huahua:additionalTipOffset="40dip"
+        huahua:fontColor="@color/colorAccent"
+        huahua:maxBezierHeight="150dip"
+        huahua:maxBezierWidth="180dip"
+        huahua:maxFontSize="77"
+        huahua:minFontSize="32"
+        huahua:tipFontSize="72"
+        huahua:widthOffset="15dip" />
+
+</RelativeLayout>
