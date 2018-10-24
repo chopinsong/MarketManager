@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui.fragment.bean
+package com.chopin.marketmanager.bean
 
 data class PSPageItem(val id: String, val content: String, val details: String) {
     override fun toString(): String = content

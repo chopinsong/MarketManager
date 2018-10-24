@@ -15,7 +15,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.ITHCallBack
 import com.chopin.marketmanager.ui.LetterIndexer
-import com.chopin.marketmanager.ui.fragment.bean.StockItem
+import com.chopin.marketmanager.bean.StockItem
 import com.chopin.marketmanager.util.defaultItemAnimation
 import com.chopin.marketmanager.util.snack
 import com.chopin.marketmanager.util.toPY
