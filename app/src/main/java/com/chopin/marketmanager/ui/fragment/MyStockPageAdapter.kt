@@ -10,8 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.chopin.marketmanager.R
+import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.StockBean
-import com.chopin.marketmanager.ui.fragment.bean.StockItem
+import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.purchaseDrawable
 import com.chopin.marketmanager.util.shipmentDrawable
 import kotlinx.android.synthetic.main.stock_page_item.view.*
@@ -58,6 +59,29 @@ class MyStockPageAdapter(val context: Context, private val mListener: (s: StockB
 
     fun getData(): ArrayList<StockBean> {
         return mValues
+    }
+
+    fun plus(i: Int, back: (StockBean) -> Unit) {
+        val stockBean = mValues[i]
+        val psId = DBManager.ps(PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = true, count = 1, customerName = ""))
+        if (psId != -1L) {
+            stockBean.count = stockBean.count + 1
+            back.invoke(stockBean)
+        }
+        notifyItemChanged(i)
+    }
+
+    fun minus(i: Int, back: (StockBean) -> Unit) {
+        val stockBean = mValues[i]
+        if (stockBean.count > 0) {
+            val psId = DBManager.ps(PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = true, count = 1, customerName = ""))
+            if (psId != -1L) {
+                stockBean.count = stockBean.count - 1
+                notifyItemChanged(i)
+                back.invoke(stockBean)
+            }
+        }
+        notifyItemChanged(i)
     }
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {

@@ -54,6 +54,6 @@ class PSPage : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance() = PSPage().apply { }
+        fun newInstance() = PSPage()
     }
 }

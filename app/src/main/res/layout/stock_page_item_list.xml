@@ -4,16 +4,18 @@
     xmlns:huahua="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:name="com.chopin.marketmanager.ui.fragment.StockPage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         tools:context=".ui.fragment.StockPage"
-        tools:listitem="@layout/stock_page_item" />
+        tools:listitem="@layout/stock_page_item"/>
+
 
     <com.chopin.marketmanager.ui.LetterIndexer
         android:id="@+id/letter_index"

@@ -6,17 +6,19 @@ import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.ui.ITHCallBack
 import com.chopin.marketmanager.ui.LetterIndexer
 import com.chopin.marketmanager.ui.fragment.bean.StockItem
 import com.chopin.marketmanager.util.defaultItemAnimation
+import com.chopin.marketmanager.util.snack
 import com.chopin.marketmanager.util.toPY
-import kotlinx.android.synthetic.main.stock_page_item_list.*
 import kotlinx.android.synthetic.main.stock_page_item_list.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -28,7 +30,6 @@ class StockPage : Fragment() {
     private val mHandler = Handler()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -68,7 +69,23 @@ class StockPage : Fragment() {
             override fun onTouchActionUp(s: String) {}
 
         })
+        val callback = ITHCallBack { i, d ->
+            when (d) {
+                ItemTouchHelper.LEFT -> {
+                    mAdapter?.plus(i) { b ->
+                        snack(view, "进货成功,当前${b.goods.brand}${b.goods.type}为${b.count}个")
+                    }
 
+                }
+                ItemTouchHelper.RIGHT -> {
+                    mAdapter?.minus(i) { b ->
+                        snack(view, "出货成功,当前${b.goods.brand}${b.goods.type}为${b.count}个")
+                    }
+                }
+            }
+        }
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(list)
         return view
     }
 
@@ -84,6 +101,6 @@ class StockPage : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(columnCount: Int) = StockPage().apply { }
+        fun newInstance() = StockPage()
     }
 }

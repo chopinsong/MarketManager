@@ -8,6 +8,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.ui.fragment.PSPage
 import com.chopin.marketmanager.ui.fragment.StockPage
 import kotlinx.android.synthetic.main.activity_mm.*
+import kotlinx.android.synthetic.main.stock_page_item_list.*
 
 class MMActivity : AppCompatActivity() {
     val STOCK = 0
@@ -34,11 +35,10 @@ class MMActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mm)
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         val fms = ArrayList<Fragment>()
-        fms.add(StockPage())
-        fms.add(PSPage())
+        fms.add(StockPage.newInstance())
+        fms.add(PSPage.newInstance())
         val myPagerAdapter = MyPagerAdapter(supportFragmentManager, fms)
         main_view_page.adapter=myPagerAdapter
     }
