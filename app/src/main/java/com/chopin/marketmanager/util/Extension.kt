@@ -226,7 +226,11 @@ fun DialogFragment.snack(msg: String) {
 fun Activity.snack(msg: String) {
     Snackbar.make(window.decorView, msg, Snackbar.LENGTH_LONG).show()
 }
-
+fun Fragment.snack(msg: String) {
+    view?.let {
+        Snackbar.make(it, msg, Snackbar.LENGTH_LONG).show()
+    }
+}
 fun Any.snack(v: View, msg: String) {
     Snackbar.make(v, msg, Snackbar.LENGTH_LONG).show()
 }
@@ -237,6 +241,15 @@ fun PSBean.toPSItemBean(): PSItemBean {
 }
 
 fun Activity.showGoodsLeft(b: PSItemBean) {
+    doAsync {
+        val countLeft = DBManager.getGoodsCountLeft(b.g.id)
+        uiThread {
+            snack("${b.g.brand}${b.g.type}${b.g.remark}剩余${countLeft}件")
+        }
+    }
+}
+
+fun Fragment.showGoodsLeft(b: PSItemBean) {
     doAsync {
         val countLeft = DBManager.getGoodsCountLeft(b.g.id)
         uiThread {

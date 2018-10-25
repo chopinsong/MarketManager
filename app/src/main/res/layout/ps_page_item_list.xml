@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="com.chopin.marketmanager.ui.fragment.PSPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    tools:context=".ui.fragment.PSPage"
-    tools:listitem="@layout/ps_page_item" />
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.chopin.marketmanager.ui.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/purchase_shipment_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="13" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:id="@+id/main_num_picker_layout"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <NumberPicker
+            android:id="@+id/m_filter_type_p"
+            android:layout_width="wrap_content"
+            android:minWidth="120dp"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants" />
+
+        <NumberPicker
+            android:id="@+id/m_filter_p"
+            android:layout_width="wrap_content"
+            android:minWidth="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:descendantFocusability="blocksDescendants" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,8 +1,6 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chopin.marketmanager.R
+import com.chopin.marketmanager.bean.PSBean
+import com.chopin.marketmanager.bean.StockBean
+import com.chopin.marketmanager.bean.StockItem
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.ITHCallBack
 import com.chopin.marketmanager.ui.LetterIndexer
-import com.chopin.marketmanager.bean.StockItem
 import com.chopin.marketmanager.util.defaultItemAnimation
 import com.chopin.marketmanager.util.snack
 import com.chopin.marketmanager.util.toPY
@@ -27,10 +27,6 @@ class StockPage : Fragment() {
 
     private var listener: (s: StockItem) -> Unit = {}
     private var mAdapter: MyStockPageAdapter? = null
-    private val mHandler = Handler()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.stock_page_item_list, container, false)
@@ -72,14 +68,16 @@ class StockPage : Fragment() {
         val callback = ITHCallBack { i, d ->
             when (d) {
                 ItemTouchHelper.LEFT -> {
-                    mAdapter?.plus(i) { b ->
+                    mAdapter?.plus(i) { b,pb ->
                         snack(view, "进货成功,当前${b.goods.brand}${b.goods.type}为${b.count}个")
+                        operaListener.invoke(pb)
                     }
 
                 }
                 ItemTouchHelper.RIGHT -> {
-                    mAdapter?.minus(i) { b ->
+                    mAdapter?.minus(i) { b,pb ->
                         snack(view, "出货成功,当前${b.goods.brand}${b.goods.type}为${b.count}个")
+                        operaListener.invoke(pb)
                     }
                 }
             }
@@ -89,13 +87,16 @@ class StockPage : Fragment() {
         return view
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
 
     override fun onDetach() {
         super.onDetach()
         listener = {}
+    }
+
+    private var operaListener: (PSBean) -> Unit = {}
+
+    fun setOperaListener(listener: (PSBean) -> Unit) {
+        this.operaListener = listener
     }
 
     companion object {

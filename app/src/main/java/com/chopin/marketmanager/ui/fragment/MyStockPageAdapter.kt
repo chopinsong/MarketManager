@@ -61,24 +61,26 @@ class MyStockPageAdapter(val context: Context, private val mListener: (s: StockB
         return mValues
     }
 
-    fun plus(i: Int, back: (StockBean) -> Unit) {
+    fun plus(i: Int, back: (StockBean,PSBean) -> Unit) {
         val stockBean = mValues[i]
-        val psId = DBManager.ps(PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = true, count = 1, customerName = ""))
+        val psBean = PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = true, count = 1, customerName = "")
+        val psId = DBManager.ps(psBean)
         if (psId != -1L) {
             stockBean.count = stockBean.count + 1
-            back.invoke(stockBean)
+            back.invoke(stockBean,psBean)
         }
         notifyItemChanged(i)
     }
 
-    fun minus(i: Int, back: (StockBean) -> Unit) {
+    fun minus(i: Int, back: (StockBean,PSBean) -> Unit) {
         val stockBean = mValues[i]
         if (stockBean.count > 0) {
-            val psId = DBManager.ps(PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = true, count = 1, customerName = ""))
+            val psBean = PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = true, count = 1, customerName = "")
+            val psId = DBManager.ps(psBean)
             if (psId != -1L) {
                 stockBean.count = stockBean.count - 1
                 notifyItemChanged(i)
-                back.invoke(stockBean)
+                back.invoke(stockBean,psBean)
             }
         }
         notifyItemChanged(i)
