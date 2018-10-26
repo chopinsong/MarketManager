@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-
     override fun onStart() {
         super.onStart()
         checkUpdate()

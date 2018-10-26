@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
@@ -226,11 +227,13 @@ fun DialogFragment.snack(msg: String) {
 fun Activity.snack(msg: String) {
     Snackbar.make(window.decorView, msg, Snackbar.LENGTH_LONG).show()
 }
+
 fun Fragment.snack(msg: String) {
     view?.let {
         Snackbar.make(it, msg, Snackbar.LENGTH_LONG).show()
     }
 }
+
 fun Any.snack(v: View, msg: String) {
     Snackbar.make(v, msg, Snackbar.LENGTH_LONG).show()
 }
@@ -270,6 +273,7 @@ fun NumberPicker.refreshValues(content: Array<String>) {
         maxValue = content.size - 1
     }
 }
+
 
 fun Int.isPurchase(): Boolean {
     return this == 0

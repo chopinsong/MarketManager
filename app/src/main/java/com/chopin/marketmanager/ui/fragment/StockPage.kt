@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
-import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.bean.StockItem
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.ITHCallBack
@@ -24,7 +23,6 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class StockPage : Fragment() {
-
     private var listener: (s: StockItem) -> Unit = {}
     private var mAdapter: MyStockPageAdapter? = null
 
@@ -68,14 +66,14 @@ class StockPage : Fragment() {
         val callback = ITHCallBack { i, d ->
             when (d) {
                 ItemTouchHelper.LEFT -> {
-                    mAdapter?.plus(i) { b,pb ->
+                    mAdapter?.plus(i) { b, pb ->
                         snack(view, "进货成功,当前${b.goods.brand}${b.goods.type}为${b.count}个")
                         operaListener.invoke(pb)
                     }
 
                 }
                 ItemTouchHelper.RIGHT -> {
-                    mAdapter?.minus(i) { b,pb ->
+                    mAdapter?.minus(i) { b, pb ->
                         snack(view, "出货成功,当前${b.goods.brand}${b.goods.type}为${b.count}个")
                         operaListener.invoke(pb)
                     }

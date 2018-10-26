@@ -128,7 +128,7 @@ class PSPage : Fragment() {
         }
     }
 
-    fun addData(b: PSBean,showLeft:Boolean=true) {
+    fun addData(b: PSBean, showLeft: Boolean = true) {
         doAsync {
             val pib = b.toPSItemBean()
             i("addData=${pib.g.brand}${pib.g.type}")
