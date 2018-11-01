@@ -13,7 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import com.chopin.marketmanager.R
-import com.chopin.marketmanager.ui.fragment.PSPage
+import com.chopin.marketmanager.ui.fragment.PSInfoPage
 import com.chopin.marketmanager.ui.fragment.StockPage
 import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         fms.clear()
         val stockPage = StockPage.newInstance()
-        val psPage = PSPage.newInstance()
+        val psPage = PSInfoPage.newInstance()
         fms.add(psPage)
         fms.add(stockPage)
         val myPagerAdapter = MyPagerAdapter(supportFragmentManager, fms)
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 newText?.let {
                     try {
                         val ps = fms[PS]
-                        if (ps is PSPage) {
+                        if (ps is PSInfoPage) {
                             ps.handleFilter(0, it)
                         }
                     } catch (e: Exception) {
@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun showPSFragment(isP: Boolean = true) {
         val fragment = fms[0]
-        if (fragment is PSPage) {
+        if (fragment is PSInfoPage) {
             fragment.showPSFragment(isP)
         }
     }
