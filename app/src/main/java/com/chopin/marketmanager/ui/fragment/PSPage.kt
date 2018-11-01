@@ -18,8 +18,8 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.content_main.view.*
+import kotlinx.android.synthetic.main.ps_page_item_list.*
+import kotlinx.android.synthetic.main.ps_page_item_list.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -29,11 +29,10 @@ class PSPage : Fragment() {
     private var content = arrayOf("")
     private var brands = arrayOf("")
     private var types = arrayOf("")
-    var nav_view_margin:()->Int = {0}
 
     private var psData: ArrayList<PSItemBean> = arrayListOf()
 
-    var dsListener:(Boolean, Boolean) -> Unit={d,t->}
+    var dsListener: (Boolean, Boolean) -> Unit = { d, t -> }
     private val mReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.action?.let {
@@ -52,15 +51,6 @@ class PSPage : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.ps_page_item_list, container, false)
         val list = view.purchase_shipment_list
@@ -70,6 +60,12 @@ class PSPage : Fragment() {
             adapter = PSAdapter(it)
             list.adapter = adapter
             list.defaultItemAnimation()
+            list.setDirectionScrollListener { d, t ->
+                if (d)
+                    showMainPicker(false)
+                else
+                    showMainPicker()
+            }
         }
         refreshBrandTypes()
         initListener(view)
@@ -79,10 +75,18 @@ class PSPage : Fragment() {
         context?.let {
             LocalBroadcastManager.getInstance(it).registerReceiver(mReceiver, i)
         }
-        val pll = view.main_num_picker_layout.layoutParams as ViewGroup.MarginLayoutParams
-        pll.setMargins(0, 0, 0, nav_view_margin.invoke())
-        view.main_num_picker_layout.layoutParams=pll
         return view
+    }
+
+    private fun showMainPicker(isShow: Boolean = true) {
+        main_num_picker_layout.transAnim(isShow)
+//        if (isShow) {
+//            main_num_picker_layout.downAnim()
+//            main_num_picker_layout2.downAnim(200)
+//        } else {
+//            main_num_picker_layout2.upAnim()
+//            main_num_picker_layout.upAnim(200)
+//        }
     }
 
     override fun onStart() {

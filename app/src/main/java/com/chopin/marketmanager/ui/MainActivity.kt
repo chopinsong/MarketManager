@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     private fun showPSFragment(isP: Boolean = true) {
-        val fragment = fms[1]
+        val fragment = fms[0]
         if (fragment is PSPage) {
             fragment.showPSFragment(isP)
         }

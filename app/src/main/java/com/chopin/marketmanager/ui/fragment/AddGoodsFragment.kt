@@ -12,7 +12,9 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.ui.AddGoodsView
 import com.chopin.marketmanager.util.PhotoUtil
+import com.chopin.marketmanager.util.gd
 import com.chopin.marketmanager.util.i
+import com.chopin.marketmanager.util.setGoodsImage
 import kotlinx.android.synthetic.main.add_goods_layout.*
 import kotlinx.android.synthetic.main.purchase_layout.*
 
@@ -48,8 +50,10 @@ class AddGoodsFragment : MyDialogFragment() {
             dismiss()
         }
         addGoodsView.setCancelListener { dismiss() }
-        goods?.let {
+        if (goods!=null){
             initEditBean()
+        }else{
+            goods_pic.setGoodsImage(null,gd(context))
         }
         addGoodsView.setGoods_Image_Listener {
              photoUtil = PhotoUtil(this)

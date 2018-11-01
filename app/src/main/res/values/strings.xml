@@ -57,7 +57,7 @@
     <string name="title_activity_mm">MMActivity</string>
     <string name="title_home">Home</string>
     <string name="title_stock">库存</string>
-    <string name="title_ps">进出货</string>
+    <string name="title_record">记录</string>
     <string name="stock_page_desc">商品描述</string>
     <string name="goods_image">图片</string>
 </resources>

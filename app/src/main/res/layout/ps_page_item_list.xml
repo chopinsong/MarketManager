@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.chopin.marketmanager.ui.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:context="com.chopin.marketmanager.ui.MainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/purchase_shipment_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="13" />
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom"
         android:id="@+id/main_num_picker_layout"
-        android:layout_weight="3"
+        android:background="@color/white2"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -41,4 +39,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</FrameLayout>

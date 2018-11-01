@@ -20,7 +20,9 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.TranslateAnimation
 import android.widget.*
 import com.chopin.marketmanager.R
@@ -81,31 +83,27 @@ fun Any.toast(context: Context, msg: String) {
 }
 
 fun Context.purchaseDrawable(c: Int = R.color.black2): VectorDrawableCompat? {
-    VectorDrawableCompat.create(resources, R.drawable.ic_purchase, theme)?.let {
-        it.setTint(getColor(c))
-        return it
-    }
-    return null
+    return getDrawable(R.drawable.ic_purchase, c)
 }
 
 fun Context.shipmentDrawable(c: Int = R.color.black2): VectorDrawableCompat? {
-    VectorDrawableCompat.create(resources, R.drawable.ic_shipment, theme)?.let {
-        it.setTint(getColor(c))
-        return it
-    }
-    return null
+    return getDrawable(R.drawable.ic_shipment, c)
 }
 
 fun Context.goodsDrawable(c: Int = R.color.black2): VectorDrawableCompat? {
-    VectorDrawableCompat.create(resources, R.drawable.ic_goods, theme)?.let {
+    return getDrawable(R.drawable.ic_goods, c)
+}
+
+fun Context.getDrawable(id: Int, c: Int = R.color.black2): VectorDrawableCompat? {
+    VectorDrawableCompat.create(resources, id, theme)?.let {
         it.setTint(getColor(c))
         return it
     }
     return null
 }
 
-fun Any.gd(context: Context): VectorDrawableCompat? {
-    return context.goodsDrawable()
+fun Any.gd(context: Context?): VectorDrawableCompat? {
+    return context?.goodsDrawable()
 }
 
 fun ImageView.setGoodsImage(b: Bitmap?, gd: VectorDrawableCompat?) {
@@ -362,14 +360,52 @@ fun RecyclerView.setDirectionScrollListener(func: (Boolean, Boolean) -> Unit) {
     })
 }
 
-fun View.upAnim() {
+fun View.upAnim(delay:Long=0,onEnd:()->Unit={}) {
     val animator = ObjectAnimator.ofFloat(this, "translationY", height.toFloat(), 0f)
+    animator.startDelay=delay
+    animator.interpolator= DecelerateInterpolator()
+    animator.addListener(object :Animator.AnimatorListener{
+        override fun onAnimationRepeat(animation: Animator?) {
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            onEnd()
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+        }
+
+    })
     animator.setDuration(400).start()
 }
 
-fun View.downAnim() {
+fun View.downAnim(delay:Long=0,onEnd:()->Unit={}) {
     val animator = ObjectAnimator.ofFloat(this, "translationY", 0f, height.toFloat())
+    animator.startDelay=delay
+    animator.interpolator= DecelerateInterpolator()
+    animator.addListener(object :Animator.AnimatorListener{
+        override fun onAnimationRepeat(animation: Animator?) {
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            onEnd()
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+        }
+
+    })
     animator.setDuration(400).start()
+}
+
+fun View.transAnim(isShow: Boolean = true, onEnd:()->Unit={}) {
+    if (isShow) upAnim(onEnd = onEnd) else downAnim(onEnd = onEnd)
 }
 
 fun String.toBitmap(): Bitmap {
@@ -415,10 +451,10 @@ fun Bitmap.scale(w: Int = 800, h: Int = 600): Bitmap {
     return Bitmap.createBitmap(this, x.toInt(), y.toInt(), (width - x).toInt(), (height - y).toInt(), matrix, true)// createBitmap()方法中定义的参数x+width要小于或等于bitmap.getWidth()，y+height要小于或等于bitmap.getHeight()
 }
 
-fun Bitmap.scale2( w: Int=800, h: Int=600): Bitmap {
+fun Bitmap.scale2(w: Int = 800, h: Int = 600): Bitmap {
     val resizeBmp: Bitmap
     // 获取控件的宽高
-    val bitmap=this
+    val bitmap = this
     var width = bitmap.width
     var height = bitmap.height
     // 控件宽高比
@@ -433,18 +469,18 @@ fun Bitmap.scale2( w: Int=800, h: Int=600): Bitmap {
             height = (width / viewAspectRatio).toInt()
 
             resizeBmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
-            val canvas = Canvas (resizeBmp)
+            val canvas = Canvas(resizeBmp)
             val src = Rect(0, (bitmap.height - height) / 2, bitmap.width, (bitmap.height - height) / 2 + height)
-            val dst =  Rect (0, 0, width, height)
+            val dst = Rect(0, 0, width, height)
             canvas.drawBitmap(bitmap, src, dst, null)
         }
 // 控件宽高比小于图片宽高比，调整宽度
         else -> {
             width = (height * viewAspectRatio).toInt()
             resizeBmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
-            val canvas =  Canvas (resizeBmp)
-            val src =  Rect ((bitmap.width - width) / 2, 0, (bitmap.width-width) / 2+width, bitmap.height)
-            val dst =  Rect (0, 0, width, height)
+            val canvas = Canvas(resizeBmp)
+            val src = Rect((bitmap.width - width) / 2, 0, (bitmap.width - width) / 2 + width, bitmap.height)
+            val dst = Rect(0, 0, width, height)
             canvas.drawBitmap(bitmap, src, dst, null)
         }
     }

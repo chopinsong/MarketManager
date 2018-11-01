@@ -23,6 +23,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import com.chopin.marketmanager.R
 import org.jetbrains.anko.editText
 
 import java.io.ByteArrayOutputStream
@@ -44,7 +45,7 @@ class PhotoUtil(private val df: DialogFragment) {
     init {
         if (android.os.Environment.getExternalStorageState() == android.os.Environment.MEDIA_MOUNTED) {
             val view = initView()
-            dialog = AlertDialog.Builder(context).setTitle("图片来源").setView(view).create()
+            dialog = AlertDialog.Builder(context).setTitle("图片来源").setView(view).setIcon(R.mipmap.ic_logo).create()
             dialog?.show()
             addListener()
         } else {
@@ -103,7 +104,7 @@ class PhotoUtil(private val df: DialogFragment) {
         camera?.layoutParams = textViewParams
         camera?.setPadding(20, 20, 0, 20)
         camera?.text = "相册"
-        camera?.textSize = 20f
+        camera?.textSize = 16f
         camera?.background = backGroundColor
         val blod1 = TextView(context)
         val blodViewParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1)
@@ -118,7 +119,7 @@ class PhotoUtil(private val df: DialogFragment) {
         photo?.setPadding(20, 20, 0, 20)
         photo?.text = "拍照"
         photo?.background = backGroundColor
-        photo?.textSize = 20f
+        photo?.textSize = 16f
         back = TextView(context)
         val backParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         back?.layoutParams = backParams

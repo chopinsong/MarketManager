@@ -8,11 +8,11 @@
 
     <item
         android:id="@+id/navigation_ps"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_ps" />
+        android:icon="@drawable/ic_shipment"
+        android:title="@string/title_record" />
     <item
         android:id="@+id/navigation_stock"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_goods"
         android:title="@string/title_stock" />
 
 
