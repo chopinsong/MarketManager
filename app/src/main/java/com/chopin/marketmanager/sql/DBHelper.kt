@@ -26,8 +26,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, Constant.DATABASE_N
 ////        db.execSQL("DROP TABLE IF EXISTS " + PSTable.NAME)
 ////        db.execSQL("DROP TABLE IF EXISTS " + GoodsTable.NAME)
 //        onCreate(db)
-        if (oldVersion<4&&newVersion == 4) {
+        if (oldVersion < 4 && newVersion == 4) {
             db.execSQL("alter table ${PSTable.NAME} add remark text default ''")
+        }
+        if (oldVersion == 4 && newVersion == 5) {
+            db.execSQL("alter table ${GoodsTable.NAME} add ${GoodsTable.IMAGE_PATH} text default ''")
         }
     }
 }

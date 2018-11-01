@@ -11,13 +11,13 @@ import com.chopin.marketmanager.util.toPSItemBean
 class DBUtil(context: Context) {
     private val db = DBHelper(context).writableDatabase
 
-    fun select(sql:String):Array<Array<String>>{
+    fun select(sql: String): Array<Array<String>> {
         val q = db.rawQuery(sql, null)
         val data = emptyArray<Array<String>>()
-        while (q.moveToNext()){
+        while (q.moveToNext()) {
             val row = emptyArray<String>()
             for (cn in q.columnNames) {
-                    row.plus(q.getString(q.getColumnIndex(cn))?:"")
+                row.plus(q.getString(q.getColumnIndex(cn)) ?: "")
             }
             data.plus(row)
         }
@@ -130,7 +130,7 @@ class DBUtil(context: Context) {
             val isP = c.getInt(c.getColumnIndex(PSTable.IS_PURCHASE))
             val good = getGood(id)
             val split = time.split(" ")[0].split("-")
-            val pb = ProfitBean(good, count , price, split[0].toInt(), split[1].toInt(), isP == 1)
+            val pb = ProfitBean(good, count, price, split[0].toInt(), split[1].toInt(), isP == 1)
             l.add(pb)
         }
         c.close()
@@ -257,7 +257,12 @@ class DBUtil(context: Context) {
             val n = c.getString(c.getColumnIndex(GoodsTable.GOODS_NAME))
             val p = c.getDouble(c.getColumnIndex(GoodsTable.AVERAGE_PRICE))
             val t = c.getString(c.getColumnIndex(GoodsTable.TIME))
-            list.add(Goods(id, n, b, type, p, true, t))
+            val imagePath: String = try {
+                c.getString(c.getColumnIndex(GoodsTable.IMAGE_PATH))
+            } catch (e: Exception) {
+                ""
+            }
+            list.add(Goods(id, n, b, type, p, true, t,image_path = imagePath))
         }
         c.close()
         return list
@@ -283,7 +288,12 @@ class DBUtil(context: Context) {
             val type = c.getString(c.getColumnIndex(GoodsTable.TYPE))
             val goodsName = c.getString(c.getColumnIndex(GoodsTable.GOODS_NAME))
             val avgPrice = c.getDouble(c.getColumnIndex(GoodsTable.AVERAGE_PRICE))
-            return Goods(id, goodsName, brand, type, avgPrice)
+            val imagePath: String = try {
+                c.getString(c.getColumnIndex(GoodsTable.IMAGE_PATH))
+            } catch (e: Exception) {
+                ""
+            }
+            return Goods(id, goodsName, brand, type, avgPrice, image_path = imagePath)
         }
         c.close()
         return Goods(-1, "", "", "", 0.0)
@@ -297,6 +307,7 @@ class DBUtil(context: Context) {
         cv.put(GoodsTable.AVERAGE_PRICE, g.avgPrice)
         cv.put(GoodsTable.IS_ENABLE, 1)
         cv.put(GoodsTable.TIME, Util.crTime())
+        cv.put(GoodsTable.IMAGE_PATH, g.image_path)
         return db.insert(GoodsTable.NAME, null, cv)
 
     }
@@ -322,13 +333,13 @@ class DBUtil(context: Context) {
     }
 
     fun updateGoods(g: Goods): Int {
-        val cv=ContentValues()
+        val cv = ContentValues()
         cv.put(GoodsTable.BRAND, g.brand)
         cv.put(GoodsTable.TYPE, g.type)
         cv.put(GoodsTable.GOODS_NAME, g.remark)
         cv.put(GoodsTable.AVERAGE_PRICE, g.avgPrice)
         cv.put(GoodsTable.IS_ENABLE, 1)
-        return db.update(GoodsTable.NAME, cv,"${GoodsTable.Goods_ID}=?", arrayOf(g.id.toString()))
+        return db.update(GoodsTable.NAME, cv, "${GoodsTable.Goods_ID}=?", arrayOf(g.id.toString()))
     }
 
 

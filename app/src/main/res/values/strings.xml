@@ -21,7 +21,7 @@
     <string name="email_title">chopinsong@gmail.com</string>
     <string name="del_text">删除</string>
     <string name="plus">+</string>
-    <string name="X">X</string>
+    <string name="X">x</string>
     <string name="select_present">选择赠品</string>
     <string name="add_goods_text">增加货品</string>
     <string name="remark">备注</string>
@@ -48,7 +48,7 @@
     <string name="brand_hint"><font size="13">品牌</font></string>
     <string name="name_hint"><font size="13">名字</font></string>
     <string name="price_hint"><font size="13">价格</font></string>
-    <string name="del_all_data">进阶所有数据(包含进出货和货品)</string>
+    <string name="del_all_data">清除所有数据(包含进出货和货品)</string>
     <string name="goods_list">商品</string>
     <string name="goods_remark_show">显示货品备注</string>
     <string name="default_version">1.0</string>
@@ -59,4 +59,5 @@
     <string name="title_stock">库存</string>
     <string name="title_ps">进出货</string>
     <string name="stock_page_desc">商品描述</string>
+    <string name="goods_image">图片</string>
 </resources>

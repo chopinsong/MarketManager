@@ -8,9 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
+import com.chopin.marketmanager.util.*
 import swipe.SwipeItemLayout
 
 class GoodsEditAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
@@ -69,6 +71,7 @@ class GoodsEditAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>(
                 holder.goods_edit_swipe_layout.close()
             }
         }
+        h.goods_edit_image.setGoodsImage(b.image_path.toBitmap().scale2(),gd(context))
         h.goods_edit_brand.text = b.brand
         h.goods_edit_type.text = b.type
         h.goods_edit_remark.text = if (b.remark.isEmpty()) "无备注" else b.remark
@@ -93,5 +96,6 @@ class GoodsViewHolder(v: View) : ViewHolder(v) {
     val right_menu_goods_edit = v.findViewById<TextView>(R.id.right_menu_goods_edit)
     val left_menu_goods_edit = v.findViewById<TextView>(R.id.left_menu_goods_edit)
     val goods_edit_swipe_layout = v.findViewById<SwipeItemLayout>(R.id.goods_edit_swipe_layout)
+    val goods_edit_image = v.findViewById<ImageView>(R.id.goods_edit_image)
 
 }

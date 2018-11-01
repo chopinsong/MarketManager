@@ -1,5 +1,6 @@
 package com.chopin.marketmanager.ui
 
+import android.graphics.Bitmap
 import android.support.design.widget.TextInputLayout
 import android.text.TextUtils
 import android.view.View
@@ -8,21 +9,24 @@ import android.widget.ImageView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.snack
+import com.chopin.marketmanager.util.*
+import kotlinx.android.synthetic.main.add_goods_layout.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class AddGoodsView(var root: View) {
-    var brandEt: EditText = root.findViewById(R.id.add_goods_brand)
-    var typeEt: EditText = root.findViewById(R.id.add_goods_type)
-    var avgPriceEt: EditText = root.findViewById(R.id.add_goods_avg_price)
-    var remarkEt: EditText = root.findViewById(R.id.add_goods_remark)
-    var commitBtn: ImageView = root.findViewById(R.id.add_goods_commit_btn)
-    var cancelBtn: ImageView = root.findViewById(R.id.add_goods_cancel_btn)
-    var agbl: TextInputLayout = root.findViewById(R.id.add_goods_brand_Layout)
-    var agtl: TextInputLayout = root.findViewById(R.id.add_goods_type_Layout)
-    var agpl: TextInputLayout = root.findViewById(R.id.add_goods_avg_price_Layout)
-    var agrl: TextInputLayout = root.findViewById(R.id.add_goods_remark_Layout)
+    var brandEt: EditText = root.add_goods_brand
+    var typeEt: EditText = root.add_goods_type
+    var avgPriceEt: EditText = root.add_goods_avg_price
+    var remarkEt: EditText = root.add_goods_remark
+    var commitBtn: ImageView = root.add_goods_commit_btn
+    var cancelBtn: ImageView = root.add_goods_cancel_btn
+    var agbl: TextInputLayout = root.add_goods_brand_Layout
+    var agtl: TextInputLayout = root.add_goods_type_Layout
+    var agpl: TextInputLayout = root.add_goods_avg_price_Layout
+    var agrl: TextInputLayout = root.add_goods_remark_Layout
+    var goods_image: ImageView = root.goods_pic
+    var goods_image_path:String=""
 
     init {
         commitBtn.setOnClickListener {
@@ -30,6 +34,9 @@ class AddGoodsView(var root: View) {
         }
         cancelBtn.setOnClickListener {
             cancelListener.invoke()
+        }
+        goods_image.setOnClickListener {
+            goods_image_listener.invoke()
         }
     }
 
@@ -43,6 +50,12 @@ class AddGoodsView(var root: View) {
 
     fun setCancelListener(cancelListener: () -> Unit) {
         this.cancelListener = cancelListener
+    }
+
+    private var goods_image_listener: () -> Unit = {}
+
+    fun setGoods_Image_Listener(goods_image_listener: () -> Unit) {
+        this.goods_image_listener = goods_image_listener
     }
 
     private fun getBrand(): String {
@@ -68,22 +81,22 @@ class AddGoodsView(var root: View) {
     fun commit(func: (g: Goods) -> Unit = {}) {
         val brand = getBrand()
         if (brand.isEmpty()) {
-            agbl.error="请输入品牌"
+            agbl.error = "请输入品牌"
             return
-        }else{
-            agbl.error=null
+        } else {
+            agbl.error = null
         }
         val type = getType()
         if (type.isEmpty()) {
-            agtl.error="请输入类型"
+            agtl.error = "请输入类型"
             return
-        }else{
-            agtl.error=null
+        } else {
+            agtl.error = null
         }
         val name = getName()
         val avgPrice = getAvgPrice()
         doAsync {
-            val goods = Goods(brand = brand, type = type, remark = name, avgPrice = avgPrice)
+            val goods = Goods(brand = brand, type = type, remark = name, avgPrice = avgPrice,image_path = goods_image_path)
             val goodsId = DBManager.getGoodsId(brand, type, name)
             if (isEditMode) {
                 if (goodsId == editBean.id || goodsId == -1) {
@@ -139,7 +152,15 @@ class AddGoodsView(var root: View) {
         typeEt.setText(g.type)
         avgPriceEt.setText(g.avgPrice.toString())
         remarkEt.setText(g.remark)
+        goods_image.setGoodsImage(g.image_path.toBitmap().scale2(),gd(root.context))
         isEditMode = true
+    }
+
+    fun setGoodsImage(bitmap: Bitmap?) {
+        bitmap?.let {
+            goods_image_path=PhotoUtil.bitmaptoString(it)
+            goods_image.setImageBitmap(it.scale2())
+        }
     }
 
 }

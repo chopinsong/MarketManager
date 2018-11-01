@@ -7,7 +7,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
-import android.graphics.Color
+import android.graphics.*
 import android.support.design.widget.Snackbar
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.app.ActivityCompat
@@ -16,15 +16,13 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
+import android.util.Base64
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import android.widget.ArrayAdapter
-import android.widget.NumberPicker
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.PSBean
@@ -33,6 +31,7 @@ import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.*
 import net.sourceforge.pinyin4j.PinyinHelper
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.image
 import org.jetbrains.anko.uiThread
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
@@ -95,6 +94,26 @@ fun Context.shipmentDrawable(c: Int = R.color.black2): VectorDrawableCompat? {
         return it
     }
     return null
+}
+
+fun Context.goodsDrawable(c: Int = R.color.black2): VectorDrawableCompat? {
+    VectorDrawableCompat.create(resources, R.drawable.ic_goods, theme)?.let {
+        it.setTint(getColor(c))
+        return it
+    }
+    return null
+}
+
+fun Any.gd(context: Context): VectorDrawableCompat? {
+    return context.goodsDrawable()
+}
+
+fun ImageView.setGoodsImage(b: Bitmap?, gd: VectorDrawableCompat?) {
+    if (b == null) {
+        image = gd
+    } else {
+        setImageBitmap(b)
+    }
 }
 
 fun Any.i(msg: String) {
@@ -320,6 +339,119 @@ fun Activity.verifyStoragePermissions() {
         ActivityCompat.requestPermissions(this, Util.PERMISSIONS_STORAGE, Util.REQUEST_EXTERNAL_STORAGE)
     }
 }
+
+fun RecyclerView.setDirectionScrollListener(func: (Boolean, Boolean) -> Unit) {
+    var distance = 0
+    var visible = true
+    addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if (distance < -ViewConfiguration.getTouchSlop() && !visible) {
+                func.invoke(false, canScrollVertically(-1))
+                distance = 0
+                visible = true
+            } else if (distance > ViewConfiguration.getTouchSlop() && visible) {
+                func.invoke(true, canScrollVertically(-1))
+                distance = 0
+                visible = false
+            }
+            if ((dy > 0 && visible) || (dy < 0 && !visible))//向下滑并且可见  或者  向上滑并且不可见
+                distance += dy
+        }
+
+    })
+}
+
+fun View.upAnim() {
+    val animator = ObjectAnimator.ofFloat(this, "translationY", height.toFloat(), 0f)
+    animator.setDuration(400).start()
+}
+
+fun View.downAnim() {
+    val animator = ObjectAnimator.ofFloat(this, "translationY", 0f, height.toFloat())
+    animator.setDuration(400).start()
+}
+
+fun String.toBitmap(): Bitmap {
+    // 将字符串转换成Bitmap类型
+    val bitmapArray = Base64.decode(this, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.size)
+}
+
+/**
+ * 按宽/高缩放图片到指定大小并进行裁剪得到中间部分图片 <br></br>
+ * @param w 缩放后指定的宽度
+ * @param h 缩放后指定的高度
+ * @return 缩放后的中间部分图片 Bitmap
+ */
+fun Bitmap.scale(w: Int = 800, h: Int = 600): Bitmap {
+    val scaleW: Float
+    val scaleH: Float
+    val x: Float
+    val y: Float
+    val matrix = Matrix()
+    i("h = $height w= $width")
+    when {
+        width > height -> {
+            scaleW = h.toFloat() / height
+            scaleH = h.toFloat() / height
+            x = ((width - w * height / h) / 2).toFloat()// 获取bitmap源文件中x做表需要偏移的像数大小
+            y = 0f
+        }
+        width < height -> {
+            scaleW = w.toFloat() / width
+            scaleH = w.toFloat() / width
+            x = 0f
+            y = ((height - h * width / w) / 2).toFloat()// 获取bitmap源文件中y做表需要偏移的像数大小
+        }
+        else -> {
+            scaleW = w.toFloat() / width
+            scaleH = w.toFloat() / width
+            x = 0f
+            y = 0f
+        }
+    }
+    matrix.postScale(scaleW, scaleH)
+    return Bitmap.createBitmap(this, x.toInt(), y.toInt(), (width - x).toInt(), (height - y).toInt(), matrix, true)// createBitmap()方法中定义的参数x+width要小于或等于bitmap.getWidth()，y+height要小于或等于bitmap.getHeight()
+}
+
+fun Bitmap.scale2( w: Int=800, h: Int=600): Bitmap {
+    val resizeBmp: Bitmap
+    // 获取控件的宽高
+    val bitmap=this
+    var width = bitmap.width
+    var height = bitmap.height
+    // 控件宽高比
+    val viewAspectRatio = w.toFloat() / h.toFloat()
+    // 图片宽高比
+    val bitmapAspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
+    // 宽高比相等，直接使用
+    when {
+        viewAspectRatio == bitmapAspectRatio -> resizeBmp = bitmap
+// 控件宽高比大于图片宽高比，调整高度
+        viewAspectRatio > bitmapAspectRatio -> {
+            height = (width / viewAspectRatio).toInt()
+
+            resizeBmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+            val canvas = Canvas (resizeBmp)
+            val src = Rect(0, (bitmap.height - height) / 2, bitmap.width, (bitmap.height - height) / 2 + height)
+            val dst =  Rect (0, 0, width, height)
+            canvas.drawBitmap(bitmap, src, dst, null)
+        }
+// 控件宽高比小于图片宽高比，调整宽度
+        else -> {
+            width = (height * viewAspectRatio).toInt()
+            resizeBmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+            val canvas =  Canvas (resizeBmp)
+            val src =  Rect ((bitmap.width - width) / 2, 0, (bitmap.width-width) / 2+width, bitmap.height)
+            val dst =  Rect (0, 0, width, height)
+            canvas.drawBitmap(bitmap, src, dst, null)
+        }
+    }
+    bitmap.recycle()
+    return resizeBmp
+}
+
 
 object Util {
     fun crTime(): String {

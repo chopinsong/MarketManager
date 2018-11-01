@@ -15,9 +15,7 @@ import com.chopin.marketmanager.bean.StockItem
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.ITHCallBack
 import com.chopin.marketmanager.ui.LetterIndexer
-import com.chopin.marketmanager.util.defaultItemAnimation
-import com.chopin.marketmanager.util.snack
-import com.chopin.marketmanager.util.toPY
+import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.stock_page_item_list.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -25,6 +23,7 @@ import org.jetbrains.anko.uiThread
 class StockPage : Fragment() {
     private var listener: (s: StockItem) -> Unit = {}
     private var mAdapter: MyStockPageAdapter? = null
+    var dsListener: (Boolean, Boolean) -> Unit = { d, t -> }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.stock_page_item_list, container, false)
@@ -35,12 +34,7 @@ class StockPage : Fragment() {
                 mAdapter = MyStockPageAdapter(context) {}
                 list.defaultItemAnimation()
                 adapter = mAdapter
-                doAsync {
-                    val stock = DBManager.stock()
-                    uiThread {
-                        mAdapter?.updateData(stock)
-                    }
-                }
+                refreshData()
             }
         }
         val li = view.findViewById<LetterIndexer>(R.id.letter_index)
@@ -89,6 +83,15 @@ class StockPage : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = {}
+    }
+
+    fun refreshData() {
+        doAsync {
+            val stock = DBManager.stock()
+            uiThread {
+                mAdapter?.updateData(stock)
+            }
+        }
     }
 
     private var operaListener: (PSBean) -> Unit = {}

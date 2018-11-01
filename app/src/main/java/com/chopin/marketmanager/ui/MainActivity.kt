@@ -5,6 +5,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
+import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
@@ -42,7 +43,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setPage(i: Int) {
         main_view_page.currentItem = i
     }
-
+    private val dsListener :(Boolean, Boolean) -> Unit= { d, t ->
+        if (d) {
+            navigation.downAnim()
+        } else {
+            navigation.upAnim()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,7 +63,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fms.add(psPage)
         fms.add(stockPage)
         val myPagerAdapter = MyPagerAdapter(supportFragmentManager, fms)
+        main_view_page.setNoScroll(true)
         main_view_page.adapter = myPagerAdapter
+        main_view_page.addOnPageChangeListener(object:ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(p0: Int) {
+            }
+
+            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+            }
+
+            override fun onPageSelected(p0: Int) {
+                if (p0==STOCK){
+                    stockPage.refreshData()
+                }
+            }
+
+        })
         stockPage.setOperaListener {
             psPage.addData(it, false)
         }

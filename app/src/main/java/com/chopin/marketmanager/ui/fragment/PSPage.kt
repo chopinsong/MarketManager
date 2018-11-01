@@ -29,8 +29,11 @@ class PSPage : Fragment() {
     private var content = arrayOf("")
     private var brands = arrayOf("")
     private var types = arrayOf("")
+    var nav_view_margin:()->Int = {0}
 
     private var psData: ArrayList<PSItemBean> = arrayListOf()
+
+    var dsListener:(Boolean, Boolean) -> Unit={d,t->}
     private val mReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.action?.let {
@@ -76,6 +79,9 @@ class PSPage : Fragment() {
         context?.let {
             LocalBroadcastManager.getInstance(it).registerReceiver(mReceiver, i)
         }
+        val pll = view.main_num_picker_layout.layoutParams as ViewGroup.MarginLayoutParams
+        pll.setMargins(0, 0, 0, nav_view_margin.invoke())
+        view.main_num_picker_layout.layoutParams=pll
         return view
     }
 

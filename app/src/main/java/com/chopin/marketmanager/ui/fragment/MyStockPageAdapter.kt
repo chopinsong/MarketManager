@@ -2,6 +2,7 @@ package com.chopin.marketmanager.ui.fragment
 
 
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -13,8 +14,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.purchaseDrawable
-import com.chopin.marketmanager.util.shipmentDrawable
+import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.stock_page_item.view.*
 import org.jetbrains.anko.image
 
@@ -23,7 +23,7 @@ class MyStockPageAdapter(val context: Context, private val mListener: (s: StockB
     private val mOnClickListener: View.OnClickListener
     var s: VectorDrawableCompat? = context.shipmentDrawable()
     var p: VectorDrawableCompat? = context.purchaseDrawable()
-
+    var gd = context.goodsDrawable()
     init {
         mOnClickListener = View.OnClickListener { v ->
             val item = v.tag as StockBean
@@ -41,7 +41,8 @@ class MyStockPageAdapter(val context: Context, private val mListener: (s: StockB
         val item = mValues[position]
         holder.mStockBrand.text = item.goods.brand
         holder.mStockType.text = item.goods.type
-        holder.mImageView.image = p
+        val scale = item.goods.image_path.toBitmap().scale2()
+        holder.mImageView.setGoodsImage(scale,gd)
         holder.mCount.text = item.count.toString()
 
         with(holder.mView) {
@@ -75,7 +76,7 @@ class MyStockPageAdapter(val context: Context, private val mListener: (s: StockB
     fun minus(i: Int, back: (StockBean,PSBean) -> Unit) {
         val stockBean = mValues[i]
         if (stockBean.count > 0) {
-            val psBean = PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = true, count = 1, customerName = "")
+            val psBean = PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = false, count = 1, customerName = "")
             val psId = DBManager.ps(psBean)
             if (psId != -1L) {
                 stockBean.count = stockBean.count - 1

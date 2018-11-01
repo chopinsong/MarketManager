@@ -6,7 +6,7 @@ import java.io.Serializable
 import java.util.*
 
 
-class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double = 0.0, var isEnabled: Boolean = true, var time: String = Util.crTime()) : Serializable{
+class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double = 0.0, var isEnabled: Boolean = true, var time: String = Util.crTime(),var image_path:String="") : Serializable{
     override fun equals(other: Any?): Boolean {
         if (other is Goods){
             return other.brand==this.brand&&other.type==this.type&&other.remark==this.remark&&other.avgPrice==this.avgPrice&&other.isEnabled==this.isEnabled&&other.time==this.time

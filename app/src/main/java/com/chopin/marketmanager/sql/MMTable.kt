@@ -51,6 +51,7 @@ object GoodsTable {
     val AVERAGE_PRICE = "AveragePrice"
     val IS_ENABLE = "isEnabled"
     val TIME = "Time"
+    val IMAGE_PATH = "image_path"
 
     fun getCommand(): String {
         return "CREATE TABLE $NAME($Goods_ID  INTEGER PRIMARY KEY," +
