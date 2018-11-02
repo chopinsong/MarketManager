@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.AdapterView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
@@ -82,7 +81,7 @@ class GoodsEditFragment : MyDialogFragment() {
     }
 
     private fun showDelConfirm(g: Goods, i: Int) {
-        Snackbar.make(dialog.window.decorView, "确定删除?", Snackbar.LENGTH_LONG).setAction("确定") { _ ->
+        Snackbar.make(dialog.window.decorView, "确定删除?", Snackbar.LENGTH_LONG).setAction("确定") {
             doAsync {
                 val line = DBManager.setGoodsEnable(g.id, false)
                 uiThread {

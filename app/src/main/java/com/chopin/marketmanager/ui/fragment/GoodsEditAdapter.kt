@@ -1,7 +1,6 @@
 package com.chopin.marketmanager.ui.fragment
 
 import android.content.Context
-import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.util.Log
@@ -16,7 +15,7 @@ import com.chopin.marketmanager.util.*
 import swipe.SwipeItemLayout
 
 class GoodsEditAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
-    var mData = ArrayList<Goods>()
+    private var mData = ArrayList<Goods>()
 
     fun setData(data: ArrayList<Goods>) {
         mData.clear()
@@ -59,22 +58,18 @@ class GoodsEditAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>(
         Log.i("chopin", "onBindViewHolder")
         val h = holder as GoodsViewHolder
         val b = mData[position]
-        if (h.right_menu_goods_edit != null) {
-            h.right_menu_goods_edit.setOnClickListener { _ ->
-                rListener.invoke(b, position)
-                holder.goods_edit_swipe_layout.close()
-            }
+        h.geRightMenu.setOnClickListener {
+            rListener.invoke(b, position)
+            holder.geSwipeLayout.close()
         }
-        h.left_menu_goods_edit?.let {
-            h.left_menu_goods_edit.setOnClickListener { _ ->
-                lListener.invoke(b, position)
-                holder.goods_edit_swipe_layout.close()
-            }
+        h.geLeftMenu.setOnClickListener {
+            lListener.invoke(b, position)
+            holder.geSwipeLayout.close()
         }
-        h.goods_edit_image.setGoodsImage(b.image_path.toBitmap().scale2(),gd(context))
-        h.goods_edit_brand.text = b.brand
-        h.goods_edit_type.text = b.type
-        h.goods_edit_remark.text = if (b.remark.isEmpty()) "无备注" else b.remark
+        h.geImage.setGoodsImage(b.image_path.toBitmap().scale2(), gd(context))
+        h.geBrand.text = b.brand
+        h.geType.text = b.type
+        h.geRemark.text = if (b.remark.isEmpty()) "无备注" else b.remark
     }
 
     fun remove(i: Int) {
@@ -90,12 +85,12 @@ class GoodsEditAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>(
 }
 
 class GoodsViewHolder(v: View) : ViewHolder(v) {
-    val goods_edit_brand = v.findViewById<TextView>(R.id.goods_edit_brand)
-    val goods_edit_type = v.findViewById<TextView>(R.id.goods_edit_type)
-    val goods_edit_remark = v.findViewById<TextView>(R.id.goods_edit_remark)
-    val right_menu_goods_edit = v.findViewById<TextView>(R.id.right_menu_goods_edit)
-    val left_menu_goods_edit = v.findViewById<TextView>(R.id.left_menu_goods_edit)
-    val goods_edit_swipe_layout = v.findViewById<SwipeItemLayout>(R.id.goods_edit_swipe_layout)
-    val goods_edit_image = v.findViewById<ImageView>(R.id.goods_edit_image)
+    val geBrand: TextView = v.findViewById(R.id.goods_edit_brand)
+    val geType: TextView = v.findViewById(R.id.goods_edit_type)
+    val geRemark: TextView = v.findViewById(R.id.goods_edit_remark)
+    val geRightMenu: TextView = v.findViewById(R.id.right_menu_goods_edit)
+    val geLeftMenu: TextView = v.findViewById(R.id.left_menu_goods_edit)
+    val geSwipeLayout: SwipeItemLayout = v.findViewById(R.id.goods_edit_swipe_layout)
+    val geImage: ImageView = v.findViewById(R.id.goods_edit_image)
 
 }

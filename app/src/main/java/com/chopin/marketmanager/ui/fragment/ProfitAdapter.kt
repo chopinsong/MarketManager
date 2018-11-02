@@ -12,7 +12,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.ProfitBean
 
 class ProfitAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
-    var mData = ArrayList<ProfitBean>()
+    private var mData = ArrayList<ProfitBean>()
 
     fun setData(data: ArrayList<ProfitBean>) {
         mData.clear()
@@ -51,6 +51,6 @@ class ProfitAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 }
 
 class ProfitViewHolder(v: View) : ViewHolder(v) {
-    val itemBrandTypeTv = v.findViewById<TextView>(R.id.profit_item_brand_type_tv)
-    val itemPriceTv = v.findViewById<TextView>(R.id.profit_item_price_tv)
+    val itemBrandTypeTv: TextView = v.findViewById(R.id.profit_item_brand_type_tv)
+    val itemPriceTv: TextView = v.findViewById(R.id.profit_item_price_tv)
 }

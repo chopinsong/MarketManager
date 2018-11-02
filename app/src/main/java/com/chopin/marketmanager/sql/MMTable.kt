@@ -43,15 +43,15 @@ object PSTable {
 //}
 
 object GoodsTable {
-    val NAME = "Goods"
-    val Goods_ID = "GoodsId"
-    val GOODS_NAME = "GoodsName"
-    val BRAND = "brand"
-    val TYPE = "type"
-    val AVERAGE_PRICE = "AveragePrice"
-    val IS_ENABLE = "isEnabled"
-    val TIME = "Time"
-    val IMAGE_PATH = "image_path"
+    const val NAME = "Goods"
+    const val Goods_ID = "GoodsId"
+    const val GOODS_NAME = "GoodsName"
+    const val BRAND = "brand"
+    const val TYPE = "type"
+    const val AVERAGE_PRICE = "AveragePrice"
+    const val IS_ENABLE = "isEnabled"
+    const val TIME = "Time"
+    const val IMAGE_PATH = "image_path"
 
     fun getCommand(): String {
         return "CREATE TABLE $NAME($Goods_ID  INTEGER PRIMARY KEY," +

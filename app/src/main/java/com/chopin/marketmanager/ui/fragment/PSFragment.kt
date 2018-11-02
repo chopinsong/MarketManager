@@ -14,7 +14,6 @@ import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.image
-import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 
@@ -64,9 +63,9 @@ class PSFragment : MyDialogFragment() {
         goodsPickerView.updateBrands()
         commit_btn.setOnClickListener { commit() }
         purchase_cancel_btn.setOnClickListener { dismiss() }
-        add_goods_btn.setOnClickListener { _ ->
-            fragmentManager?.let { it ->
-                showAddGoods(it) {
+        add_goods_btn.setOnClickListener {
+            fragmentManager?.let { fm ->
+                showAddGoods(fm) {
                     goodsPickerView.updateBrands()
                 }
             }
@@ -204,11 +203,11 @@ class PSFragment : MyDialogFragment() {
         val selectName = selectGoods.remark
         val inputPrice = getInputPrice()
         var psCount = getPSCount()
-        if (psCount==0){
-            purchase_count_Layout.error="请至少输入数量 1"
+        if (psCount == 0) {
+            purchase_count_Layout.error = "请至少输入数量 1"
             return
-        }else{
-            purchase_count_Layout.error=null
+        } else {
+            purchase_count_Layout.error = null
         }
         val progress = getProgressDialog()
         progress.show(fragmentManager, "PSActivity")

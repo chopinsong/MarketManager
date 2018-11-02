@@ -2,7 +2,6 @@ package com.chopin.marketmanager.ui.fragment
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,14 +12,12 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.ui.AddGoodsView
 import com.chopin.marketmanager.util.PhotoUtil
 import com.chopin.marketmanager.util.gd
-import com.chopin.marketmanager.util.i
 import com.chopin.marketmanager.util.setGoodsImage
 import kotlinx.android.synthetic.main.add_goods_layout.*
-import kotlinx.android.synthetic.main.purchase_layout.*
 
 class AddGoodsFragment : MyDialogFragment() {
 
-    lateinit var addGoodsView: AddGoodsView
+    private lateinit var addGoodsView: AddGoodsView
     private var l: (g: Goods) -> Unit = {}
     private var goods: Goods? = null
     private lateinit var photoUtil:PhotoUtil
@@ -55,7 +52,7 @@ class AddGoodsFragment : MyDialogFragment() {
         }else{
             goods_pic.setGoodsImage(null,gd(context))
         }
-        addGoodsView.setGoods_Image_Listener {
+        addGoodsView.setGoodsImageListener {
              photoUtil = PhotoUtil(this)
         }
     }

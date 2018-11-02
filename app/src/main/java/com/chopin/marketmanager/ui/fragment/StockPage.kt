@@ -23,7 +23,6 @@ import org.jetbrains.anko.uiThread
 class StockPage : Fragment() {
     private var listener: (s: StockItem) -> Unit = {}
     private var mAdapter: MyStockPageAdapter? = null
-    var dsListener: (Boolean, Boolean) -> Unit = { d, t -> }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.stock_page_item_list, container, false)

@@ -1,7 +1,6 @@
 package com.chopin.marketmanager.ui.fragment
 
 import android.content.Context
-import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.util.Log
@@ -17,10 +16,7 @@ import swipe.SwipeItemLayout
 
 
 class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
-    var mData = ArrayList<PSItemBean>()
-    var s: VectorDrawableCompat? = context.shipmentDrawable()
-    var p: VectorDrawableCompat? = context.purchaseDrawable()
-    var gd = context.goodsDrawable()
+    private var mData = ArrayList<PSItemBean>()
     fun setData(data: ArrayList<PSItemBean>) {
         mData.clear()
         mData.addAll(data)
@@ -68,25 +64,23 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
         Log.i("chopin", "onBindViewHolder")
         val h = holder as PSViewHolder
         val bean = mData[position]
-        if (h.mRightMenu != null) {
-            h.mRightMenu.setOnClickListener { _ ->
-                listener.invoke(bean, position)
-                holder.mSwipeItemLayout.close()
-            }
+        h.mRightMenu.setOnClickListener {
+            listener.invoke(bean, position)
+            holder.mSwipeItemLayout.close()
         }
-        h.mLeftMenu?.let {
-            h.mLeftMenu.setOnClickListener { _ ->
+        h.mLeftMenu.let {
+            h.mLeftMenu.setOnClickListener {
                 editListener.invoke(bean, position)
                 holder.mSwipeItemLayout.close()
             }
         }
-        h.img.setGoodsImage(bean.g.image_path.toBitmap().scale2(), gd)
+        h.img.setGoodsImage(bean.g.image_path.toBitmap().scale2(), gd(context))
         h.itemBrandTv.text = bean.g.brand
         h.itemTypeTv.text = bean.g.type
-        if(bean.customerName.isEmpty()){
-            h.itemCustomerTv.visibility=View.GONE
-        }else{
-            h.itemCustomerTv.text=bean.customerName
+        if (bean.customerName.isEmpty()) {
+            h.itemCustomerTv.visibility = View.GONE
+        } else {
+            h.itemCustomerTv.text = bean.customerName
         }
         h.itemPriceTv.text = String.format("%s%s", (if (bean.isP) "-" else "+"), bean.price)
 //        h.itemRemarkTv.text = if (bean.remark.isEmpty()) "无备注" else bean.remark
@@ -102,16 +96,16 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 }
 
 class PSViewHolder(v: View) : ViewHolder(v) {
-    val img = v.findViewById<ImageView>(R.id.item_is_p_img)
-    val itemBrandTv = v.findViewById<TextView>(R.id.item_brand_tv)
-    val itemTypeTv = v.findViewById<TextView>(R.id.item_type_tv)
-//    val itemRemarkTv = v.findViewById<TextView>(R.id.item_remark_tv)
-    val itemPriceTv = v.findViewById<TextView>(R.id.item_price_tv)
-    val itemCustomerTv = v.findViewById<TextView>(R.id.item_customer_tv)
-    val itemCountTv = v.findViewById<TextView>(R.id.item_count_tv)
-    val mRightMenu = v.findViewById<TextView>(R.id.right_menu)
-    val mLeftMenu = v.findViewById<TextView>(R.id.left_menu)
-    val mSwipeItemLayout = v.findViewById<SwipeItemLayout>(R.id.swipe_layout)
-    val itemTimeTv = v.findViewById<TextView>(R.id.time_tv)
+    val img: ImageView = v.findViewById(R.id.item_is_p_img)
+    val itemBrandTv: TextView = v.findViewById(R.id.item_brand_tv)
+    val itemTypeTv: TextView = v.findViewById(R.id.item_type_tv)
+    //    val itemRemarkTv = v.findViewById<TextView>(R.id.item_remark_tv)
+    val itemPriceTv: TextView = v.findViewById(R.id.item_price_tv)
+    val itemCustomerTv: TextView = v.findViewById(R.id.item_customer_tv)
+    val itemCountTv: TextView = v.findViewById(R.id.item_count_tv)
+    val mRightMenu: TextView = v.findViewById(R.id.right_menu)
+    val mLeftMenu: TextView = v.findViewById(R.id.left_menu)
+    val mSwipeItemLayout: SwipeItemLayout = v.findViewById(R.id.swipe_layout)
+    val itemTimeTv: TextView = v.findViewById(R.id.time_tv)
 
 }

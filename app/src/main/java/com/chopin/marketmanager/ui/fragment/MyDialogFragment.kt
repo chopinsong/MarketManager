@@ -19,13 +19,14 @@ abstract class MyDialogFragment : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
         listener.invoke(dialog)
+
     }
 
-    var sx = 0f
-    var sy = 0f
+    private var sx = 0f
+    private var sy = 0f
     var x = 0f
     var y = 0f
-    var hasSwipeUp = false
+    private var hasSwipeUp = false
     fun setTouch(v: View) {
         v.setOnTouchListener { _, event ->
             if (event != null) {

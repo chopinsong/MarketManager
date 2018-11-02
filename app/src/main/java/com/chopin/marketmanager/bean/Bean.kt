@@ -3,13 +3,12 @@ package com.chopin.marketmanager.bean
 import com.chopin.marketmanager.util.Util
 import com.chopin.marketmanager.util.time2long
 import java.io.Serializable
-import java.util.*
 
 
-class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double = 0.0, var isEnabled: Boolean = true, var time: String = Util.crTime(),var image_path:String="") : Serializable{
+class Goods(var id: Int = 0, var remark: String, var brand: String, var type: String, var avgPrice: Double = 0.0, var isEnabled: Boolean = true, var time: String = Util.crTime(), var image_path: String = "") : Serializable {
     override fun equals(other: Any?): Boolean {
-        if (other is Goods){
-            return other.brand==this.brand&&other.type==this.type&&other.remark==this.remark&&other.avgPrice==this.avgPrice&&other.isEnabled==this.isEnabled&&other.time==this.time
+        if (other is Goods) {
+            return other.brand == this.brand && other.type == this.type && other.remark == this.remark && other.avgPrice == this.avgPrice && other.isEnabled == this.isEnabled && other.time == this.time
         }
         return super.equals(other)
     }
@@ -25,10 +24,11 @@ class Goods(var id: Int = 0, var remark: String, var brand: String, var type: St
         return result
     }
 
-    fun contains(s:String):Boolean{
-        return remark.contains(s)||brand.contains(s)||type.contains(s)||avgPrice.toString().contains(s)
+    fun contains(s: String): Boolean {
+        return remark.contains(s) || brand.contains(s) || type.contains(s) || avgPrice.toString().contains(s)
     }
 }
+
 open class PSBean(var psId: Int, var goodsId: Int, var price: Double, var customerName: String, val isPurchase: Boolean, var count: Int, var isEnabled: Boolean = true, var remark: String = "", var time: String = Util.crTime())
 
 //class PurchaseBean(var purchaseId:Int,var pGoodsId:Int,var purchasePrice:Double,var pCustomerName:String,var pTime:String= Util.time()):PSBean(purchaseId,pGoodsId,purchasePrice,pCustomerName,pTime)
@@ -47,11 +47,11 @@ class PSItemBean(var g: Goods, var psId: Int, var isP: Boolean, var price: Strin
         return (time2long(time) - time2long(bean.time)).toInt()
     }
 
-    fun contains(s:String):Boolean{
-        return g.contains(s)||price.contains(s)||customerName.contains(s)||count.contains(s)||remark.contains(s)
+    fun contains(s: String): Boolean {
+        return g.contains(s) || price.contains(s) || customerName.contains(s) || count.contains(s) || remark.contains(s)
     }
 }
 
-class ProfitBean(var g: Goods,var count:Int, var price: Double, var year:Int,var month:Int,var isP: Boolean)
+class ProfitBean(var g: Goods, var count: Int, var price: Double, var year: Int, var month: Int, var isP: Boolean)
 
 class PickerBean(var brand: String, var type: String, var name: String)

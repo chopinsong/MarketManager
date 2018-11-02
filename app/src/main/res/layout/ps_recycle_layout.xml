@@ -10,10 +10,9 @@
         android:layout_width="120dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
         android:background="@color/bg_blue"
         android:gravity="center"
+        android:textSize="@dimen/mk_text_size"
         android:text="@string/edit_text"
         android:textColor="@color/white" />
 
@@ -22,9 +21,8 @@
         android:layout_width="120dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
-        android:background="#A27E82"
+        android:background="@color/colorAccent"
+        android:textSize="@dimen/mk_text_size"
         android:gravity="center"
         android:text="@string/del_text"
         android:textColor="@color/white" />

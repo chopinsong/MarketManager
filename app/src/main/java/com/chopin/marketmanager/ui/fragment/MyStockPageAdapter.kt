@@ -2,8 +2,6 @@ package com.chopin.marketmanager.ui.fragment
 
 
 import android.content.Context
-import android.graphics.drawable.BitmapDrawable
-import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,16 +12,17 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.*
+import com.chopin.marketmanager.util.goodsDrawable
+import com.chopin.marketmanager.util.scale2
+import com.chopin.marketmanager.util.setGoodsImage
+import com.chopin.marketmanager.util.toBitmap
 import kotlinx.android.synthetic.main.stock_page_item.view.*
-import org.jetbrains.anko.image
 
 class MyStockPageAdapter(val context: Context, private val mListener: (s: StockBean) -> Unit) : RecyclerView.Adapter<MyStockPageAdapter.ViewHolder>() {
     private var mValues: ArrayList<StockBean> = ArrayList()
     private val mOnClickListener: View.OnClickListener
-    var s: VectorDrawableCompat? = context.shipmentDrawable()
-    var p: VectorDrawableCompat? = context.purchaseDrawable()
-    var gd = context.goodsDrawable()
+    private var gd = context.goodsDrawable()
+
     init {
         mOnClickListener = View.OnClickListener { v ->
             val item = v.tag as StockBean
@@ -42,7 +41,7 @@ class MyStockPageAdapter(val context: Context, private val mListener: (s: StockB
         holder.mStockBrand.text = item.goods.brand
         holder.mStockType.text = item.goods.type
         val scale = item.goods.image_path.toBitmap().scale2()
-        holder.mImageView.setGoodsImage(scale,gd)
+        holder.mImageView.setGoodsImage(scale, gd)
         holder.mCount.text = item.count.toString()
 
         with(holder.mView) {
@@ -62,18 +61,18 @@ class MyStockPageAdapter(val context: Context, private val mListener: (s: StockB
         return mValues
     }
 
-    fun plus(i: Int, back: (StockBean,PSBean) -> Unit) {
+    fun plus(i: Int, back: (StockBean, PSBean) -> Unit) {
         val stockBean = mValues[i]
         val psBean = PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = true, count = 1, customerName = "")
         val psId = DBManager.ps(psBean)
         if (psId != -1L) {
             stockBean.count = stockBean.count + 1
-            back.invoke(stockBean,psBean)
+            back.invoke(stockBean, psBean)
         }
         notifyItemChanged(i)
     }
 
-    fun minus(i: Int, back: (StockBean,PSBean) -> Unit) {
+    fun minus(i: Int, back: (StockBean, PSBean) -> Unit) {
         val stockBean = mValues[i]
         if (stockBean.count > 0) {
             val psBean = PSBean(psId = -1, goodsId = stockBean.goods.id, price = stockBean.goods.avgPrice, isPurchase = false, count = 1, customerName = "")
@@ -81,7 +80,7 @@ class MyStockPageAdapter(val context: Context, private val mListener: (s: StockB
             if (psId != -1L) {
                 stockBean.count = stockBean.count - 1
                 notifyItemChanged(i)
-                back.invoke(stockBean,psBean)
+                back.invoke(stockBean, psBean)
             }
         }
         notifyItemChanged(i)

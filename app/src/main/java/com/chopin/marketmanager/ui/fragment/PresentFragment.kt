@@ -15,7 +15,7 @@ import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 class PresentFragment : MyDialogFragment() {
-    lateinit var gpicker: GoodsPickerView
+    private lateinit var gpicker: GoodsPickerView
     private var l: (g: Goods, count: Int) -> Unit = { _, _ -> }
 
     fun setCommitListener(func: (g: Goods, count: Int) -> Unit) {

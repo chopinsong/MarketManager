@@ -6,7 +6,6 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
-import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.*
@@ -14,19 +13,17 @@ import kotlinx.android.synthetic.main.add_goods_layout.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class AddGoodsView(var root: View) {
-    var brandEt: EditText = root.add_goods_brand
-    var typeEt: EditText = root.add_goods_type
-    var avgPriceEt: EditText = root.add_goods_avg_price
-    var remarkEt: EditText = root.add_goods_remark
-    var commitBtn: ImageView = root.add_goods_commit_btn
-    var cancelBtn: ImageView = root.add_goods_cancel_btn
-    var agbl: TextInputLayout = root.add_goods_brand_Layout
-    var agtl: TextInputLayout = root.add_goods_type_Layout
-    var agpl: TextInputLayout = root.add_goods_avg_price_Layout
-    var agrl: TextInputLayout = root.add_goods_remark_Layout
-    var goods_image: ImageView = root.goods_pic
-    var goods_image_path:String=""
+class AddGoodsView(private var root: View) {
+    private var brandEt: EditText = root.add_goods_brand
+    private var typeEt: EditText = root.add_goods_type
+    private var avgPriceEt: EditText = root.add_goods_avg_price
+    private var remarkEt: EditText = root.add_goods_remark
+    private var commitBtn: ImageView = root.add_goods_commit_btn
+    private var cancelBtn: ImageView = root.add_goods_cancel_btn
+    private var agbl: TextInputLayout = root.add_goods_brand_Layout
+    private var agtl: TextInputLayout = root.add_goods_type_Layout
+    private var goodsImage: ImageView = root.goods_pic
+    private var goodsImagePath: String = ""
 
     init {
         commitBtn.setOnClickListener {
@@ -35,8 +32,8 @@ class AddGoodsView(var root: View) {
         cancelBtn.setOnClickListener {
             cancelListener.invoke()
         }
-        goods_image.setOnClickListener {
-            goods_image_listener.invoke()
+        goodsImage.setOnClickListener {
+            goodsImageListener.invoke()
         }
     }
 
@@ -52,10 +49,10 @@ class AddGoodsView(var root: View) {
         this.cancelListener = cancelListener
     }
 
-    private var goods_image_listener: () -> Unit = {}
+    private var goodsImageListener: () -> Unit = {}
 
-    fun setGoods_Image_Listener(goods_image_listener: () -> Unit) {
-        this.goods_image_listener = goods_image_listener
+    fun setGoodsImageListener(goods_image_listener: () -> Unit) {
+        this.goodsImageListener = goods_image_listener
     }
 
     private fun getBrand(): String {
@@ -96,7 +93,7 @@ class AddGoodsView(var root: View) {
         val name = getName()
         val avgPrice = getAvgPrice()
         doAsync {
-            val goods = Goods(brand = brand, type = type, remark = name, avgPrice = avgPrice,image_path = goods_image_path)
+            val goods = Goods(brand = brand, type = type, remark = name, avgPrice = avgPrice, image_path = goodsImagePath)
             val goodsId = DBManager.getGoodsId(brand, type, name)
             if (isEditMode) {
                 if (goodsId == editBean.id || goodsId == -1) {
@@ -134,7 +131,7 @@ class AddGoodsView(var root: View) {
 
     }
 
-    fun clearET() {
+    private fun clearET() {
         brandEt.setText("")
         typeEt.setText("")
         avgPriceEt.setText("")
@@ -152,14 +149,14 @@ class AddGoodsView(var root: View) {
         typeEt.setText(g.type)
         avgPriceEt.setText(g.avgPrice.toString())
         remarkEt.setText(g.remark)
-        goods_image.setGoodsImage(g.image_path.toBitmap().scale2(),gd(root.context))
+        goodsImage.setGoodsImage(g.image_path.toBitmap().scale2(), gd(root.context))
         isEditMode = true
     }
 
     fun setGoodsImage(bitmap: Bitmap?) {
         bitmap?.let {
-            goods_image_path=PhotoUtil.bitmaptoString(it)
-            goods_image.setImageBitmap(it.scale2())
+            goodsImagePath = PhotoUtil.bitmaptoString(it)
+            goodsImage.setImageBitmap(it.scale2())
         }
     }
 

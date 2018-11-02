@@ -13,7 +13,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.StockBean
 
 class StockAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
-    var mData = ArrayList<StockBean>()
+    private var mData = ArrayList<StockBean>()
 
     fun setData(data: ArrayList<StockBean>) {
         mData.clear()
@@ -56,6 +56,6 @@ class StockAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 }
 
 class StockViewHolder(v: View) : ViewHolder(v) {
-    val itemBrandTypeTv = v.findViewById<TextView>(R.id.stock_item_brand_type_tv)
-    val itemCountTv = v.findViewById<TextView>(R.id.stock_item_count_tv)
+    val itemBrandTypeTv: TextView = v.findViewById(R.id.stock_item_brand_type_tv)
+    val itemCountTv: TextView = v.findViewById(R.id.stock_item_count_tv)
 }

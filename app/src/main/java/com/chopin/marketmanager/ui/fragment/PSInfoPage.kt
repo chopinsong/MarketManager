@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Point
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -17,34 +18,34 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.ui.SpinnerFilterView
 import com.chopin.marketmanager.util.*
-import kotlinx.android.synthetic.main.ps_page_item_list.*
 import kotlinx.android.synthetic.main.ps_page_item_list.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class PSInfoPage : Fragment() {
     private lateinit var adapter: PSAdapter
-    private var filterType = 0
-    private var content = arrayOf("")
-    private var brands = arrayOf("")
-    private var types = arrayOf("")
+//    private var filterType = 0
+//    private var content = arrayOf("")
+//    private var brands = arrayOf("")
+//    private var types = arrayOf("")
 
     private var psData: ArrayList<PSItemBean> = arrayListOf()
+    private var mSpinnerFilter: SpinnerFilterView? = null
 
-    var dsListener: (Boolean, Boolean) -> Unit = { d, t -> }
     private val mReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.action?.let {
                 when (it) {
                     Constant.ACTION_CLEAR_ALL_PS -> updateList()
                     Constant.ACTION_CLEAR_ALL_DATA -> {
-                        updateList()
-                        refreshBrandTypes()
+                        refresh()
                     }
                     Constant.ACTION_UPDATE_GOODS -> {
-                        updateList()
-                        refreshBrandTypes()
+                        refresh()
+                    }
+                    else -> {
                     }
                 }
             }
@@ -53,6 +54,10 @@ class PSInfoPage : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.ps_page_item_list, container, false)
+        mSpinnerFilter = SpinnerFilterView(view)
+        mSpinnerFilter?.changeListener = { _, tid, v, vid ->
+            handleFilter(tid,vid,v)
+        }
         val list = view.purchase_shipment_list
         context?.let {
             val layoutManager = LinearLayoutManager(it)
@@ -60,14 +65,9 @@ class PSInfoPage : Fragment() {
             adapter = PSAdapter(it)
             list.adapter = adapter
             list.defaultItemAnimation()
-            list.setDirectionScrollListener { d, t ->
-                if (d)
-                    showMainPicker(false)
-                else
-                    showMainPicker()
-            }
         }
-        refreshBrandTypes()
+//        refreshBrandTypes()
+        mSpinnerFilter?.refresh()
         initListener(view)
         val i = IntentFilter(Constant.ACTION_CLEAR_ALL_PS)
         i.addAction(Constant.ACTION_UPDATE_GOODS)
@@ -78,22 +78,20 @@ class PSInfoPage : Fragment() {
         return view
     }
 
-    private fun showMainPicker(isShow: Boolean = true) {
-        main_num_picker_layout.transAnim(isShow)
-//        if (isShow) {
-//            main_num_picker_layout.downAnim()
-//            main_num_picker_layout2.downAnim(200)
-//        } else {
-//            main_num_picker_layout2.upAnim()
-//            main_num_picker_layout.upAnim(200)
-//        }
-    }
+//    private fun showMainPicker(isShow: Boolean = true) {
+//        main_num_picker_layout.transAnim(isShow)
+////        if (isShow) {
+////            main_num_picker_layout.downAnim()
+////            main_num_picker_layout2.downAnim(200)
+////        } else {
+////            main_num_picker_layout2.upAnim()
+////            main_num_picker_layout.upAnim(200)
+////        }
+//    }
 
     override fun onStart() {
         super.onStart()
-        updateList()
-        refreshBrandTypes()
-        updatePicker()
+        refresh()
     }
 
     override fun onDestroy() {
@@ -103,26 +101,26 @@ class PSInfoPage : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-    }
-
-    private fun refreshBrandTypes() {
-        brands = DBManager.brands().toTypedArray()
-        types = DBManager.types().toTypedArray()
-    }
+//    private fun refreshBrandTypes() {
+//        brands = DBManager.brands().toTypedArray()
+//        types = DBManager.types().toTypedArray()
+//    }
 
 
     override fun onResume() {
         super.onResume()
+        refresh()
+    }
+
+    private fun refresh() {
         updateList()
-        refreshBrandTypes()
+        mSpinnerFilter?.refresh()
     }
 
 
-    private fun updatePicker() {
-        m_filter_type_p.refreshValues(arrayOf("无过滤", "品牌", "类型", "进出货"))
-    }
+//    private fun updatePicker() {
+//        m_filter_type_p.refreshValues(arrayOf("无过滤", "品牌", "类型", "进出货"))
+//    }
 
 
     private fun updateList() {
@@ -165,9 +163,9 @@ class PSInfoPage : Fragment() {
 
     var x = 0f
     var y = 0f
-    var x2 = 0f
-    var y2 = 0f
-    var is_touch = false
+    private var x2 = 0f
+    private var y2 = 0f
+    private var isTouch = false
     private fun initListener(view: View) {
         view.main_num_picker_layout.setOnTouchListener { v, event ->
             i("onTouchEvent ${event == null} ")
@@ -175,53 +173,55 @@ class PSInfoPage : Fragment() {
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     x = event.rawX
                     y = event.rawY
-                    is_touch = false
+                    isTouch = false
                 }
-                if (event.action == MotionEvent.ACTION_MOVE && !is_touch) {
+                if (event.action == MotionEvent.ACTION_MOVE && !isTouch) {
                     //当手指离开的时候
                     y2 = event.rawY
                     x2 = event.rawX
-                    i("x $x width ${v.display.width} y $y y2$y2")
-                    if ((x < v.display.width / 3) && ((y - y2) > 50)) {
+                    val p = Point()
+                    v.display.getSize(p)
+                    i("x $x width ${p.x} y $y y2$y2")
+                    if ((x < p.x / 3) && ((y - y2) > 50)) {
 //                        showPSFragment()
                         showPSFragment()
-                        is_touch = true
-                    } else if ((x > v.display.width * 2 / 3) && ((y - y2) > 50)) {
+                        isTouch = true
+                    } else if ((x > p.x * 2 / 3) && ((y - y2) > 50)) {
                         showPSFragment(false)
-                        is_touch = true
+                        isTouch = true
                     } else if (x2 - x > 50 && (Math.abs(y - y2) < 10)) {
                         fragmentManager?.let {
                             showStock(it)
                         }
-                        is_touch = true
+                        isTouch = true
                     } else if (x - x2 > 50 && (Math.abs(y - y2) < 10)) {
                         fragmentManager?.let {
                             showSettings(it)
                         }
-                        is_touch = true
+                        isTouch = true
                     }
                 }
             }
             true
         }
-        view.m_filter_type_p.setOnValueChangedListener { _, _, type ->
-            filterType = type
-            content = getTypeContent()
-            if (content.isNotEmpty()) {
-                m_filter_p.refreshValues(content)
-                handleFilter(m_filter_p.value)
-            }
-        }
-        view.m_filter_p.setOnValueChangedListener { _, _, newVal ->
-            handleFilter(newVal)
-        }
+//        view.m_filter_type_p.setOnValueChangedListener { _, _, type ->
+//            filterType = type
+//            content = getTypeContent()
+//            if (content.isNotEmpty()) {
+//                m_filter_p.refreshValues(content)
+//                handleFilter(m_filter_p.value)
+//            }
+//        }
+//        view.m_filter_p.setOnValueChangedListener { _, _, newVal ->
+//            handleFilter(newVal)
+//        }
         adapter.setOnDelListener { b, i ->
             showDelConfirm(i, b)
         }
         adapter.setEditListener { b, i ->
             showEditPSFragment(b) {
                 updateData(it, i)
-                refreshBrandTypes()
+                mSpinnerFilter?.refresh()
             }
         }
     }
@@ -236,29 +236,29 @@ class PSInfoPage : Fragment() {
         ps.show(fragmentManager, "PSFragment")
     }
 
-    private fun showPsParseFragment(isP: Boolean = true) {
-        val ppf = PSParseFragment()
-        val b = Bundle()
-        b.putStringArray("brandsArray", brands)
-        b.putStringArray("typesArray", types)
-        ppf.arguments = b
-        ppf.show(fragmentManager, "PSParseFragment")
-        ppf.setCancelListener {
-            showPSFragment(isP)
-        }
-        ppf.setCommitListener { it ->
-            val pm = PSManager()
-            pm.ps(brand = it[1], type = it[2], count = it[3].toInt(), price = it[4].toDouble(), isP = it[0].toInt() == 1) { b ->
-                addData(b)
-                refreshBrandTypes()
-            }
-        }
-    }
+//    private fun showPsParseFragment(isP: Boolean = true) {
+//        val ppf = PSParseFragment()
+//        val b = Bundle()
+//        b.putStringArray("brandsArray", brands)
+//        b.putStringArray("typesArray", types)
+//        ppf.arguments = b
+//        ppf.show(fragmentManager, "PSParseFragment")
+//        ppf.setCancelListener {
+//            showPSFragment(isP)
+//        }
+//        ppf.setCommitListener { it ->
+//            val pm = PSManager()
+//            pm.ps(brand = it[1], type = it[2], count = it[3].toInt(), price = it[4].toDouble(), isP = it[0].toInt() == 1) { b ->
+//                addData(b)
+//                refreshBrandTypes()
+//            }
+//        }
+//    }
 
     fun showPSFragment(isP: Boolean = true) {
         val ps = getPSFragment().setCommitListener {
             addData(it)
-            refreshBrandTypes()
+            mSpinnerFilter?.refresh()
         }
         val bundle = Bundle()
         bundle.putBoolean("isP", isP)
@@ -266,20 +266,20 @@ class PSInfoPage : Fragment() {
         ps.show(fragmentManager, "PSFragment")
     }
 
-    private fun getTypeContent(): Array<String> {
-        return when (filterType) {
-            1 -> brands
-            2 -> types
-            3 -> arrayOf("进货", "出货")
-            else -> {
-                arrayOf("")
-            }
-        }
-    }
+//    private fun getTypeContent(): Array<String> {
+//        return when (filterType) {
+//            1 -> brands
+//            2 -> types
+//            3 -> arrayOf("进货", "出货")
+//            else -> {
+//                arrayOf("")
+//            }
+//        }
+//    }
 
     private fun showDelConfirm(i: Int, b: PSItemBean) {
         view?.let { it ->
-            Snackbar.make(it, "确定删除?", Snackbar.LENGTH_LONG).setAction("确定") { _ ->
+            Snackbar.make(it, "确定删除?", Snackbar.LENGTH_LONG).setAction("确定") {
                 doAsync {
                     val line = DBManager.setPSEnable(b.psId, false)
                     uiThread {
@@ -298,7 +298,7 @@ class PSInfoPage : Fragment() {
 
     private fun showUndo(i: Int, b: PSItemBean) {
         view?.let { it ->
-            Snackbar.make(it, "删除成功，是否撤消?", Snackbar.LENGTH_LONG).setAction("撤消") { _ ->
+            Snackbar.make(it, "删除成功，是否撤消?", Snackbar.LENGTH_LONG).setAction("撤消") {
                 doAsync {
                     val psEnable = DBManager.setPSEnable(b.psId, true)
                     uiThread {
@@ -314,14 +314,14 @@ class PSInfoPage : Fragment() {
         }
     }
 
-    fun handleFilter(type: Int, searchText: String? = null) {
+    fun handleFilter(firstIndex:Int=-1, secondIndex: Int=-1, secondValue:String="", searchText: String? = null) {
         doAsync {
             val data = psData.filter {
                 if (searchText == null) {
-                    when (filterType) {
-                        1 -> it.g.brand == content[type]
-                        2 -> it.g.type == content[type]
-                        3 -> type.isPurchase() && it.isP || type.isShipment() && !it.isP
+                    when (firstIndex) {
+                        1 -> it.g.brand == secondValue
+                        2 -> it.g.type == secondValue
+                        3 -> secondIndex.isPurchase() && it.isP || secondIndex.isShipment() && !it.isP
                         else -> true
                     }
                 } else {

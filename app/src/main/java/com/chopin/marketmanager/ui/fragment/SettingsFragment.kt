@@ -28,13 +28,13 @@ class SettingsFragment : MyDialogFragment() {
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         setTouch(setting_root_layout)
-        del_all_btn.setOnClickListener { _ ->
-            Snackbar.make(dialog.window.decorView, "确定要删除？", Snackbar.LENGTH_INDEFINITE).setAction("确定") { _ ->
+        del_all_btn.setOnClickListener {
+            Snackbar.make(dialog.window.decorView, "确定要删除？", Snackbar.LENGTH_INDEFINITE).setAction("确定") {
                 doAsync {
                     DBManager.setAllPSDisable()
-                    uiThread { _ ->
-                        context?.let {
-                            LocalBroadcastManager.getInstance(it).sendBroadcast(Intent(Constant.ACTION_CLEAR_ALL_PS))
+                    uiThread {
+                        context?.let { c ->
+                            LocalBroadcastManager.getInstance(c).sendBroadcast(Intent(Constant.ACTION_CLEAR_ALL_PS))
                             snack("清除成功")
                         }
                     }
@@ -42,14 +42,14 @@ class SettingsFragment : MyDialogFragment() {
             }.show()
         }
 
-        del_all_data_btn.setOnClickListener { _ ->
-            Snackbar.make(dialog.window.decorView, "确定要删除？", Snackbar.LENGTH_INDEFINITE).setAction("确定") { _ ->
+        del_all_data_btn.setOnClickListener {
+            Snackbar.make(dialog.window.decorView, "确定要删除？", Snackbar.LENGTH_INDEFINITE).setAction("确定") {
                 doAsync {
                     DBManager.setAllPSDisable()
                     DBManager.setAllGoodsDisable()
-                    uiThread { _ ->
-                        context?.let {
-                            LocalBroadcastManager.getInstance(it).sendBroadcast(Intent(Constant.ACTION_CLEAR_ALL_DATA))
+                    uiThread {
+                        context?.let {c->
+                            LocalBroadcastManager.getInstance(c).sendBroadcast(Intent(Constant.ACTION_CLEAR_ALL_DATA))
                             snack("清除成功")
                         }
 

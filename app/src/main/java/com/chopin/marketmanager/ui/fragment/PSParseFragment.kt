@@ -18,10 +18,6 @@ class PSParseFragment : MyDialogFragment() {
         cancelListener = func
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window.setWindowAnimations(R.style.dialogAnim)
@@ -32,7 +28,7 @@ class PSParseFragment : MyDialogFragment() {
         val ba = arguments?.getStringArray("brandsArray") ?: arrayOf("")
         val ta = arguments?.getStringArray("typesArray") ?: arrayOf("")
         setTouch(ps_parse_root)
-        ps_parse_commit_btn.setOnClickListener { _ ->
+        ps_parse_commit_btn.setOnClickListener {
             val pp = PSParse()
             val cArray = pp.parse(ps_parse_content.text.toString(), ba, ta)
             commitListener.invoke(cArray)

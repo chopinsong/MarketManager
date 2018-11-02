@@ -20,10 +20,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_mm.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
+const val PS: Int = 0
+const val STOCK = 1
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    val PS = 0
-    val STOCK = 1
     var fms = ArrayList<Fragment>()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -43,13 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setPage(i: Int) {
         main_view_page.currentItem = i
     }
-    private val dsListener :(Boolean, Boolean) -> Unit= { d, t ->
-        if (d) {
-            navigation.downAnim()
-        } else {
-            navigation.upAnim()
-        }
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -65,7 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val myPagerAdapter = MyPagerAdapter(supportFragmentManager, fms)
         main_view_page.setNoScroll(true)
         main_view_page.adapter = myPagerAdapter
-        main_view_page.addOnPageChangeListener(object:ViewPager.OnPageChangeListener{
+        main_view_page.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {
             }
 
@@ -73,7 +67,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             override fun onPageSelected(p0: Int) {
-                if (p0==STOCK){
+                if (p0 == STOCK) {
                     stockPage.refreshData()
                 }
             }
@@ -115,7 +109,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     try {
                         val ps = fms[PS]
                         if (ps is PSInfoPage) {
-                            ps.handleFilter(0, it)
+                            ps.handleFilter(searchText =  it)
                         }
                     } catch (e: Exception) {
                         print(e)
@@ -157,7 +151,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     private fun initView() {
-        ActionBarDrawerToggle(this, drawer_layout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
         val hv = nav_view?.getHeaderView(nav_view.headerCount - 1)
         val vv = hv?.findViewById<TextView>(R.id.version_tv)

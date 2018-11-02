@@ -38,6 +38,7 @@ import org.jetbrains.anko.uiThread
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 fun String.toPY(): String {
     var convert = ""
@@ -308,10 +309,14 @@ fun RecyclerView.defaultItemAnimation() {
 }
 
 fun <T> Spinner.setValues(l: ArrayList<T>) {
-    val yAdapter = ArrayAdapter<T>(context, android.R.layout.simple_list_item_1, l)
+    val yAdapter = ArrayAdapter<T>(context, R.layout.item_spinner, l)
     adapter = yAdapter
 }
-
+fun <T> Spinner.setValues(array: Array<T>) {
+    val al=ArrayList<T>()
+    al.addAll(array)
+    setValues(al)
+}
 fun <T> Context.setConfig(key: String, value: T) {
     val sp = getSharedPreferences("marketManager", MODE_PRIVATE)
     val e = sp.edit()
@@ -360,8 +365,8 @@ fun RecyclerView.setDirectionScrollListener(func: (Boolean, Boolean) -> Unit) {
     })
 }
 
-fun View.upAnim(delay:Long=0,onEnd:()->Unit={}) {
-    val animator = ObjectAnimator.ofFloat(this, "translationY", height.toFloat(), 0f)
+fun View.upAnim(s:Float=height.toFloat(),e:Float=0f,delay:Long=0,onEnd:()->Unit={}) {
+    val animator = ObjectAnimator.ofFloat(this, "translationY", s,e)
     animator.startDelay=delay
     animator.interpolator= DecelerateInterpolator()
     animator.addListener(object :Animator.AnimatorListener{
@@ -382,8 +387,8 @@ fun View.upAnim(delay:Long=0,onEnd:()->Unit={}) {
     animator.setDuration(400).start()
 }
 
-fun View.downAnim(delay:Long=0,onEnd:()->Unit={}) {
-    val animator = ObjectAnimator.ofFloat(this, "translationY", 0f, height.toFloat())
+fun View.downAnim(s:Float=height.toFloat(),e:Float=0f,delay:Long=0,onEnd:()->Unit={}) {
+    val animator = ObjectAnimator.ofFloat(this, "translationY", s, e)
     animator.startDelay=delay
     animator.interpolator= DecelerateInterpolator()
     animator.addListener(object :Animator.AnimatorListener{

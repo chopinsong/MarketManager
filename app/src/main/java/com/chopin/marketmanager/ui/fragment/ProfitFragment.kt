@@ -72,7 +72,6 @@ class ProfitFragment : MyDialogFragment() {
             }
         }
     }
-
     private fun generateAvgMap(stockPrice: HashMap<Goods, Array<Double>>) {
         for (key in stockPrice.keys) {
             var avg = 0.0
