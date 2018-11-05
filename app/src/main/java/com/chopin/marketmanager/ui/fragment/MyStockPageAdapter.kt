@@ -2,6 +2,7 @@ package com.chopin.marketmanager.ui.fragment
 
 
 import android.content.Context
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -18,17 +19,9 @@ import com.chopin.marketmanager.util.setGoodsImage
 import com.chopin.marketmanager.util.toBitmap
 import kotlinx.android.synthetic.main.stock_page_item.view.*
 
-class MyStockPageAdapter(val context: Context, private val mListener: (s: StockBean) -> Unit) : RecyclerView.Adapter<MyStockPageAdapter.ViewHolder>() {
+class MyStockPageAdapter(val context: Context, private val mListener: (v: ImageView, s: StockBean, position: Int) -> Unit) : RecyclerView.Adapter<MyStockPageAdapter.ViewHolder>() {
     private var mValues: ArrayList<StockBean> = ArrayList()
-    private val mOnClickListener: View.OnClickListener
     private var gd = context.goodsDrawable()
-
-    init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as StockBean
-            mListener.invoke(item)
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -43,10 +36,9 @@ class MyStockPageAdapter(val context: Context, private val mListener: (s: StockB
         val scale = item.goods.image_path.toBitmap().scale2()
         holder.mImageView.setGoodsImage(scale, gd)
         holder.mCount.text = item.count.toString()
-
-        with(holder.mView) {
-            tag = item
-            setOnClickListener(mOnClickListener)
+        holder.mView.tag=item
+        holder.mImageView.setOnClickListener {
+            mListener.invoke(it.stock_image, item, position)
         }
     }
 

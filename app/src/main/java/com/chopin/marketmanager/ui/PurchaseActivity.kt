@@ -1,25 +1,28 @@
-package com.chopin.marketmanager.ui.fragment
+package com.chopin.marketmanager.ui
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.*
+import android.view.Window
+import android.view.WindowManager
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
-import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.*
+import com.chopin.marketmanager.ui.fragment.PresentFragment
+import com.chopin.marketmanager.util.gd
+import com.chopin.marketmanager.util.scale2
+import com.chopin.marketmanager.util.setGoodsImage
+import com.chopin.marketmanager.util.toBitmap
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-
-class PSFragment : MyDialogFragment() {
+class PurchaseActivity : AppCompatActivity() {
     private var commitListener: (b: PSBean) -> Unit = {}
     private var editBean: PSItemBean? = null
     private var presentGoods: Goods? = null
@@ -27,44 +30,24 @@ class PSFragment : MyDialogFragment() {
     private lateinit var selectGoods: Goods
     var isP: Boolean = true
 
+
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
-        val eb = arguments?.getSerializable("editBean")
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        setContentView(R.layout.purchase_layout)
+        val eb = b?.getSerializable("editBean")
         if (eb != null) {
             editBean = eb as PSItemBean
             isP = editBean?.isP ?: true
             selectGoods = editBean!!.g
         } else {
-            isP = arguments?.getBoolean("isP", true) ?: true
-            val stockBean = arguments?.getSerializable("selectGoods") as StockBean
-            selectGoods = stockBean.goods
+            isP = b?.getBoolean("isP", true) ?: true
+//            val stockBean = b?.getSerializable("selectGoods") as StockBean
+//            selectGoods = stockBean.goods
+            selectGoods = DBManager.getGoodsInfo(20)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val params = dialog.window.attributes
-        params.gravity = Gravity.BOTTOM
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
-        params.height = WindowManager.LayoutParams.MATCH_PARENT
-        dialog.window.attributes = params
-        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View? {
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.window.setWindowAnimations(R.style.dialogAnim)
-        dialog?.setOnKeyListener { _, keyCode, _ ->
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
-            }
-            return@setOnKeyListener false
-        }
-        return inflater.inflate(R.layout.purchase_layout, container)
-    }
-
-    override fun onViewCreated(v: View, b: Bundle?) {
         initViews()
-        setTouch(purchase_layout_root)
         commit_btn.setOnClickListener { commit() }
         is_p_switch.setOnCheckedChangeListener { _, _ ->
             checkLeftGoodsCount()
@@ -87,8 +70,9 @@ class PSFragment : MyDialogFragment() {
                 this.presentGoods = presentGoods
                 this.presentCount = presentCount
             }
-            pf.show(fragmentManager, "PresentFragment")
+            pf.show(supportFragmentManager, "PresentFragment")
         }
+        ViewCompat.setTransitionName(stock_image, "stock_image")
     }
 
     private fun initViews() {
@@ -102,13 +86,7 @@ class PSFragment : MyDialogFragment() {
         setGoods(selectGoods)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        dialog.setCancelable(true)
-        dialog.setCanceledOnTouchOutside(true)
-    }
-
-    fun setCommitListener(commitListener: (b: PSBean) -> Unit = {}): PSFragment {
+    fun setCommitListener(commitListener: (b: PSBean) -> Unit = {}): PurchaseActivity {
         this.commitListener = commitListener
         return this
     }
@@ -161,7 +139,7 @@ class PSFragment : MyDialogFragment() {
                 if (line > 0) {
                     commitListener.invoke(updateBean)
                 }
-                dismiss()
+                supportFinishAfterTransition()
             }
         }
     }
@@ -183,16 +161,15 @@ class PSFragment : MyDialogFragment() {
                 presentB?.let { pb ->
                     commitListener.invoke(pb)
                 }
-                dismiss()
+                supportFinishAfterTransition()
             }
         }
     }
 
 
     private fun setGoods(goods: Goods) {
-        stock_image.setGoodsImage(goods.image_path.toBitmap().scale2(), gd(context))
+        stock_image.setGoodsImage(goods.image_path.toBitmap().scale2(), gd(this.applicationContext))
         stock_brand.text = goods.brand
         stock_type.text = goods.type
     }
-
 }

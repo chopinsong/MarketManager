@@ -1,5 +1,6 @@
 package com.chopin.marketmanager.ui.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -22,6 +23,13 @@ import com.chopin.marketmanager.util.toPY
 import kotlinx.android.synthetic.main.stock_page_item_list.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import android.support.v4.view.ViewCompat
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.app.ActivityCompat
+import android.content.Intent
+import com.chopin.marketmanager.ui.PurchaseActivity
+import org.jetbrains.anko.act
+
 
 class StockPage : Fragment() {
     private var listener: (s: StockItem) -> Unit = {}
@@ -33,8 +41,13 @@ class StockPage : Fragment() {
         if (list is RecyclerView) {
             with(list) {
                 layoutManager = LinearLayoutManager(context)
-                mAdapter = MyStockPageAdapter(context) { sb ->
+                mAdapter = MyStockPageAdapter(context) { v, sb, po ->
                     (activity as MainActivity).showPSFragment(selectGoods = sb)
+//                    val intent = Intent(context, PurchaseActivity::class.java)
+//                    intent.putExtra("selectGoods",sb)
+//                    ActivityCompat.startActivity(activity!!.act, intent, ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                            activity!!.act, v, "stock_image").toBundle())
+//                    activity!!.act.overridePendingTransition(R.anim.dialog_push_in,0)
                 }
                 list.defaultItemAnimation()
                 adapter = mAdapter
@@ -106,6 +119,7 @@ class StockPage : Fragment() {
 
     companion object {
 
+        var sb = null
         @JvmStatic
         fun newInstance() = StockPage()
     }
