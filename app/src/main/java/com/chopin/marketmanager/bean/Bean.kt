@@ -39,7 +39,7 @@ class PurchaseCount(var goodsId: Int, var count: Int)
 
 class ShipmentsCount(var goodsId: Int, var count: Int)
 
-class StockBean(var goods: Goods, var count: Int)
+class StockBean(var goods: Goods, var count: Int):Serializable
 
 class PSItemBean(var g: Goods, var psId: Int, var isP: Boolean, var price: String, var customerName: String, var count: String, var remark: String = "", var time: String) : Serializable {
     @Override

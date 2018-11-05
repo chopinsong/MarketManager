@@ -13,6 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import com.chopin.marketmanager.R
+import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.ui.fragment.PSInfoPage
 import com.chopin.marketmanager.ui.fragment.StockPage
 import com.chopin.marketmanager.util.*
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_mm.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-const val PS: Int = 0
+const val PS_INFO = 0
 const val STOCK = 1
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -28,8 +29,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_ps -> {
-                setPage(PS)
+            R.id.navigation_ps_info -> {
+                setPage(PS_INFO)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_stock -> {
@@ -107,9 +108,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
                     try {
-                        val ps = fms[PS]
+                        val ps = fms[PS_INFO]
                         if (ps is PSInfoPage) {
-                            ps.handleFilter(searchText =  it)
+                            ps.handleFilter(searchText = it)
                         }
                     } catch (e: Exception) {
                         print(e)
@@ -165,13 +166,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    private fun showPSFragment(isP: Boolean = true) {
-        val fragment = fms[0]
-        if (fragment is PSInfoPage) {
-            fragment.showPSFragment(isP)
+    fun showPSFragment(isP: Boolean = true,selectGoods: StockBean?=null) {
+        supportFragmentManager.showPSFragment(isP,selectGoods) {
+            (fms[0] as PSInfoPage).handlerAddData(it)
         }
     }
-
 
     private fun checkUpdate() {
         try {

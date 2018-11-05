@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
 import android.graphics.*
+import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.app.ActivityCompat
@@ -20,7 +21,6 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.ViewConfiguration
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.TranslateAnimation
@@ -29,6 +29,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
+import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.fragment.*
 import net.sourceforge.pinyin4j.PinyinHelper
@@ -132,8 +133,27 @@ fun Fragment.getProgressDialog(): ProgressDialog {
     return ProgressDialog()
 }
 
-fun Activity.getPSFragment(): PSFragment {
-    return PSFragment()
+
+fun FragmentManager.showPSFragment(isP: Boolean = true,selectGoods:StockBean?=null, func: (PSBean) -> Unit = {}) {
+    val ps = getPSFragment().setCommitListener {
+        func.invoke(it)
+    }
+    val bundle = Bundle()
+    bundle.putBoolean("isP", isP)
+    selectGoods?.let {
+        bundle.putSerializable("selectGoods",selectGoods)
+    }
+    ps.arguments = bundle
+    ps.show(this, "PSFragment")
+}
+
+fun FragmentManager.showEditPSFragment(b: PSItemBean, func: (b: PSBean) -> Unit) {
+    val ps = getPSFragment()
+    val bundle = Bundle()
+    bundle.putSerializable("editBean", b)
+    ps.arguments = bundle
+    ps.setCommitListener(func)
+    ps.show(this, "PSFragment")
 }
 
 fun Context.toWeak(): WeakReference<Context> {
@@ -312,11 +332,13 @@ fun <T> Spinner.setValues(l: ArrayList<T>) {
     val yAdapter = ArrayAdapter<T>(context, R.layout.item_spinner, l)
     adapter = yAdapter
 }
+
 fun <T> Spinner.setValues(array: Array<T>) {
-    val al=ArrayList<T>()
+    val al = ArrayList<T>()
     al.addAll(array)
     setValues(al)
 }
+
 fun <T> Context.setConfig(key: String, value: T) {
     val sp = getSharedPreferences("marketManager", MODE_PRIVATE)
     val e = sp.edit()
@@ -365,33 +387,11 @@ fun RecyclerView.setDirectionScrollListener(func: (Boolean, Boolean) -> Unit) {
     })
 }
 
-fun View.upAnim(s:Float=height.toFloat(),e:Float=0f,delay:Long=0,onEnd:()->Unit={}) {
-    val animator = ObjectAnimator.ofFloat(this, "translationY", s,e)
-    animator.startDelay=delay
-    animator.interpolator= DecelerateInterpolator()
-    animator.addListener(object :Animator.AnimatorListener{
-        override fun onAnimationRepeat(animation: Animator?) {
-        }
-
-        override fun onAnimationEnd(animation: Animator?) {
-            onEnd()
-        }
-
-        override fun onAnimationCancel(animation: Animator?) {
-        }
-
-        override fun onAnimationStart(animation: Animator?) {
-        }
-
-    })
-    animator.setDuration(400).start()
-}
-
-fun View.downAnim(s:Float=height.toFloat(),e:Float=0f,delay:Long=0,onEnd:()->Unit={}) {
+fun View.upAnim(s: Float = height.toFloat(), e: Float = 0f, delay: Long = 0, onEnd: () -> Unit = {}) {
     val animator = ObjectAnimator.ofFloat(this, "translationY", s, e)
-    animator.startDelay=delay
-    animator.interpolator= DecelerateInterpolator()
-    animator.addListener(object :Animator.AnimatorListener{
+    animator.startDelay = delay
+    animator.interpolator = DecelerateInterpolator()
+    animator.addListener(object : Animator.AnimatorListener {
         override fun onAnimationRepeat(animation: Animator?) {
         }
 
@@ -409,7 +409,29 @@ fun View.downAnim(s:Float=height.toFloat(),e:Float=0f,delay:Long=0,onEnd:()->Uni
     animator.setDuration(400).start()
 }
 
-fun View.transAnim(isShow: Boolean = true, onEnd:()->Unit={}) {
+fun View.downAnim(s: Float = height.toFloat(), e: Float = 0f, delay: Long = 0, onEnd: () -> Unit = {}) {
+    val animator = ObjectAnimator.ofFloat(this, "translationY", s, e)
+    animator.startDelay = delay
+    animator.interpolator = DecelerateInterpolator()
+    animator.addListener(object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            onEnd()
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+        }
+
+    })
+    animator.setDuration(400).start()
+}
+
+fun View.transAnim(isShow: Boolean = true, onEnd: () -> Unit = {}) {
     if (isShow) upAnim(onEnd = onEnd) else downAnim(onEnd = onEnd)
 }
 

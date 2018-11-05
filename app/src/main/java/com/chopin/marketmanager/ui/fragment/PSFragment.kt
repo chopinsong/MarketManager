@@ -9,33 +9,34 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
+import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.purchase_layout.*
+import kotlinx.android.synthetic.main.stock_page_item.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.image
 import org.jetbrains.anko.uiThread
 
 
 class PSFragment : MyDialogFragment() {
     private var commitListener: (b: PSBean) -> Unit = {}
-    private var updateListener: (b: PSBean) -> Unit = {}
-    private var isP: Boolean? = null
     private var editBean: PSItemBean? = null
-    private var isEditMode: Boolean = false
-    private lateinit var goodsPickerView: GoodsPickerView
+    private var presentGoods: Goods? = null
+    private var presentCount: Int = 1
+    private lateinit var selectGoods: Goods
+    var isP: Boolean = true
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         val eb = arguments?.getSerializable("editBean")
-        eb?.let {
-            editBean = it as PSItemBean
-        }
-        isEditMode = eb != null
-        isP = if (isEditMode) {
-            editBean?.isP
+        if (eb != null) {
+            editBean = eb as PSItemBean
+            isP = editBean?.isP ?: true
+            selectGoods = editBean!!.g
         } else {
-            arguments?.getBoolean("isP", true)
+            isP = arguments?.getBoolean("isP", true) ?: true
+            val stockBean = arguments?.getSerializable("selectGoods") as StockBean
+            selectGoods = stockBean.goods
         }
     }
 
@@ -52,43 +53,16 @@ class PSFragment : MyDialogFragment() {
     }
 
     override fun onViewCreated(v: View, b: Bundle?) {
+        initViews()
         setTouch(purchase_layout_root)
-        img_switch_purchase.image = context?.purchaseDrawable()
-        img_switch_shipment.image = context?.shipmentDrawable()
-        var isShow = true
-        context?.let {
-            isShow = it.getConfig(Constant.SHOW_GOODS_REMARK) ?: false
-        }
-        goodsPickerView = GoodsPickerView(goods_picker_root, isShow)
-        goodsPickerView.updateBrands()
         commit_btn.setOnClickListener { commit() }
-        purchase_cancel_btn.setOnClickListener { dismiss() }
-        add_goods_btn.setOnClickListener {
-            fragmentManager?.let { fm ->
-                showAddGoods(fm) {
-                    goodsPickerView.updateBrands()
-                }
-            }
-        }
-        is_p_switch.setOnCheckedChangeListener { _, isChecked ->
-            switchPS(isChecked)
+        is_p_switch.setOnCheckedChangeListener { _, _ ->
             checkLeftGoodsCount()
         }
-        isP?.let {
-            is_p_switch.isChecked = it
-            switchPS(it)
-        }
-        goodsPickerView.setListener {
-            if (!is_p_switch.isChecked) {
-                checkLeftGoodsCount()
-            }
-        }
         purchase_count.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
+            override fun afterTextChanged(s: Editable?) {}
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!TextUtils.isEmpty(s) && !is_p_switch.isChecked) {
@@ -100,41 +74,22 @@ class PSFragment : MyDialogFragment() {
         select_present_tv.setOnClickListener {
             val pf = PresentFragment()
             pf.setCommitListener { presentGoods, presentCount ->
-                setPresentGoods(presentGoods, presentCount)
+                this.presentGoods = presentGoods
+                this.presentCount = presentCount
             }
             pf.show(fragmentManager, "PresentFragment")
         }
-        initEditBean()
     }
 
-    private var presentGoods: Goods? = null
-
-    private var presentCount: Int = 1
-
-    private fun setPresentGoods(it: Goods, presentCount: Int) {
-        this.presentGoods = it
-        this.presentCount = presentCount
-    }
-
-
-    private fun switchPS(isChecked: Boolean) {
-        add_goods_btn.visibility = if (isChecked) View.VISIBLE else View.GONE
-        if (isChecked) {
-            commit_btn.isEnabled = true
+    private fun initViews() {
+        is_p_switch.isChecked = isP
+        if (editBean != null) {
+            customer_et.setText(editBean!!.customerName)
+            price_et.setText(editBean!!.price)
+            purchase_count.setText(editBean!!.count)
+            remark_tv.setText(editBean!!.remark)
         }
-        setSelectFocus(isChecked)
-    }
-
-    private fun initEditBean() {
-        if (isEditMode) {
-            editBean?.let {
-                customer_et.setText(it.customerName)
-                price_et.setText(it.price)
-                purchase_count.setText(it.count)
-                remark_tv.setText(it.remark)
-                goodsPickerView.initValues(it.g.brand, it.g.type, it.g.remark)
-            }
-        }
+        setGoods(selectGoods)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -148,12 +103,6 @@ class PSFragment : MyDialogFragment() {
         return this
     }
 
-    private fun setSelectFocus(isP: Boolean) {
-        img_switch_purchase.image = context?.purchaseDrawable(if (isP) R.color.colorAccent else R.color.black2)
-        img_switch_shipment.image = context?.shipmentDrawable(if (!isP) R.color.colorAccent else R.color.black2)
-    }
-
-
     private fun getCustomerName(): String {
         val name = customer_et.text.toString()
         return if (TextUtils.isEmpty(name)) "" else name.trim()
@@ -166,17 +115,16 @@ class PSFragment : MyDialogFragment() {
 
     private fun getPSCount(): Int {
         val count = purchase_count.text.toString()
-        return if (TextUtils.isEmpty(count)) 0 else count.toInt()
+        val intCount = if (TextUtils.isEmpty(count)) 0 else count.toInt()
+        return if (intCount == 0) 1 else intCount
     }
 
     private fun checkLeftGoodsCount() {
-        val selectGoods = goodsPickerView.getSelectGoods()
-        val psCount = getPSCount()
+        val selectGoods = selectGoods
         doAsync {
-            val goodsId = DBManager.getGoodsId(selectGoods)
-            val goodsCountLeft = DBManager.getGoodsCountLeft(goodsId)
+            val goodsCountLeft = DBManager.getGoodsCountLeft(selectGoods)
             uiThread {
-                if (!is_p_switch.isChecked && psCount > goodsCountLeft) {
+                if (!is_p_switch.isChecked && getPSCount() > goodsCountLeft) {
                     commit_btn.isClickable = false
                     purchase_count_Layout.error = "当前库存不足,${selectGoods.brand}${selectGoods.type}${selectGoods.remark}只有${goodsCountLeft}个"
                 } else {
@@ -188,82 +136,53 @@ class PSFragment : MyDialogFragment() {
     }
 
     private fun commit() {
-        val selectGoods = goodsPickerView.getSelectGoods()
-        val selectBrand = selectGoods.brand
-        if (selectBrand.isEmpty()) {
-            snack("请选择品牌")
-            return
-        }
-        val selectType = selectGoods.type
-        if (selectType.isEmpty()) {
-            snack("请选择类型")
-            return
-        }
-
-        val selectName = selectGoods.remark
-        val inputPrice = getInputPrice()
-        var psCount = getPSCount()
-        if (psCount == 0) {
-            purchase_count_Layout.error = "请至少输入数量 1"
-            return
+        if (editBean != null) {
+            applyUpdate()
         } else {
-            purchase_count_Layout.error = null
+            applyCommit()
         }
-        val progress = getProgressDialog()
-        progress.show(fragmentManager, "PSActivity")
-        psCount = if (psCount == 0) 1 else psCount
-        var customerName = getCustomerName()
-        customerName = if (customerName.isNotEmpty()) customerName else "未知"
-        val remark = remark_tv.text.toString()
-        val isP = is_p_switch.isChecked
+    }
+
+    private fun applyUpdate() {
         doAsync {
-            val goodsId = DBManager.getGoodsId(selectBrand, selectType, selectName)
-            var line = 0
-            var b: PSBean? = null
-            var presentBean: PSBean? = null
-            if (isEditMode) {
-                editBean?.let {
-                    b = PSBean(it.psId, goodsId, inputPrice, customerName, isP, psCount, remark = remark)
-                    b?.let { updateBean ->
-                        line = DBManager.updatePS(updateBean)
-                    }
-                }
-            } else {
-                b = PSBean(psId = -1, goodsId = goodsId, price = inputPrice, customerName = customerName, isPurchase = isP, count = psCount, remark = remark)
-                b?.let { psBean ->
-                    val id = DBManager.ps(psBean)
-                    psBean.psId = id.toInt()
-                }
-                presentGoods?.let {
-                    val presentId = DBManager.getGoodsId(it)
-                    presentBean = PSBean(psId = -1, goodsId = presentId, price = 0.0, customerName = customerName, isPurchase = false, count = presentCount, remark = "赠品")
-                    presentBean?.let { pBean ->
-                        val id = DBManager.ps(pBean)
-                        pBean.psId = id.toInt()
-                    }
-                }
-            }
+            val updateBean = PSBean(editBean!!.psId, selectGoods.id, getInputPrice(), getCustomerName(), is_p_switch.isChecked, getPSCount(), remark = remark_tv.text.toString())
+            val line = DBManager.updatePS(updateBean)
             uiThread {
-                progress.dismiss()
-                b?.let { it1 ->
-                    if (isEditMode) {
-                        if (line > 0) {
-                            updateListener.invoke(it1)
-                        }
-                    } else {
-                        commitListener.invoke(it1)
-                    }
-                }
-                presentBean?.let { presentB ->
-                    commitListener.invoke(presentB)
+                if (line > 0) {
+                    commitListener.invoke(updateBean)
                 }
                 dismiss()
             }
         }
     }
 
-    fun setUpdateListener(func: (b: PSBean) -> Unit) {
-        this.updateListener = func
+    private fun applyCommit() {
+        doAsync {
+            val commitBean = PSBean(psId = -1, goodsId = selectGoods.id, price = getInputPrice(), customerName = getCustomerName(), isPurchase = is_p_switch.isChecked, count = getPSCount(), remark = remark_tv.text.toString())
+            commitBean.psId = DBManager.ps(commitBean).toInt()
+            var presentB: PSBean? = null
+            presentGoods?.let {
+                val presentId = DBManager.getGoodsId(it)
+                val presentBean = PSBean(psId = -1, goodsId = presentId, price = 0.0, customerName = getCustomerName(), isPurchase = false, count = presentCount, remark = "赠品")
+                val id = DBManager.ps(presentBean)
+                presentBean.psId = id.toInt()
+                presentB=presentBean
+            }
+            uiThread {
+                commitListener.invoke(commitBean)
+                presentB?.let { pb ->
+                    commitListener.invoke(pb)
+                }
+                dismiss()
+            }
+        }
+    }
+
+
+    private fun setGoods(goods: Goods) {
+        stock_image.setGoodsImage(goods.image_path.toBitmap().scale2(), gd(context))
+        stock_brand.text = goods.brand
+        stock_type.text = goods.type
     }
 
 }

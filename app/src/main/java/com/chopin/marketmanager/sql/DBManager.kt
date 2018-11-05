@@ -100,6 +100,10 @@ object DBManager {
         return db.goodsCountLeft(goodsId)
     }
 
+    fun getGoodsCountLeft(g:Goods):Int{
+        return db.goodsCountLeft(getGoodsId(g))
+    }
+
     fun setAllPSDisable(): Int {
         return db.setAllPSDisable()
     }

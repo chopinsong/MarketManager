@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/setting_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="400dp"
-    android:id="@+id/setting_root_layout"
     android:orientation="vertical">
 
     <TextView
@@ -40,6 +40,13 @@
                 android:textColor="@color/colorAccent" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginEnd="80dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/bright_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,28 +71,42 @@
                 android:textColor="@color/colorAccent" />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginEnd="80dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/bright_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="6"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
                 android:gravity="center_vertical"
                 android:text="@string/goods_remark_show" />
 
             <CheckBox
                 android:id="@+id/show_goods_remark"
                 android:layout_width="0dp"
+                android:layout_gravity="center"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginEnd="80dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/bright_gray" />
     </LinearLayout>
 
 

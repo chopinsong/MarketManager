@@ -4,14 +4,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Point
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.chopin.marketmanager.R
@@ -56,7 +54,7 @@ class PSInfoPage : Fragment() {
         val view = inflater.inflate(R.layout.ps_page_item_list, container, false)
         mSpinnerFilter = SpinnerFilterView(view)
         mSpinnerFilter?.changeListener = { _, tid, v, vid ->
-            handleFilter(tid,vid,v)
+            handleFilter(tid, vid, v)
         }
         val list = view.purchase_shipment_list
         context?.let {
@@ -161,49 +159,49 @@ class PSInfoPage : Fragment() {
 
     }
 
-    var x = 0f
-    var y = 0f
-    private var x2 = 0f
-    private var y2 = 0f
-    private var isTouch = false
+    //    var x = 0f
+//    var y = 0f
+//    private var x2 = 0f
+//    private var y2 = 0f
+//    private var isTouch = false
     private fun initListener(view: View) {
-        view.main_num_picker_layout.setOnTouchListener { v, event ->
-            i("onTouchEvent ${event == null} ")
-            if (event != null) {
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    x = event.rawX
-                    y = event.rawY
-                    isTouch = false
-                }
-                if (event.action == MotionEvent.ACTION_MOVE && !isTouch) {
-                    //当手指离开的时候
-                    y2 = event.rawY
-                    x2 = event.rawX
-                    val p = Point()
-                    v.display.getSize(p)
-                    i("x $x width ${p.x} y $y y2$y2")
-                    if ((x < p.x / 3) && ((y - y2) > 50)) {
+//        view.main_num_picker_layout.setOnTouchListener { v, event ->
+//            i("onTouchEvent ${event == null} ")
+//            if (event != null) {
+//                if (event.action == MotionEvent.ACTION_DOWN) {
+//                    x = event.rawX
+//                    y = event.rawY
+//                    isTouch = false
+//                }
+//                if (event.action == MotionEvent.ACTION_MOVE && !isTouch) {
+//                    //当手指离开的时候
+//                    y2 = event.rawY
+//                    x2 = event.rawX
+//                    val p = Point()
+//                    v.display.getSize(p)
+//                    i("x $x width ${p.x} y $y y2$y2")
+//                    if ((x < p.x / 3) && ((y - y2) > 50)) {
+////                        showPSFragment()
 //                        showPSFragment()
-                        showPSFragment()
-                        isTouch = true
-                    } else if ((x > p.x * 2 / 3) && ((y - y2) > 50)) {
-                        showPSFragment(false)
-                        isTouch = true
-                    } else if (x2 - x > 50 && (Math.abs(y - y2) < 10)) {
-                        fragmentManager?.let {
-                            showStock(it)
-                        }
-                        isTouch = true
-                    } else if (x - x2 > 50 && (Math.abs(y - y2) < 10)) {
-                        fragmentManager?.let {
-                            showSettings(it)
-                        }
-                        isTouch = true
-                    }
-                }
-            }
-            true
-        }
+//                        isTouch = true
+//                    } else if ((x > p.x * 2 / 3) && ((y - y2) > 50)) {
+//                        showPSFragment(false)
+//                        isTouch = true
+//                    } else if (x2 - x > 50 && (Math.abs(y - y2) < 10)) {
+//                        fragmentManager?.let {
+//                            showStock(it)
+//                        }
+//                        isTouch = true
+//                    } else if (x - x2 > 50 && (Math.abs(y - y2) < 10)) {
+//                        fragmentManager?.let {
+//                            showSettings(it)
+//                        }
+//                        isTouch = true
+//                    }
+//                }
+//            }
+//            true
+//        }
 //        view.m_filter_type_p.setOnValueChangedListener { _, _, type ->
 //            filterType = type
 //            content = getTypeContent()
@@ -219,22 +217,13 @@ class PSInfoPage : Fragment() {
             showDelConfirm(i, b)
         }
         adapter.setEditListener { b, i ->
-            showEditPSFragment(b) {
+            fragmentManager?.showEditPSFragment(b) {
                 updateData(it, i)
                 mSpinnerFilter?.refresh()
             }
         }
     }
 
-
-    private fun showEditPSFragment(b: PSItemBean, func: (b: PSBean) -> Unit) {
-        val ps = getPSFragment()
-        val bundle = Bundle()
-        bundle.putSerializable("editBean", b)
-        ps.arguments = bundle
-        ps.setUpdateListener(func)
-        ps.show(fragmentManager, "PSFragment")
-    }
 
 //    private fun showPsParseFragment(isP: Boolean = true) {
 //        val ppf = PSParseFragment()
@@ -255,16 +244,6 @@ class PSInfoPage : Fragment() {
 //        }
 //    }
 
-    fun showPSFragment(isP: Boolean = true) {
-        val ps = getPSFragment().setCommitListener {
-            addData(it)
-            mSpinnerFilter?.refresh()
-        }
-        val bundle = Bundle()
-        bundle.putBoolean("isP", isP)
-        ps.arguments = bundle
-        ps.show(fragmentManager, "PSFragment")
-    }
 
 //    private fun getTypeContent(): Array<String> {
 //        return when (filterType) {
@@ -276,6 +255,11 @@ class PSInfoPage : Fragment() {
 //            }
 //        }
 //    }
+
+    fun handlerAddData(it: PSBean) {
+        addData(it)
+        mSpinnerFilter?.refresh()
+    }
 
     private fun showDelConfirm(i: Int, b: PSItemBean) {
         view?.let { it ->
@@ -314,7 +298,7 @@ class PSInfoPage : Fragment() {
         }
     }
 
-    fun handleFilter(firstIndex:Int=-1, secondIndex: Int=-1, secondValue:String="", searchText: String? = null) {
+    fun handleFilter(firstIndex: Int = -1, secondIndex: Int = -1, secondValue: String = "", searchText: String? = null) {
         doAsync {
             val data = psData.filter {
                 if (searchText == null) {

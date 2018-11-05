@@ -60,4 +60,5 @@
     <string name="title_record">记录</string>
     <string name="stock_page_desc">商品描述</string>
     <string name="goods_image">图片</string>
+    <string name="is_purchase_text">是否进货</string>
 </resources>

@@ -56,7 +56,7 @@ class GoodsPickerView(root: View,showRemark:Boolean=true) {
         }
     }
 
-    fun updateBrands() {
+    fun updateBrands(func:()->Unit={}) {
         doAsync {
             try {
                 brands = DBManager.brands().toTypedArray()
@@ -70,12 +70,12 @@ class GoodsPickerView(root: View,showRemark:Boolean=true) {
                         i(e.toString())
                     }
                 }
-                updateTypes(getSelectBrand())
+                updateTypes(getSelectBrand(),func)
             }
         }
     }
 
-    private fun updateTypes(brand: String) {
+    private fun updateTypes(brand: String,func: () -> Unit={}) {
         doAsync {
             try {
                 types = DBManager.types("${GoodsTable.BRAND}=\"$brand\"").toTypedArray()
@@ -85,6 +85,7 @@ class GoodsPickerView(root: View,showRemark:Boolean=true) {
                 if (types.isNotEmpty()) {
                     try {
                         typePicker.refreshByNewDisplayedValues(types)
+                        func.invoke()
                     } catch (e: Exception) {
                         i(e.toString())
                     }

@@ -15,7 +15,10 @@ import com.chopin.marketmanager.bean.StockItem
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.ITHCallBack
 import com.chopin.marketmanager.ui.LetterIndexer
-import com.chopin.marketmanager.util.*
+import com.chopin.marketmanager.ui.MainActivity
+import com.chopin.marketmanager.util.defaultItemAnimation
+import com.chopin.marketmanager.util.snack
+import com.chopin.marketmanager.util.toPY
 import kotlinx.android.synthetic.main.stock_page_item_list.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -30,7 +33,9 @@ class StockPage : Fragment() {
         if (list is RecyclerView) {
             with(list) {
                 layoutManager = LinearLayoutManager(context)
-                mAdapter = MyStockPageAdapter(context) {}
+                mAdapter = MyStockPageAdapter(context) { sb ->
+                    (activity as MainActivity).showPSFragment(selectGoods = sb)
+                }
                 list.defaultItemAnimation()
                 adapter = mAdapter
                 refreshData()
