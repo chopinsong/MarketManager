@@ -39,8 +39,6 @@
                 android:resource="@xml/provider_path" />
         </provider>
 
-        <activity android:name=".ui.PurchaseActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

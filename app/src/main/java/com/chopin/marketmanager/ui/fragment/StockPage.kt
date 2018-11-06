@@ -1,6 +1,5 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -23,13 +22,7 @@ import com.chopin.marketmanager.util.toPY
 import kotlinx.android.synthetic.main.stock_page_item_list.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import android.support.v4.view.ViewCompat
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.ActivityCompat
-import android.content.Intent
-import com.chopin.marketmanager.ui.PurchaseActivity
 import com.chopin.marketmanager.util.setDirectionScrollListener
-import org.jetbrains.anko.act
 
 
 class StockPage : Fragment() {
