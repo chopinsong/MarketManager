@@ -65,7 +65,7 @@ class GoodsEditFragment : MyDialogFragment() {
         val b = Bundle()
         b.putSerializable("goods_edit_bean", g)
         adf.arguments = b
-        adf.setCommitListener { it ->
+        adf.commitListener = { it ->
             geAdapter.updateData(i, it)
             context?.let {
                 LocalBroadcastManager.getInstance(it).sendBroadcast(Intent(Constant.ACTION_UPDATE_GOODS))

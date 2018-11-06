@@ -185,7 +185,7 @@ fun Any.getPSFragment(): PSFragment {
 
 fun Any.showAddGoods(fm: FragmentManager, f: (g: Goods) -> Unit = {}) {
     val af = AddGoodsFragment()
-    af.setCommitListener(f)
+    af.commitListener = f
     af.show(fm, "AddGoods")
 }
 

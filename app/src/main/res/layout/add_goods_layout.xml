@@ -10,120 +10,52 @@
         style="@style/title_style"
         android:text="@string/add_goods_text" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:paddingBottom="10dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/add_goods_cancel_btn"
-                android:layout_width="50dp"
-                android:layout_height="25dp"
-                android:layout_alignParentStart="true"
-                android:contentDescription="@string/cancel_button"
-                android:gravity="center"
-                android:src="@drawable/ic_close" />
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+            app:cardUseCompatPadding="true">
 
             <ImageView
-                android:id="@+id/add_goods_commit_btn"
-                android:layout_width="50dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:contentDescription="@string/commit_button"
-                android:gravity="center"
-                android:src="@drawable/ic_check" />
-        </RelativeLayout>
+                android:id="@+id/goods_pic"
+                android:layout_width="280dp"
+                android:layout_height="210dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/goods_image" />
+
+        </android.support.v7.widget.CardView>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp">
-
-            <android.support.v7.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:cardElevation="5dp"
-                app:cardCornerRadius="5dp"
-                app:cardUseCompatPadding="true">
-
-                <ImageView
-                    android:id="@+id/goods_pic"
-                    android:layout_width="280dp"
-                    android:layout_height="210dp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/goods_image" />
-
-            </android.support.v7.widget.CardView>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/add_goods_brand_Layout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top"
-                    android:layout_weight="1">
-
-                    <EditText
-                        android:id="@+id/add_goods_brand"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/brand_hint"
-                        android:inputType="textAutoComplete"
-                        android:textColor="@color/colorAccent"
-                        android:textColorHint="@color/gray"
-                        android:textSize="@dimen/ps_et_text_size" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/add_goods_type_Layout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top"
-                    android:layout_weight="1">
-
-                    <EditText
-                        android:id="@+id/add_goods_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/type_hint"
-                        android:inputType="textAutoComplete"
-                        android:textColor="@color/colorAccent"
-                        android:textColorHint="@color/gray"
-                        android:textSize="@dimen/ps_et_text_size" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/add_goods_avg_price_Layout"
-                android:layout_width="match_parent"
+                android:id="@+id/add_goods_brand_Layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top">
+                android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top"
+                android:layout_weight="1">
 
                 <EditText
-                    android:id="@+id/add_goods_avg_price"
+                    android:id="@+id/add_goods_brand"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/price_hint"
+                    android:hint="@string/brand_hint"
                     android:inputType="textAutoComplete"
                     android:textColor="@color/colorAccent"
                     android:textColorHint="@color/gray"
@@ -131,23 +63,66 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/add_goods_remark_Layout"
-                android:layout_width="match_parent"
+                android:id="@+id/add_goods_type_Layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top">
+                android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top"
+                android:layout_weight="1">
 
                 <EditText
-                    android:id="@+id/add_goods_remark"
+                    android:id="@+id/add_goods_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/remark_hint"
+                    android:hint="@string/type_hint"
                     android:inputType="textAutoComplete"
                     android:textColor="@color/colorAccent"
                     android:textColorHint="@color/gray"
                     android:textSize="@dimen/ps_et_text_size" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
-    </LinearLayout>
 
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/add_goods_avg_price_Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top">
+
+            <EditText
+                android:id="@+id/add_goods_avg_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/price_hint"
+                android:inputType="textAutoComplete"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/ps_et_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/add_goods_remark_Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ps_layout_input_ed_margin_top">
+
+            <EditText
+                android:id="@+id/add_goods_remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/remark_hint"
+                android:inputType="textAutoComplete"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/gray"
+                android:textSize="@dimen/ps_et_text_size" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/add_goods_commit_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/commit_button"
+            android:gravity="center"
+            android:src="@drawable/ic_check" />
+    </LinearLayout>
 
 </LinearLayout>

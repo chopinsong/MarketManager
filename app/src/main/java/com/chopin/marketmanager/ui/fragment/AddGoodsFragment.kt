@@ -18,13 +18,9 @@ import kotlinx.android.synthetic.main.add_goods_layout.*
 class AddGoodsFragment : MyDialogFragment() {
 
     private lateinit var addGoodsView: AddGoodsView
-    private var l: (g: Goods) -> Unit = {}
+    var commitListener: (g: Goods) -> Unit = {}
     private var goods: Goods? = null
-    private lateinit var photoUtil:PhotoUtil
-
-    fun setCommitListener(func: (g: Goods) -> Unit) {
-        this.l = func
-    }
+    private lateinit var photoUtil: PhotoUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,18 +38,17 @@ class AddGoodsFragment : MyDialogFragment() {
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         setTouch(add_goods_layout_root)
         addGoodsView = AddGoodsView(add_goods_layout_root)
-        addGoodsView.setCommitListener {
-            l.invoke(it)
+        addGoodsView.commitListener = {
+            commitListener.invoke(it)
             dismiss()
         }
-        addGoodsView.setCancelListener { dismiss() }
-        if (goods!=null){
+        if (goods != null) {
             initEditBean()
-        }else{
-            goods_pic.setGoodsImage(null,gd(context))
+        } else {
+            goods_pic.setGoodsImage(null, gd(context))
         }
-        addGoodsView.setGoodsImageListener {
-             photoUtil = PhotoUtil(this)
+        addGoodsView.goodsImageListener = {
+            photoUtil = PhotoUtil(this)
         }
     }
 
