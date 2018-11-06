@@ -14,6 +14,7 @@ import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.Constant
 import com.chopin.marketmanager.util.defaultItemAnimation
+import com.chopin.marketmanager.util.showAddGoods
 import com.chopin.marketmanager.util.snack
 import kotlinx.android.synthetic.main.goods_edit_layout.*
 import org.jetbrains.anko.doAsync
@@ -56,7 +57,13 @@ class GoodsEditFragment : MyDialogFragment() {
         geAdapter.setEditListener { g, i ->
             showEditGoodsFragment(g, i)
         }
-
+        add_goods_btn.setOnClickListener {
+            fragmentManager?.let { fm ->
+                showAddGoods(fm) { g ->
+                    geAdapter.addData(g)
+                }
+            }
+        }
 
     }
 

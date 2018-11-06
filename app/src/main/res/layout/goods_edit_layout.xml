@@ -13,5 +13,18 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/goods_edit_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_weight="1"
+        android:layout_height="0dp" />
+
+    <TextView
+        android:id="@+id/add_goods_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_gray"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:text="@string/add_goods_text" />
 </LinearLayout>

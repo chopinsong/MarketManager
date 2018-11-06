@@ -105,7 +105,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if (main_view_page != null && main_view_page.currentItem == STOCK) {
+                setPage(PS_INFO)
+            } else {
+                moveTaskToBack(true)
+            }
         }
     }
 
@@ -143,10 +147,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_purchase -> {
-                showPSFragment()
+                setPage(STOCK)
+                snack("选择商品左滑/点击商品以进货")
             }
             R.id.nav_shipments -> {
-                showPSFragment(false)
+                setPage(STOCK)
+                snack("选择商品右滑/点击商品以出货")
             }
             R.id.stock -> {
                 showStock(supportFragmentManager)
@@ -182,7 +188,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    fun showPSFragment(isP: Boolean = true, selectGoods: StockBean? = null) {
+    fun showPSFragment(isP: Boolean = true, selectGoods: StockBean) {
         supportFragmentManager.showPSFragment(isP, selectGoods) {
             (fms[0] as PSInfoPage).handlerAddData(it)
         }

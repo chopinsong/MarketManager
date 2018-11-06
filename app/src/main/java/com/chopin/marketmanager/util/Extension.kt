@@ -135,15 +135,13 @@ fun Fragment.getProgressDialog(): ProgressDialog {
 }
 
 
-fun FragmentManager.showPSFragment(isP: Boolean = true, selectGoods: StockBean? = null, func: (PSBean) -> Unit = {}) {
+fun FragmentManager.showPSFragment(isP: Boolean = true, selectGoods: StockBean, func: (PSBean) -> Unit = {}) {
     val ps = getPSFragment().setCommitListener {
         func.invoke(it)
     }
     val bundle = Bundle()
     bundle.putBoolean("isP", isP)
-    selectGoods?.let {
-        bundle.putSerializable("selectGoods", selectGoods)
-    }
+    bundle.putSerializable("selectGoods", selectGoods)
     ps.arguments = bundle
     ps.show(this, "PSFragment")
 }

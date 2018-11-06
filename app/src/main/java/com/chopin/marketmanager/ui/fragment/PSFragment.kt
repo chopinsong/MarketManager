@@ -36,9 +36,11 @@ class PSFragment : MyDialogFragment() {
             isP = editBean?.isP ?: true
             selectGoods = editBean!!.g
         } else {
-            isP = arguments?.getBoolean("isP", true) ?: true
-            val stockBean = arguments?.getSerializable("selectGoods") as StockBean
-            selectGoods = stockBean.goods
+            arguments?.let {agm->
+                isP = agm.getBoolean("isP", true)
+                val stockBean = agm.getSerializable("selectGoods") as StockBean
+                selectGoods = stockBean.goods
+            }
         }
     }
 
