@@ -49,6 +49,7 @@ class PSFragment : MyDialogFragment() {
         params.height = WindowManager.LayoutParams.MATCH_PARENT
         dialog.window.attributes = params
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+        dialog.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View? {

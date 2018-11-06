@@ -52,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:textStyle="bold"
                 android:textColor="@color/black2"
                 android:textSize="@dimen/mk_text_size" />
 
@@ -63,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"
+                android:textStyle="bold"
                 android:textColor="@color/black2"
                 android:textSize="@dimen/mk_text_size" />
 
@@ -73,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="start"
+                android:textStyle="bold"
                 android:textColor="@color/black2"
                 android:textSize="@dimen/mk_text_size" />
 
@@ -102,7 +105,7 @@
                 android:shadowColor="@color/colorAccent"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/ps_list_price_text_size"
-                android:textStyle="bold" />
+                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/x"
@@ -122,7 +125,7 @@
                 android:shadowColor="@color/colorAccent"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/ps_list_price_text_size"
-                android:textStyle="bold" />
+                android:textStyle="italic" />
         </LinearLayout>
     </LinearLayout>
 
@@ -131,7 +134,7 @@
         android:id="@+id/time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/mk_text_size"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.97"

@@ -21,6 +21,7 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.TranslateAnimation
@@ -134,14 +135,14 @@ fun Fragment.getProgressDialog(): ProgressDialog {
 }
 
 
-fun FragmentManager.showPSFragment(isP: Boolean = true,selectGoods:StockBean?=null, func: (PSBean) -> Unit = {}) {
+fun FragmentManager.showPSFragment(isP: Boolean = true, selectGoods: StockBean? = null, func: (PSBean) -> Unit = {}) {
     val ps = getPSFragment().setCommitListener {
         func.invoke(it)
     }
     val bundle = Bundle()
     bundle.putBoolean("isP", isP)
     selectGoods?.let {
-        bundle.putSerializable("selectGoods",selectGoods)
+        bundle.putSerializable("selectGoods", selectGoods)
     }
     ps.arguments = bundle
     ps.show(this, "PSFragment")
@@ -368,14 +369,15 @@ fun Activity.verifyStoragePermissions() {
 fun RecyclerView.setDirectionScrollListener(func: (Boolean, Boolean) -> Unit) {
     var distance = 0
     var visible = true
+    val vc = ViewConfiguration.get(context)
     addOnScrollListener(object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            if (distance < -ViewConfiguration.getTouchSlop() && !visible) {
+            if (distance < -vc.scaledTouchSlop && !visible) {
                 func.invoke(false, canScrollVertically(-1))
                 distance = 0
                 visible = true
-            } else if (distance > ViewConfiguration.getTouchSlop() && visible) {
+            } else if (distance > vc.scaledTouchSlop && visible) {
                 func.invoke(true, canScrollVertically(-1))
                 distance = 0
                 visible = false
@@ -409,7 +411,7 @@ fun View.upAnim(s: Float = height.toFloat(), e: Float = 0f, delay: Long = 0, onE
     animator.setDuration(400).start()
 }
 
-fun View.downAnim(s: Float = height.toFloat(), e: Float = 0f, delay: Long = 0, onEnd: () -> Unit = {}) {
+fun View.downAnim(s: Float = 0f, e: Float = height.toFloat(), delay: Long = 0, onEnd: () -> Unit = {}) {
     val animator = ObjectAnimator.ofFloat(this, "translationY", s, e)
     animator.startDelay = delay
     animator.interpolator = DecelerateInterpolator()
@@ -515,6 +517,13 @@ fun Bitmap.scale2(w: Int = 800, h: Int = 600): Bitmap {
     return resizeBmp
 }
 
+fun Activity.fullScreen() {
+    window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+}
+
+fun Activity.quitFull() {
+    window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+}
 
 object Util {
     fun crTime(): String {

@@ -28,12 +28,14 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.ActivityCompat
 import android.content.Intent
 import com.chopin.marketmanager.ui.PurchaseActivity
+import com.chopin.marketmanager.util.setDirectionScrollListener
 import org.jetbrains.anko.act
 
 
 class StockPage : Fragment() {
     private var listener: (s: StockItem) -> Unit = {}
     private var mAdapter: MyStockPageAdapter? = null
+    var scrollListener: (Boolean, Boolean) -> Unit = {d,t->}
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.stock_page_item_list, container, false)
@@ -50,6 +52,7 @@ class StockPage : Fragment() {
 //                    activity!!.act.overridePendingTransition(R.anim.dialog_push_in,0)
                 }
                 list.defaultItemAnimation()
+                list.setDirectionScrollListener(scrollListener)
                 adapter = mAdapter
                 refreshData()
             }

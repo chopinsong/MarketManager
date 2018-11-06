@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.StockBean
@@ -54,6 +55,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         fms.clear()
         val stockPage = StockPage.newInstance()
+        stockPage.scrollListener = { isUp, t ->
+            if (isUp) {
+                supportActionBar?.hide()
+                navigation.visibility = View.GONE
+            } else {
+                supportActionBar?.show()
+                navigation.visibility = View.VISIBLE
+            }
+        }
         val psPage = PSInfoPage.newInstance()
         fms.add(psPage)
         fms.add(stockPage)
@@ -70,6 +80,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onPageSelected(p0: Int) {
                 if (p0 == STOCK) {
                     stockPage.refreshData()
+                    fullScreen()
+                }
+                if (p0 == PS_INFO) {
+                    quitFull()
                 }
             }
 
@@ -166,8 +180,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    fun showPSFragment(isP: Boolean = true,selectGoods: StockBean?=null) {
-        supportFragmentManager.showPSFragment(isP,selectGoods) {
+    fun showPSFragment(isP: Boolean = true, selectGoods: StockBean? = null) {
+        supportFragmentManager.showPSFragment(isP, selectGoods) {
             (fms[0] as PSInfoPage).handlerAddData(it)
         }
     }
