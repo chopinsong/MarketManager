@@ -14,6 +14,7 @@ import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.*
+import com.chopin.marketmanager.util.color.DominantColorCalculator
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -191,9 +192,12 @@ class PSFragment : MyDialogFragment() {
 
 
     private fun setGoods(goods: Goods) {
-        stock_image.setGoodsImage(goods.image_path.toBitmap().scale2(), gd(context))
-        stock_brand.text = goods.brand
-        stock_type.text = goods.type
+        val scale = goods.image_path.toBitmap().scale2()
+        stock_image.setGoodsImage(scale, gd(context))
+        stock_title.text = String.format("%s%s", goods.brand, goods.type)
+        val dcc = DominantColorCalculator(scale)
+        stock_title.setBackgroundColor(dcc.colorScheme.primaryAccent)
+        stock_title.setTextColor(dcc.colorScheme.primaryText)
     }
 
 }

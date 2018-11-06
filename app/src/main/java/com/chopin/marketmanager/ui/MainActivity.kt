@@ -59,9 +59,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (isUp) {
                 supportActionBar?.hide()
                 navigation.visibility = View.GONE
+                fullScreen()
             } else {
                 supportActionBar?.show()
                 navigation.visibility = View.VISIBLE
+                quitFull()
             }
         }
         val psPage = PSInfoPage.newInstance()
@@ -80,7 +82,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onPageSelected(p0: Int) {
                 if (p0 == STOCK) {
                     stockPage.refreshData()
-                    fullScreen()
+//                    fullScreen()
                 }
                 if (p0 == PS_INFO) {
                     quitFull()

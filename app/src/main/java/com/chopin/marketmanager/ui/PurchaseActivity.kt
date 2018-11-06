@@ -169,7 +169,6 @@ class PurchaseActivity : AppCompatActivity() {
 
     private fun setGoods(goods: Goods) {
         stock_image.setGoodsImage(goods.image_path.toBitmap().scale2(), gd(this.applicationContext))
-        stock_brand.text = goods.brand
-        stock_type.text = goods.type
+        stock_title.text = String.format("%s%s", goods.brand, goods.type)
     }
 }

@@ -2,7 +2,6 @@ package com.chopin.marketmanager.ui.fragment
 
 
 import android.content.Context
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.util.color.DominantColorCalculator
 import com.chopin.marketmanager.util.goodsDrawable
 import com.chopin.marketmanager.util.scale2
 import com.chopin.marketmanager.util.setGoodsImage
@@ -31,12 +31,15 @@ class MyStockPageAdapter(val context: Context, private val mListener: (v: ImageV
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mStockBrand.text = item.goods.brand
-        holder.mStockType.text = item.goods.type
+        holder.mStockTitle.text = String.format("%s%s",item.goods.brand,item.goods.type)
         val scale = item.goods.image_path.toBitmap().scale2()
         holder.mImageView.setGoodsImage(scale, gd)
+        val dcc = DominantColorCalculator(scale)
+        holder.mBG.setBackgroundColor(dcc.colorScheme.primaryAccent)
+        holder.mStockTitle.setTextColor(dcc.colorScheme.primaryText)
+        holder.mCount.setTextColor(dcc.colorScheme.primaryText)
         holder.mCount.text = item.count.toString()
-        holder.mView.tag=item
+        holder.mView.tag = item
         holder.mImageView.setOnClickListener {
             mListener.invoke(it.stock_image, item, position)
         }
@@ -79,13 +82,9 @@ class MyStockPageAdapter(val context: Context, private val mListener: (v: ImageV
     }
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mStockBrand: TextView = mView.stock_brand
-        val mStockType: TextView = mView.stock_type
+        val mStockTitle: TextView = mView.stock_title
         val mImageView: ImageView = mView.stock_image
         val mCount: TextView = mView.stock_count
-
-        override fun toString(): String {
-            return super.toString() + " '" + mStockType.text + "'"
-        }
+        val mBG:View=mView.stock_image_text_bg
     }
 }
