@@ -54,15 +54,11 @@
     <string name="default_version">1.0</string>
     <string name="version_text">版本</string>
     <string name="example">例:进货日立手电钻1台</string>
-    <string name="title_activity_mm">MMActivity</string>
-    <string name="title_home">Home</string>
     <string name="title_stock">库存</string>
     <string name="title_record">记录</string>
     <string name="stock_page_desc">商品描述</string>
     <string name="goods_image">图片</string>
     <string name="is_purchase_text">是否进货</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="reverse_display">倒序显示</string>
 </resources>

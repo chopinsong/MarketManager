@@ -206,8 +206,11 @@ fun Any.showAddGoods(fm: FragmentManager, f: (g: Goods) -> Unit = {}) {
     af.show(fm, "AddGoods")
 }
 
-fun Any.showEditGoodsFragment(fm: FragmentManager) {
+fun Any.showEditGoodsFragment(fm: FragmentManager,onAddGood:(Goods)->Unit={}) {
     val ge = GoodsEditFragment()
+    ge.onUpdate={
+        onAddGood.invoke(it)
+    }
     ge.show(fm, "showEditGoodsFragment")
 }
 
@@ -222,8 +225,10 @@ fun Any.time2shortTime(s: String): String {
     return fm.format(time2long(s))
 }
 
-fun Any.showSettings(fm: FragmentManager) {
-    SettingsFragment().show(fm, "SettingsFragment")
+fun Any.showSettings(fm: FragmentManager, cl: (String) -> Unit) {
+    val sf = SettingsFragment()
+    sf.clearListener = cl
+    sf.show(fm, "SettingsFragment")
 }
 
 fun View.slideToUp() {
@@ -465,7 +470,7 @@ fun String.toBitmap(): Bitmap? {
 }
 
 fun Bitmap.toStr(): String {
-    return PhotoUtil.bitmaptoString(this)
+    return PhotoUtil.bitmapToString(this)
 }
 
 /**

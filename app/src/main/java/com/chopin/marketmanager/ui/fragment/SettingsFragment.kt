@@ -1,9 +1,7 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.content.LocalBroadcastManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +17,9 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class SettingsFragment : MyDialogFragment() {
+    var clearListener: (String) -> Unit = {
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -34,7 +35,7 @@ class SettingsFragment : MyDialogFragment() {
                     DBManager.setAllPSDisable()
                     uiThread {
                         context?.let { c ->
-                            LocalBroadcastManager.getInstance(c).sendBroadcast(Intent(Constant.ACTION_CLEAR_ALL_PS))
+                            clearListener.invoke(Constant.ACTION_CLEAR_ALL_PS)
                             snack("清除成功")
                         }
                     }
@@ -48,8 +49,8 @@ class SettingsFragment : MyDialogFragment() {
                     DBManager.setAllPSDisable()
                     DBManager.setAllGoodsDisable()
                     uiThread {
-                        context?.let {c->
-                            LocalBroadcastManager.getInstance(c).sendBroadcast(Intent(Constant.ACTION_CLEAR_ALL_DATA))
+                        context?.let { c ->
+                            clearListener.invoke(Constant.ACTION_CLEAR_ALL_DATA)
                             snack("清除成功")
                         }
 
@@ -58,13 +59,13 @@ class SettingsFragment : MyDialogFragment() {
             }.show()
         }
         context?.let {
-            show_goods_remark.isChecked=it.getConfig(Constant.SHOW_GOODS_REMARK)?:false
+            show_goods_remark.isChecked = it.getConfig(Constant.SHOW_GOODS_REMARK) ?: false
         }
         show_goods_remark.setOnCheckedChangeListener { _, isChecked ->
-            context?.setConfig(Constant.SHOW_GOODS_REMARK,isChecked)
+            context?.setConfig(Constant.SHOW_GOODS_REMARK, isChecked)
         }
         reverse_display_cb.setOnCheckedChangeListener { _, isChecked ->
-            context?.setConfig(Constant.REVERSE_DISPLAY,isChecked)
+            context?.setConfig(Constant.REVERSE_DISPLAY, isChecked)
         }
     }
 

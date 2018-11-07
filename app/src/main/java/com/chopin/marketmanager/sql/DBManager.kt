@@ -25,12 +25,6 @@ object DBManager {
         db = DBUtil(context)
     }
 
-    /**
-     * delete all database
-     *
-     * @param context The context to use.  Usually your [android.app.Application]
-     * or [android.app.Activity] object.
-     */
     fun deletelDB(weak:WeakReference<Context>) {
     }
 

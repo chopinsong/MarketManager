@@ -36,7 +36,7 @@ public class MedianCutQuantizer {
     private static final String LOG_TAG = MedianCutQuantizer.class.getSimpleName();
 
     private ColorNode[] imageColors = null;    // original (unique) image colors
-    private ColorNode[] quantColors = null;    // quantized colors
+    private ColorNode[] quantColors;    // quantized colors
 
     public MedianCutQuantizer(int[] pixels, int Kmax) {
         quantColors = findRepresentativeColors(pixels, Kmax);
@@ -53,7 +53,7 @@ public class MedianCutQuantizer {
     ColorNode[] findRepresentativeColors(int[] pixels, int Kmax) {
         ColorHistogram colorHist = new ColorHistogram(pixels);
         int K = colorHist.getNumberOfColors();
-        ColorNode[] rCols = null;
+        ColorNode[] rCols;
 
         imageColors = new ColorNode[K];
         for (int i = 0; i < K; i++) {
@@ -67,7 +67,7 @@ public class MedianCutQuantizer {
             rCols = imageColors;
         } else {
             ColorBox initialBox = new ColorBox(0, K - 1, 0);
-            List<ColorBox> colorSet = new ArrayList<ColorBox>();
+            List<ColorBox> colorSet = new ArrayList<>();
             colorSet.add(initialBox);
             int k = 1;
             boolean done = false;
@@ -191,9 +191,9 @@ public class MedianCutQuantizer {
         }
 
         public String toString() {
-            return new StringBuilder(getClass().getSimpleName())
-                    .append(" #").append(Integer.toHexString(getRgb()))
-                    .append(". count: ").append(cnt).toString();
+            return getClass().getSimpleName() +
+                    " #" + Integer.toHexString(getRgb()) +
+                    ". count: " + cnt;
         }
     }
 
@@ -201,8 +201,8 @@ public class MedianCutQuantizer {
 
     class ColorBox {
 
-        int lower = 0;    // lower index into 'imageColors'
-        int upper = -1; // upper index into 'imageColors'
+        int lower;    // lower index into 'imageColors'
+        int upper; // upper index into 'imageColors'
         int level;        // split level o this color box
         int count = 0;    // number of pixels represented by thos color box
         int rmin, rmax;    // range of contained colors in red dimension
@@ -391,8 +391,8 @@ public class MedianCutQuantizer {
 
     static class ColorHistogram {
 
-        int colorArray[] = null;
-        int countArray[] = null;
+        int colorArray[];
+        int countArray[];
 
         ColorHistogram(int[] color, int[] count) {
             this.countArray = count;
@@ -411,10 +411,10 @@ public class MedianCutQuantizer {
             // count unique colors:
             int k = -1; // current color index
             int curColor = -1;
-            for (int i = 0; i < pixelsCpy.length; i++) {
-                if (pixelsCpy[i] != curColor) {
+            for (int aPixelsCpy : pixelsCpy) {
+                if (aPixelsCpy != curColor) {
                     k++;
-                    curColor = pixelsCpy[i];
+                    curColor = aPixelsCpy;
                 }
             }
             int nColors = k + 1;
@@ -424,10 +424,10 @@ public class MedianCutQuantizer {
             countArray = new int[nColors];
             k = -1;    // current color index
             curColor = -1;
-            for (int i = 0; i < pixelsCpy.length; i++) {
-                if (pixelsCpy[i] != curColor) {    // new color
+            for (int aPixelsCpy : pixelsCpy) {
+                if (aPixelsCpy != curColor) {    // new color
                     k++;
-                    curColor = pixelsCpy[i];
+                    curColor = aPixelsCpy;
                     colorArray[k] = curColor;
                     countArray[k] = 1;
                 } else {

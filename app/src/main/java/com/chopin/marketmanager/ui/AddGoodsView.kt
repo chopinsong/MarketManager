@@ -6,8 +6,6 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
-import com.chopin.marketmanager.R.string.brand
-import com.chopin.marketmanager.R.string.type
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.util.*
@@ -134,13 +132,13 @@ class AddGoodsView(private var root: View) {
         typeEt.setText(g.type)
         avgPriceEt.setText(g.avgPrice.toString())
         remarkEt.setText(g.remark)
-        goodsImage.setGoodsImage(g.image_path.toBitmap()?.scale2(400,300))
+        goodsImage.setGoodsImage(g.image_path.toBitmap()?.scale2(400, 300))
         isEditMode = true
     }
 
     fun setImage(bitmap: Bitmap?) {
         bitmap?.let {
-            goodsImage.setGoodsImage(bitmap.scale2(400,300))
+            goodsImage.setGoodsImage(bitmap.scale2(400, 300))
             goodsImagePath = bitmap.toStr()
         }
     }

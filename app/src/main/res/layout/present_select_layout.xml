@@ -25,13 +25,15 @@
                 android:layout_height="25dp"
                 android:layout_alignParentStart="true"
                 android:gravity="center"
-                android:src="@drawable/ic_close" />
+                android:src="@drawable/ic_close"
+                android:contentDescription="@string/cancel_button" />
 
             <ImageView
                 android:id="@+id/present_commit_btn"
                 android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:layout_alignParentEnd="true"
+                android:contentDescription="@string/commit_button"
                 android:gravity="center"
                 android:src="@drawable/ic_check" />
         </RelativeLayout>

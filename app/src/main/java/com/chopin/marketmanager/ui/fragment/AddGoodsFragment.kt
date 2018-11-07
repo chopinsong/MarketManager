@@ -54,7 +54,7 @@ class AddGoodsFragment : MyDialogFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (PhotoUtil.CAMRA_SETRESULT_CODE == requestCode) {
+        if (PhotoUtil.CAMERA_SET_RESULT_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 //相册选中图片路径
                 data?.let {
@@ -65,7 +65,7 @@ class AddGoodsFragment : MyDialogFragment() {
             }
         }
         //相机返回
-        else if (PhotoUtil.PHOTO_SETRESULT_CODE == requestCode) {
+        else if (PhotoUtil.PHOTO_SET_RESULT_CODE == requestCode) {
             if (resultCode == RESULT_OK) {
                 val photoPath = photoUtil.photoPath
                 val bitmap = PhotoUtil.readBitmapAutoSize(photoPath)

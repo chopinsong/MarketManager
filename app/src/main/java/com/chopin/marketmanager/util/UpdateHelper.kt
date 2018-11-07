@@ -24,8 +24,8 @@ import java.nio.charset.Charset
 
 
 object UpdateHelper {
-    val versionUrl = "https://raw.githubusercontent.com/chopinsong/FileLibrary/master/version.txt"
-    val apkUrl = "https://raw.githubusercontent.com/chopinsong/FileLibrary/master/MarketManager.apk"
+    private const val versionUrl = "https://raw.githubusercontent.com/chopinsong/FileLibrary/master/version.txt"
+    private const val apkUrl = "https://raw.githubusercontent.com/chopinsong/FileLibrary/master/MarketManager.apk"
     var remoteVersion = 0.0
     fun check(context: Context): Boolean {
         val curVersion = getVersion(context)
@@ -153,8 +153,7 @@ object UpdateHelper {
      * @throws IOException
      */
     fun readInputStream(inputStream: InputStream): String {
-        val buffer = ByteArray(1024)
-        var len = 0
+        ByteArray(1024)
         val bos = ByteArrayOutputStream()
         try {
             var read: Int = -1
@@ -174,16 +173,16 @@ object UpdateHelper {
 
     fun update(weak: WeakReference<Activity>) {
         doAsync {
-            weak.get()?.let { it ->
-                val isDownload = it.getConfig("isDownload") ?: false
+            weak.get()?.let {act ->
+                val isDownload = act.getConfig("isDownload") ?: false
                 if (isDownload) {
-                    showInstall(it)
+                    showInstall(act)
                 } else {
-                    if (check(it.applicationContext)) {
-                        showDownload(it) { _ ->
-                            download(it) { _ ->
-                                it.setConfig("isDownload", true)
-                                showInstall(it)
+                    if (check(act.applicationContext)) {
+                        showDownload(act) {
+                            download(act) {
+                                act.setConfig("isDownload", true)
+                                showInstall(act)
                             }
                         }
                     }

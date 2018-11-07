@@ -1,7 +1,5 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -36,7 +34,7 @@ class PSFragment : MyDialogFragment() {
             isP = editBean?.isP ?: true
             selectGoods = editBean!!.g
         } else {
-            arguments?.let {agm->
+            arguments?.let { agm ->
                 isP = agm.getBoolean("isP", true)
                 val stockBean = agm.getSerializable("selectGoods") as StockBean
                 selectGoods = stockBean.goods
@@ -197,7 +195,7 @@ class PSFragment : MyDialogFragment() {
         val scale = goods.image_path.toBitmap()?.scale2()
         stock_image.setGoodsImage(scale, gd(context))
         stock_title.text = String.format("%s%s", goods.brand, goods.type)
-        val dcc = DominantColorCalculator(scale?:context?.goodsBitmap())
+        val dcc = DominantColorCalculator(scale ?: context?.goodsBitmap())
         stock_title.setBackgroundColor(dcc.colorScheme.primaryAccent)
         stock_title.setTextColor(dcc.colorScheme.primaryText)
     }

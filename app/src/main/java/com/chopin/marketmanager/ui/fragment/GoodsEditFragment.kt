@@ -1,9 +1,7 @@
 package com.chopin.marketmanager.ui.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +10,6 @@ import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.util.Constant
 import com.chopin.marketmanager.util.defaultItemAnimation
 import com.chopin.marketmanager.util.showAddGoods
 import com.chopin.marketmanager.util.snack
@@ -21,6 +18,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 class GoodsEditFragment : MyDialogFragment() {
+    var onUpdate:(Goods)->Unit={}
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window.setWindowAnimations(R.style.dialogAnim)
@@ -55,28 +53,27 @@ class GoodsEditFragment : MyDialogFragment() {
         }
 
         geAdapter.setEditListener { g, i ->
-            showEditGoodsFragment(g, i)
+            showAddGoodsFragment(g, i)
         }
         add_goods_btn.setOnClickListener {
             fragmentManager?.let { fm ->
                 showAddGoods(fm) { g ->
                     geAdapter.addData(g)
+                    onUpdate.invoke(g)
                 }
             }
         }
 
     }
 
-    private fun showEditGoodsFragment(g: Goods, i: Int) {
+    private fun showAddGoodsFragment(g: Goods, i: Int) {
         val adf = AddGoodsFragment()
         val b = Bundle()
         b.putSerializable("goods_edit_bean", g)
         adf.arguments = b
         adf.commitListener = { it ->
             geAdapter.updateData(i, it)
-            context?.let {
-                LocalBroadcastManager.getInstance(it).sendBroadcast(Intent(Constant.ACTION_UPDATE_GOODS))
-            }
+            onUpdate.invoke(it)
         }
         adf.show(fragmentManager, "EditGoodsFragment")
     }

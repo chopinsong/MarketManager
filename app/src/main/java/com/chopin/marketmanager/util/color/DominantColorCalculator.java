@@ -166,10 +166,7 @@ public class DominantColorCalculator {
     }
 
     private static float calculateWeight(ColorNode node, final float maxCount) {
-        return FloatUtils.weightedAverage(
-                ColorUtils.calculateColorfulness(node), 2f,
-                (node.getCount() / maxCount), 1f
-        );
+        return FloatUtils.weightedAverage(ColorUtils.calculateColorfulness(node), 2f, (node.getCount() / maxCount), 1f);
     }
 
 }

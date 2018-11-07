@@ -1,18 +1,13 @@
 package com.chopin.marketmanager.util
 
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
-import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.DialogFragment
@@ -24,12 +19,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.chopin.marketmanager.R
-import org.jetbrains.anko.editText
 
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.IOException
-import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -79,15 +71,15 @@ class PhotoUtil(private val df: DialogFragment) {
         back?.setOnClickListener { dialog?.dismiss() }
         camera?.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            df.startActivityForResult(intent, CAMRA_SETRESULT_CODE)
+            df.startActivityForResult(intent, CAMERA_SET_RESULT_CODE)
             dialog?.dismiss()
         }
         photo?.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            context?.let { it ->
-                val photoURI = FileProvider.getUriForFile(it, "com.chopin.marketmanager.fileProvider", File(photoPath))
+            context?.let { context ->
+                val photoURI = FileProvider.getUriForFile(context, "com.chopin.marketmanager.fileProvider", File(photoPath))
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                df.startActivityForResult(intent, PHOTO_SETRESULT_CODE)
+                df.startActivityForResult(intent, PHOTO_SET_RESULT_CODE)
                 dialog?.dismiss()
             }
         }
@@ -148,11 +140,11 @@ class PhotoUtil(private val df: DialogFragment) {
         val cursor = context?.contentResolver?.query(originalUri, proj, null, null, null)
         //按我个人理解 这个是获得用户选择的图片的索引值
         return if (cursor != null) {
-            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             //将光标移至开头 ，这个很重要，不小心很容易引起越界
             cursor.moveToFirst()
             //最后根据索引值获取图片路径
-            val path = cursor.getString(column_index)
+            val path = cursor.getString(columnIndex)
             cursor.close()
             path
         } else {
@@ -162,8 +154,8 @@ class PhotoUtil(private val df: DialogFragment) {
 
     companion object {
         // 创建一个以当前时间为名称的文件
-        val CAMRA_SETRESULT_CODE = 0//相册返回码
-        val PHOTO_SETRESULT_CODE = 1//拍照返回码
+        const val CAMERA_SET_RESULT_CODE = 0//相册返回码
+        const val PHOTO_SET_RESULT_CODE = 1//拍照返回码
 
         // 拍照使用系统当前日期加以调整作为照片的名称
         private val photoFileName: String
@@ -195,7 +187,7 @@ class PhotoUtil(private val df: DialogFragment) {
             }
         }
 
-        fun computeSampleSize(options: BitmapFactory.Options, minSideLength: Int, maxNumOfPixels: Int): Int {
+        private fun computeSampleSize(options: BitmapFactory.Options, minSideLength: Int, maxNumOfPixels: Int): Int {
             val initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels)
             var roundedSize: Int
             if (initialSize <= 8) {
@@ -229,35 +221,13 @@ class PhotoUtil(private val df: DialogFragment) {
         }
 
         //bitmap转换成字节流
-        fun bitmaptoString(bitmap: Bitmap): String {
+        fun bitmapToString(bitmap: Bitmap): String {
             // 将Bitmap转换成字符串
             val bStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bStream)
             val bytes = bStream.toByteArray()
-//            val bb = Base64.encode(bytes, Base64.DEFAULT)
-//            try {
-//                return String(bb, Charset.forName("UTF-8")).replace("+", "%2B")
-//            } catch (e: IOException) {
-//                i("bitmaptoString ${e.toString()}")
-//            }
             return Base64.encodeToString(bytes, Base64.DEFAULT)
-//            return ""
         }
-
-        fun stringToBitmap(string: String): Bitmap? {
-            // 将字符串转换成Bitmap类型
-            var bitmap: Bitmap? = null
-            try {
-                val bitmapArray = Base64.decode(string, Base64.DEFAULT)
-                bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.size)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return bitmap
-        }
-
     }
-
-
 }
 

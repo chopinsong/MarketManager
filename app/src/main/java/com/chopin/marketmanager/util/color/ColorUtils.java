@@ -29,7 +29,7 @@ public class ColorUtils {
     /**
      * @return luma value according to to YIQ color space.
      */
-    public static final int calculateYiqLuma(int color) {
+    public static int calculateYiqLuma(int color) {
         return Math.round((299 * Color.red(color) + 587 * Color.green(color) + 114 * Color.blue(color)) / 1000f);
     }
 
@@ -47,19 +47,19 @@ public class ColorUtils {
         return Color.rgb((int) r, (int) g, (int) b);
     }
 
-    public static final int changeBrightness(final int color, float fraction) {
+    public static int changeBrightness(final int color, float fraction) {
         return calculateYiqLuma(color) >= 128
                 ? darken(color, fraction)
                 : lighten(color, fraction);
     }
 
-    public static final int calculateContrast(MedianCutQuantizer.ColorNode color1,
+    public static int calculateContrast(MedianCutQuantizer.ColorNode color1,
             MedianCutQuantizer.ColorNode color2) {
         return Math.abs(ColorUtils.calculateYiqLuma(color1.getRgb())
                 - ColorUtils.calculateYiqLuma(color2.getRgb()));
     }
 
-    public static final float calculateColorfulness(MedianCutQuantizer.ColorNode node) {
+    public static float calculateColorfulness(MedianCutQuantizer.ColorNode node) {
         float[] hsv = node.getHsv();
         return hsv[1] * hsv[2];
     }

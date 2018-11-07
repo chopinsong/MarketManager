@@ -3,6 +3,7 @@ package swipe;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -449,13 +450,13 @@ public class SwipeItemLayout extends FrameLayout {
     private class DragCallBack extends ViewDragHelper.Callback {
 
         @Override
-        public boolean tryCaptureView(View child, int pointerId) {
+        public boolean tryCaptureView(@NonNull View child, int pointerId) {
             // menu和content都可以抓取，因为在menu的宽度为MatchParent的时候，是无法点击到content的
             return child == getContentView() || mMenus.containsValue(child);
         }
 
         @Override
-        public int clampViewPositionHorizontal(View child, int left, int dx) {
+        public int clampViewPositionHorizontal(@NonNull View child, int left, int dx) {
 
             // 如果child是内容， 那么可以左划或右划，开启或关闭菜单
             if (child == getContentView()) {
@@ -496,13 +497,13 @@ public class SwipeItemLayout extends FrameLayout {
         }
 
         @Override
-        public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
+        public void onViewPositionChanged(@NonNull View changedView, int left, int top, int dx, int dy) {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             updateMenu();
         }
 
         @Override
-        public void onViewReleased(View releasedChild, float xvel, float yvel) {
+        public void onViewReleased(@NonNull View releasedChild, float xvel, float yvel) {
             Log.e(TAG, "onViewReleased: " + xvel + " ,releasedChild = " + releasedChild);
             if (isLeftMenu()) {
                 if (xvel > mVelocity) {

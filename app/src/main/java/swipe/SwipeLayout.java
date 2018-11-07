@@ -3,6 +3,7 @@ package swipe;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -254,7 +255,7 @@ public class SwipeLayout extends ViewGroup {
 
         // menu和content都可以抓取，因为在menu的宽度为MatchParent的时候，是无法点击到content的
         @Override
-        public boolean tryCaptureView(View child, int pointerId) {
+        public boolean tryCaptureView(@NonNull View child, int pointerId) {
             if (checkChildViewAbsGravity(child, mMenuGravity)) { // 抓取到相同gravity的menu
                 mIsCaptureContent = false;
                 mMenuView = child;
@@ -271,7 +272,7 @@ public class SwipeLayout extends ViewGroup {
         }
 
         @Override
-        public int clampViewPositionHorizontal(View child, int left, int dx) {
+        public int clampViewPositionHorizontal(@NonNull View child, int left, int dx) {
             int menuWidth = mMenuView.getWidth();
 
             // 需要判断抓到的是content还是menu
@@ -303,13 +304,13 @@ public class SwipeLayout extends ViewGroup {
         }
 
         @Override
-        public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
+        public void onViewPositionChanged(@NonNull View changedView, int left, int top, int dx, int dy) {
             // 显示或隐藏菜单
             mMenuView.setVisibility(mContentView.getLeft() == 0 ? INVISIBLE : VISIBLE);
         }
 
         @Override
-        public void onViewReleased(View releasedChild, float xvel, float yvel) {
+        public void onViewReleased(@NonNull View releasedChild, float xvel, float yvel) {
             final int left = mContentView.getLeft();
             final int menuWidth = mMenuView.getWidth();
             int target;

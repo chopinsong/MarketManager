@@ -28,13 +28,12 @@ const val STOCK = 1
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     var fms = ArrayList<Fragment>()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         verifyStoragePermissions()
         setSupportActionBar(toolbar)
-        initView()
+        viewInit()
     }
 
     override fun onStart() {
@@ -65,14 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
-                    try {
-                        val ps = fms[PS_INFO]
-                        if (ps is PSInfoPage) {
-                            ps.handleFilter(searchText = it)
-                        }
-                    } catch (e: Exception) {
-                        print(e)
-                    }
+                    getPSInfoPage()?.handleFilter(searchText = it)
                 }
                 return true
             }
@@ -99,10 +91,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 showProfit(supportFragmentManager)
             }
             R.id.goods_list -> {
-                showEditGoodsFragment(supportFragmentManager)
+                showEGF()
             }
             R.id.nav_settings -> {
-                showSettings(supportFragmentManager)
+                showSettings(supportFragmentManager) { action ->
+                    when (action) {
+                        Constant.ACTION_CLEAR_ALL_DATA -> getPSInfoPage()?.refresh()
+                        Constant.ACTION_CLEAR_ALL_PS -> getPSInfoPage()?.updateList()
+                    }
+                }
             }
         }
         item.isChecked = false
@@ -125,7 +122,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setPage(i: Int) {
-        main_view_page.currentItem = i
+        try {
+            main_view_page.currentItem = i
+        } catch (e: Exception) {
+        }
     }
 
     private fun showTools(isShow: Boolean = true) {
@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    private fun initView() {
+    private fun viewInit() {
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
@@ -155,58 +155,121 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         fms.clear()
+        pageInit()
+    }
+
+
+    private fun pageInit() {
         val stockPage = StockPage.newInstance()
-        stockPage.scrollListener = { isUp, _ ->
-            if (isUp) {
-                showTools(false)
-            } else {
-                showTools()
-            }
-        }
+        stockPage.scrollListener = stockPageScrollListener
         val psPage = PSInfoPage.newInstance()
         fms.add(psPage)
         fms.add(stockPage)
         val myPagerAdapter = MyPagerAdapter(supportFragmentManager, fms)
         main_view_page.setNoScroll(true)
         main_view_page.adapter = myPagerAdapter
-        main_view_page.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(p0: Int) {
-            }
-
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-            }
-
-            override fun onPageSelected(p0: Int) {
-                if (p0 == STOCK) {
-                    stockPage.refreshData()
-                }
-                if (p0 == PS_INFO) {
-                    quitFull()
-                }
-            }
-
-        })
+        main_view_page.addOnPageChangeListener(MyPageChangeListener(stockPage))
         stockPage.setOperaListener {
             psPage.addData(it, false)
         }
         toolbar.setOnClickListener {
-            main_view_page?.let {mvp->
-                if (mvp.currentItem== PS_INFO){
-                    psPage.top()
-                }
-            }
+            toolBarClick.invoke(psPage)
         }
         toolbar.setOnLongClickListener {
-            showEditGoodsFragment(supportFragmentManager)
+            showEGF()
             return@setOnLongClickListener true
         }
     }
 
+    private fun showEGF() {
+        showEditGoodsFragment(supportFragmentManager) {
+            if (isStockPage()){
+                getStockPage()?.refreshData()
+            }
+        }
+    }
+
+    private val stockPageScrollListener: (Boolean, Boolean) -> Unit = { isUp, _ ->
+        if (isUp) {
+            showTools(false)
+        } else {
+            showTools()
+        }
+    }
+
+    private inner class MyPageChangeListener(val stockPage: StockPage) : ViewPager.OnPageChangeListener {
+        override fun onPageScrollStateChanged(p0: Int) {
+        }
+
+        override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+        }
+
+        override fun onPageSelected(p0: Int) {
+            if (p0 == STOCK) {
+                stockPage.refreshData()
+            }
+            if (p0 == PS_INFO) {
+                quitFull()
+            }
+        }
+    }
+
+    private val toolBarClick: (PSInfoPage) -> Unit = { psPage ->
+        if (isPSPage()){
+            psPage.top()
+        }
+    }
 
     fun showPSFragment(isP: Boolean = true, selectGoods: StockBean) {
         supportFragmentManager.showPSFragment(isP, selectGoods) {
-            (fms[0] as PSInfoPage).handlerAddData(it)
+            getPSInfoPage()?.handlerAddData(it)
         }
+    }
+
+    fun getPSInfoPage(): PSInfoPage? {
+        try {
+            if (!fms.isEmpty()) {
+                return fms[PS_INFO] as PSInfoPage
+            }
+        } catch (e: Exception) {
+            try {
+                main_view_page?.let {
+                    return (main_view_page.adapter as MyPagerAdapter).getItem(PS_INFO) as PSInfoPage
+                }
+            } catch (e: Exception) {
+            }
+        }
+        return null
+    }
+
+    private fun getStockPage(): StockPage? {
+        try {
+            if (!fms.isEmpty()) {
+                return fms[STOCK] as StockPage
+            }
+        } catch (e: Exception) {
+            try {
+                main_view_page?.let {
+                    return (main_view_page.adapter as MyPagerAdapter).getItem(STOCK) as StockPage
+                }
+            } catch (e: Exception) {
+            }
+        }
+        return null
+    }
+
+    private fun isStockPage(): Boolean {
+        main_view_page?.let {
+           return it.currentItem == STOCK
+        }
+        return false
+    }
+
+    private fun isPSPage(): Boolean {
+        main_view_page?.let {
+           return it.currentItem == PS_INFO
+        }
+        return false
     }
 
     private fun checkUpdate() {
