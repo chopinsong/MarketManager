@@ -10,7 +10,7 @@ import com.chopin.marketmanager.util.i
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class GoodsPickerView(root: View,showRemark:Boolean=true) {
+class GoodsPickerView(root: View,showRemark:Boolean=false) {
     private val brandPicker = root.findViewById<NumberPickerView>(R.id.brand_picker)
     private val typePicker = root.findViewById<NumberPickerView>(R.id.type_picker)
     private val remarkPicker = root.findViewById<NumberPickerView>(R.id.remark_picker)

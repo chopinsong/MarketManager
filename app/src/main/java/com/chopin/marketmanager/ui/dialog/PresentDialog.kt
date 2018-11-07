@@ -9,6 +9,8 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.view.GoodsPickerView
+import com.chopin.marketmanager.util.Constant
+import com.chopin.marketmanager.util.getConfig
 import kotlinx.android.synthetic.main.present_select_layout.*
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.doAsync
@@ -33,13 +35,10 @@ class PresentDialog : MyBaseDialog() {
         setTouch(present_root_layout)
         present_count_picker.minValue = 1
         present_count_picker.maxValue = 99
-        gpicker = GoodsPickerView(present_goods_picker)
+        gpicker = GoodsPickerView(present_goods_picker,context?.getConfig(Constant.SHOW_GOODS_REMARK)?:false)
         gpicker.updateBrands()
         present_commit_btn.setOnClickListener {
             l.invoke(gpicker.getSelectGoods(), present_count_picker.value)
-            dismiss()
-        }
-        present_cancel_btn.setOnClickListener {
             dismiss()
         }
 

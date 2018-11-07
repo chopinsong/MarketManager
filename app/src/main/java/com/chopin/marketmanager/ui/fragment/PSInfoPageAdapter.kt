@@ -51,7 +51,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.i("chopin", "onCreateViewHolder")
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.ps_recycle_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.ps_info_list_item, parent, false)
         return PSViewHolder(view)
     }
 
