@@ -190,7 +190,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             psPage.addData(it, false)
         }
         toolbar.setOnClickListener {
-            psPage.top()
+            main_view_page?.let {mvp->
+                if (mvp.currentItem== PS_INFO){
+                    psPage.top()
+                }
+            }
         }
         toolbar.setOnLongClickListener {
             showEditGoodsFragment(supportFragmentManager)
