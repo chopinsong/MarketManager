@@ -63,7 +63,12 @@ class AddGoodsView(private var root: View) {
     }
 
     fun commit(func: (g: Goods) -> Unit = {}) {
-        val goods = goods()
+        val goods: Goods
+        try {
+            goods = goods()
+        } catch (e: Exception) {
+            return
+        }
         if (isEditMode) {
             handleUpdate(goods, func)
         } else {
@@ -129,13 +134,13 @@ class AddGoodsView(private var root: View) {
         typeEt.setText(g.type)
         avgPriceEt.setText(g.avgPrice.toString())
         remarkEt.setText(g.remark)
-        goodsImage.setGoodsImage(g.image_path.toBitmap()?.scale2())
+        goodsImage.setGoodsImage(g.image_path.toBitmap()?.scale2(400,300))
         isEditMode = true
     }
 
     fun setImage(bitmap: Bitmap?) {
         bitmap?.let {
-            goodsImage.setGoodsImage(bitmap.scale2())
+            goodsImage.setGoodsImage(bitmap.scale2(400,300))
             goodsImagePath = bitmap.toStr()
         }
     }
