@@ -85,6 +85,12 @@ class StockPage : Fragment() {
                         operaListener.invoke(pb)
                     }
                 }
+                ItemTouchHelper.UP->{
+                    mAdapter?.notifyItemChanged(i)
+                }
+                ItemTouchHelper.DOWN->{
+                    mAdapter?.notifyItemChanged(i)
+                }
             }
         }
         val touchHelper = ItemTouchHelper(callback)
@@ -115,7 +121,6 @@ class StockPage : Fragment() {
 
     companion object {
 
-        var sb = null
         @JvmStatic
         fun newInstance() = StockPage()
     }

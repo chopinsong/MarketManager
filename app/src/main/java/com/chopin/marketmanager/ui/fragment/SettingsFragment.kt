@@ -63,6 +63,9 @@ class SettingsFragment : MyDialogFragment() {
         show_goods_remark.setOnCheckedChangeListener { _, isChecked ->
             context?.setConfig(Constant.SHOW_GOODS_REMARK,isChecked)
         }
+        reverse_display_cb.setOnCheckedChangeListener { _, isChecked ->
+            context?.setConfig(Constant.REVERSE_DISPLAY,isChecked)
+        }
     }
 
 

@@ -66,10 +66,11 @@ class GoodsEditAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>(
             lListener.invoke(b, position)
             holder.geSwipeLayout.close()
         }
-        h.geImage.setGoodsImage(b.image_path.toBitmap().scale2(), gd(context))
+        h.geImage.setGoodsImage(b.image_path.toBitmap()?.scale2(200, 150))
         h.geBrand.text = b.brand
         h.geType.text = b.type
         h.geRemark.text = if (b.remark.isEmpty()) "无备注" else b.remark
+        h.geTimeTv.text = time2shortTime(b.time)
     }
 
     fun remove(i: Int) {
@@ -90,6 +91,7 @@ class GoodsViewHolder(v: View) : ViewHolder(v) {
     val geRemark: TextView = v.findViewById(R.id.goods_edit_remark)
     val geRightMenu: TextView = v.findViewById(R.id.right_menu_goods_edit)
     val geLeftMenu: TextView = v.findViewById(R.id.left_menu_goods_edit)
+    val geTimeTv: TextView = v.findViewById(R.id.goods_edit_time_tv)
     val geSwipeLayout: SwipeItemLayout = v.findViewById(R.id.goods_edit_swipe_layout)
     val geImage: ImageView = v.findViewById(R.id.goods_edit_image)
 

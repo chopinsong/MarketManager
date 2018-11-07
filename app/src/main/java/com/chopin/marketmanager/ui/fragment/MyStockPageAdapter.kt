@@ -12,11 +12,8 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.util.*
 import com.chopin.marketmanager.util.color.DominantColorCalculator
-import com.chopin.marketmanager.util.goodsDrawable
-import com.chopin.marketmanager.util.scale2
-import com.chopin.marketmanager.util.setGoodsImage
-import com.chopin.marketmanager.util.toBitmap
 import kotlinx.android.synthetic.main.stock_page_item.view.*
 
 class MyStockPageAdapter(val context: Context, private val mListener: (v: ImageView, s: StockBean, position: Int) -> Unit) : RecyclerView.Adapter<MyStockPageAdapter.ViewHolder>() {
@@ -32,9 +29,9 @@ class MyStockPageAdapter(val context: Context, private val mListener: (v: ImageV
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mStockTitle.text = String.format("%s%s",item.goods.brand,item.goods.type)
-        val scale = item.goods.image_path.toBitmap().scale2()
-        holder.mImageView.setGoodsImage(scale, gd)
-        val dcc = DominantColorCalculator(scale)
+        val scale = item.goods.image_path.toBitmap()?.scale2()
+        holder.mImageView.setGoodsImage(scale)
+        val dcc = DominantColorCalculator(scale?:context.goodsBitmap())
         holder.mBG.setBackgroundColor(dcc.colorScheme.primaryAccent)
         holder.mStockTitle.setTextColor(dcc.colorScheme.primaryText)
         holder.mCount.setTextColor(dcc.colorScheme.primaryText)

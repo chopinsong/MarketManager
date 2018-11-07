@@ -63,7 +63,7 @@ class AddGoodsView(private var root: View) {
     }
 
     fun commit(func: (g: Goods) -> Unit = {}) {
-        val goods=goods()
+        val goods = goods()
         if (isEditMode) {
             handleUpdate(goods, func)
         } else {
@@ -71,7 +71,7 @@ class AddGoodsView(private var root: View) {
         }
     }
 
-    private fun handleCommit(goods:Goods, func: (g: Goods) -> Unit) {
+    private fun handleCommit(goods: Goods, func: (g: Goods) -> Unit) {
         doAsync {
             val goodsId = DBManager.getGoodsId(goods.brand, goods.type, goods.remark)
             if (goodsId == -1) {
@@ -92,7 +92,7 @@ class AddGoodsView(private var root: View) {
         }
     }
 
-    private fun handleUpdate(goods:Goods, func: (g: Goods) -> Unit) {
+    private fun handleUpdate(goods: Goods, func: (g: Goods) -> Unit) {
         doAsync {
             val goodsId = DBManager.getGoodsId(goods.brand, goods.type, goods.remark)
             if (goodsId == editBean.id || goodsId == -1) {
@@ -129,13 +129,14 @@ class AddGoodsView(private var root: View) {
         typeEt.setText(g.type)
         avgPriceEt.setText(g.avgPrice.toString())
         remarkEt.setText(g.remark)
-        goodsImage.setGoodsImage(g.image_path.toBitmap().scale2(), gd(root.context))
+        goodsImage.setGoodsImage(g.image_path.toBitmap()?.scale2())
         isEditMode = true
     }
 
-    fun setGoodsImage(bitmap: Bitmap?) {
+    fun setImage(bitmap: Bitmap?) {
         bitmap?.let {
-            goodsImage.setGoodsImage(bitmap.scale2(), gd(root.context))
+            goodsImage.setGoodsImage(bitmap.scale2())
+            goodsImagePath = bitmap.toStr()
         }
     }
 

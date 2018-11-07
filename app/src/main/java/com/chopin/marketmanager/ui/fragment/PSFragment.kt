@@ -44,16 +44,16 @@ class PSFragment : MyDialogFragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val params = dialog.window.attributes
-        params.gravity = Gravity.BOTTOM
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
-        params.height = WindowManager.LayoutParams.MATCH_PARENT
-        dialog.window.attributes = params
-        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
-        dialog.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        val params = dialog.window.attributes
+//        params.gravity = Gravity.BOTTOM
+//        params.width = WindowManager.LayoutParams.MATCH_PARENT
+//        params.height = WindowManager.LayoutParams.MATCH_PARENT
+//        dialog.window.attributes = params
+//        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+//        dialog.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -194,10 +194,10 @@ class PSFragment : MyDialogFragment() {
 
 
     private fun setGoods(goods: Goods) {
-        val scale = goods.image_path.toBitmap().scale2()
+        val scale = goods.image_path.toBitmap()?.scale2()
         stock_image.setGoodsImage(scale, gd(context))
         stock_title.text = String.format("%s%s", goods.brand, goods.type)
-        val dcc = DominantColorCalculator(scale)
+        val dcc = DominantColorCalculator(scale?:context?.goodsBitmap())
         stock_title.setBackgroundColor(dcc.colorScheme.primaryAccent)
         stock_title.setTextColor(dcc.colorScheme.primaryText)
     }

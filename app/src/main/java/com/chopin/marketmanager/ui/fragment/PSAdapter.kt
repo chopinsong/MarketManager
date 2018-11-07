@@ -74,7 +74,7 @@ class PSAdapter(val context: Context) : RecyclerView.Adapter<ViewHolder>() {
                 holder.mSwipeItemLayout.close()
             }
         }
-        h.img.setGoodsImage(bean.g.image_path.toBitmap().scale2(), gd(context))
+        h.img.setGoodsImage(bean.g.image_path.toBitmap()?.scale2())
         h.itemBrandTv.text = bean.g.brand
         h.itemTypeTv.text = bean.g.type
         if (bean.customerName.isEmpty()) {

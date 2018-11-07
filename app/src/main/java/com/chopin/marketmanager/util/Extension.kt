@@ -97,6 +97,16 @@ fun Context.goodsDrawable(c: Int = R.color.black2): VectorDrawableCompat? {
     return getDrawable(R.drawable.ic_goods, c)
 }
 
+fun Context.goodsBitmap(): Bitmap? {
+    val bitmap: Bitmap
+    val vectorDrawable = getDrawable(R.drawable.ic_goods)
+    bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
+    vectorDrawable.draw(canvas)
+    return bitmap
+}
+
 fun Context.getDrawable(id: Int, c: Int = R.color.black2): VectorDrawableCompat? {
     VectorDrawableCompat.create(resources, id, theme)?.let {
         it.setTint(getColor(c))
@@ -116,6 +126,15 @@ fun ImageView.setGoodsImage(b: Bitmap?, gd: VectorDrawableCompat?) {
         setImageBitmap(b)
     }
 }
+
+fun ImageView.setGoodsImage(b: Bitmap?) {
+    try {
+        setImageBitmap(b ?: context.goodsBitmap())
+    } catch (e: Exception) {
+        i("setGoodsImage $e")
+    }
+}
+
 
 fun Any.i(msg: String) {
     Log.i("chopin", msg)
@@ -435,10 +454,18 @@ fun View.transAnim(isShow: Boolean = true, onEnd: () -> Unit = {}) {
     if (isShow) upAnim(onEnd = onEnd) else downAnim(onEnd = onEnd)
 }
 
-fun String.toBitmap(): Bitmap {
+fun String.toBitmap(): Bitmap? {
     // 将字符串转换成Bitmap类型
-    val bitmapArray = Base64.decode(this, Base64.DEFAULT)
-    return BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.size)
+    return try {
+        val bitmapArray = Base64.decode(this, Base64.DEFAULT)
+        BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.size)
+    } catch (e: Exception) {
+        null
+    }
+}
+
+fun Bitmap.toStr(): String {
+    return PhotoUtil.bitmaptoString(this)
 }
 
 /**
@@ -511,7 +538,6 @@ fun Bitmap.scale2(w: Int = 800, h: Int = 600): Bitmap {
             canvas.drawBitmap(bitmap, src, dst, null)
         }
     }
-    bitmap.recycle()
     return resizeBmp
 }
 

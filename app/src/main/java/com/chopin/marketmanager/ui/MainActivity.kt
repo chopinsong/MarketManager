@@ -28,23 +28,6 @@ const val STOCK = 1
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     var fms = ArrayList<Fragment>()
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_ps_info -> {
-                setPage(PS_INFO)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_stock -> {
-                setPage(STOCK)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
-
-    private fun setPage(i: Int) {
-        main_view_page.currentItem = i
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,47 +35,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         verifyStoragePermissions()
         setSupportActionBar(toolbar)
         initView()
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        fms.clear()
-        val stockPage = StockPage.newInstance()
-        stockPage.scrollListener = { isUp, t ->
-            if (isUp) {
-                supportActionBar?.hide()
-                navigation.visibility = View.GONE
-                fullScreen()
-            } else {
-                supportActionBar?.show()
-                navigation.visibility = View.VISIBLE
-                quitFull()
-            }
-        }
-        val psPage = PSInfoPage.newInstance()
-        fms.add(psPage)
-        fms.add(stockPage)
-        val myPagerAdapter = MyPagerAdapter(supportFragmentManager, fms)
-        main_view_page.setNoScroll(true)
-        main_view_page.adapter = myPagerAdapter
-        main_view_page.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(p0: Int) {
-            }
-
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-            }
-
-            override fun onPageSelected(p0: Int) {
-                if (p0 == STOCK) {
-                    stockPage.refreshData()
-//                    fullScreen()
-                }
-                if (p0 == PS_INFO) {
-                    quitFull()
-                }
-            }
-
-        })
-        stockPage.setOperaListener {
-            psPage.addData(it, false)
-        }
     }
 
     override fun onStart() {
@@ -105,11 +47,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            if (main_view_page != null && main_view_page.currentItem == STOCK) {
-                setPage(PS_INFO)
-            } else {
-                moveTaskToBack(true)
-            }
+            moveTaskToBack(true)
         }
     }
 
@@ -172,6 +110,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
+            R.id.navigation_ps_info -> {
+                setPage(PS_INFO)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_stock -> {
+                setPage(STOCK)
+                return@OnNavigationItemSelectedListener true
+            }
+        }
+        false
+    }
+
+    private fun setPage(i: Int) {
+        main_view_page.currentItem = i
+    }
+
+    private fun showTools(isShow: Boolean = true) {
+        if (isShow) {
+            supportActionBar?.show()
+            navigation.visibility = View.VISIBLE
+            quitFull()
+        } else {
+            supportActionBar?.hide()
+            navigation.visibility = View.GONE
+            fullScreen()
+        }
+    }
+
 
     private fun initView() {
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -184,6 +152,49 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         vv?.setOnClickListener {
             checkUpdate()
             vv.scaleDown()
+        }
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        fms.clear()
+        val stockPage = StockPage.newInstance()
+        stockPage.scrollListener = { isUp, _ ->
+            if (isUp) {
+                showTools(false)
+            } else {
+                showTools()
+            }
+        }
+        val psPage = PSInfoPage.newInstance()
+        fms.add(psPage)
+        fms.add(stockPage)
+        val myPagerAdapter = MyPagerAdapter(supportFragmentManager, fms)
+        main_view_page.setNoScroll(true)
+        main_view_page.adapter = myPagerAdapter
+        main_view_page.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(p0: Int) {
+            }
+
+            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+            }
+
+            override fun onPageSelected(p0: Int) {
+                if (p0 == STOCK) {
+                    stockPage.refreshData()
+                }
+                if (p0 == PS_INFO) {
+                    quitFull()
+                }
+            }
+
+        })
+        stockPage.setOperaListener {
+            psPage.addData(it, false)
+        }
+        toolbar.setOnClickListener {
+            psPage.top()
+        }
+        toolbar.setOnLongClickListener {
+            showEditGoodsFragment(supportFragmentManager)
+            return@setOnLongClickListener true
         }
     }
 

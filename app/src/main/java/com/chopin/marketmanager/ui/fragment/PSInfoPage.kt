@@ -324,6 +324,10 @@ class PSInfoPage : Fragment() {
         }
     }
 
+    fun top() {
+        view?.purchase_shipment_list?.smoothScrollToPosition(0)
+    }
+
 
     companion object {
 

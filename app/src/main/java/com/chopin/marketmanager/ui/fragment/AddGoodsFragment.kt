@@ -60,7 +60,7 @@ class AddGoodsFragment : MyDialogFragment() {
                 data?.let {
                     val cameraPath = photoUtil.getCameraPath(it)
                     val bitmap = PhotoUtil.readBitmapAutoSize(cameraPath)
-                    addGoodsView.setGoodsImage(bitmap)
+                    addGoodsView.setImage(bitmap)
                 }
             }
         }
@@ -69,7 +69,7 @@ class AddGoodsFragment : MyDialogFragment() {
             if (resultCode == RESULT_OK) {
                 val photoPath = photoUtil.photoPath
                 val bitmap = PhotoUtil.readBitmapAutoSize(photoPath)
-                addGoodsView.setGoodsImage(bitmap)
+                addGoodsView.setImage(bitmap)
             }
         }
     }
