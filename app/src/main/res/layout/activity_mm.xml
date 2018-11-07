@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:animateLayoutChanges="true">
 
-    <com.chopin.marketmanager.ui.NoSlideViewPager
+    <com.chopin.marketmanager.ui.view.NoSlideViewPager
         android:id="@+id/main_view_page"
         android:layout_width="match_parent"
         android:layout_height="0dp"

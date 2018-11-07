@@ -32,7 +32,7 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.ui.fragment.*
+import com.chopin.marketmanager.ui.dialog.*
 import net.sourceforge.pinyin4j.PinyinHelper
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.image
@@ -145,14 +145,6 @@ fun Activity.setTransparentStatusBar() {
     window.statusBarColor = Color.TRANSPARENT
 }
 
-fun Activity.getProgressDialog(): ProgressDialog {
-    return ProgressDialog()
-}
-
-fun Fragment.getProgressDialog(): ProgressDialog {
-    return ProgressDialog()
-}
-
 
 fun FragmentManager.showPSFragment(isP: Boolean = true, selectGoods: StockBean, func: (PSBean) -> Unit = {}) {
     val ps = getPSFragment().setCommitListener {
@@ -189,11 +181,11 @@ fun Any.crTime(): String {
 
 
 fun Any.showStock(fm: FragmentManager) {
-    StockFragment().show(fm, "stockFragment")
+    StockListDialog().show(fm, "stockFragment")
 }
 
 fun Any.showProfit(fm: FragmentManager) {
-    ProfitFragment().show(fm, "ProfitFragment")
+    ProfitDialog().show(fm, "ProfitDialog")
 }
 
 fun Any.getPSFragment(): PSFragment {
@@ -201,13 +193,13 @@ fun Any.getPSFragment(): PSFragment {
 }
 
 fun Any.showAddGoods(fm: FragmentManager, f: (g: Goods) -> Unit = {}) {
-    val af = AddGoodsFragment()
+    val af = AddGoodsDialog()
     af.commitListener = f
     af.show(fm, "AddGoods")
 }
 
 fun Any.showEditGoodsFragment(fm: FragmentManager,onAddGood:(Goods)->Unit={}) {
-    val ge = GoodsEditFragment()
+    val ge = GoodsListDialog()
     ge.onUpdate={
         onAddGood.invoke(it)
     }
@@ -226,9 +218,9 @@ fun Any.time2shortTime(s: String): String {
 }
 
 fun Any.showSettings(fm: FragmentManager, cl: (String) -> Unit) {
-    val sf = SettingsFragment()
+    val sf = SettingDialog()
     sf.clearListener = cl
-    sf.show(fm, "SettingsFragment")
+    sf.show(fm, "SettingDialog")
 }
 
 fun View.slideToUp() {

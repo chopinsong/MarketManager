@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui;
+package com.chopin.marketmanager.ui.view;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;

@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui.fragment
+package com.chopin.marketmanager.ui.dialog
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.stock_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class StockFragment : MyDialogFragment() {
+class StockListDialog : MyBaseDialog() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window.setWindowAnimations(R.style.dialogAnim)

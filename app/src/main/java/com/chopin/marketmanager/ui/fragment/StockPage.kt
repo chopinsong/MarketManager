@@ -14,7 +14,7 @@ import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.StockItem
 import com.chopin.marketmanager.sql.DBManager
 import com.chopin.marketmanager.ui.ITHCallBack
-import com.chopin.marketmanager.ui.LetterIndexer
+import com.chopin.marketmanager.ui.view.LetterIndexer
 import com.chopin.marketmanager.ui.MainActivity
 import com.chopin.marketmanager.util.defaultItemAnimation
 import com.chopin.marketmanager.util.snack
@@ -27,7 +27,7 @@ import com.chopin.marketmanager.util.setDirectionScrollListener
 
 class StockPage : Fragment() {
     private var listener: (s: StockItem) -> Unit = {}
-    private var mAdapter: MyStockPageAdapter? = null
+    private var mAdapter: StockPageAdapter? = null
     var scrollListener: (Boolean, Boolean) -> Unit = {d,t->}
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,7 +36,7 @@ class StockPage : Fragment() {
         if (list is RecyclerView) {
             with(list) {
                 layoutManager = LinearLayoutManager(context)
-                mAdapter = MyStockPageAdapter(context) { v, sb, po ->
+                mAdapter = StockPageAdapter(context) { v, sb, po ->
                     (activity as MainActivity).showPSFragment(selectGoods = sb)
 //                    val intent = Intent(context, PurchaseActivity::class.java)
 //                    intent.putExtra("selectGoods",sb)

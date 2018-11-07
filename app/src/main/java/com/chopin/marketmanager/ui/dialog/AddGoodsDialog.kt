@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui.fragment
+package com.chopin.marketmanager.ui.dialog
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
-import com.chopin.marketmanager.ui.AddGoodsView
+import com.chopin.marketmanager.ui.view.AddGoodsView
 import com.chopin.marketmanager.util.PhotoUtil
 import com.chopin.marketmanager.util.gd
 import com.chopin.marketmanager.util.setGoodsImage
 import kotlinx.android.synthetic.main.add_goods_layout.*
 
-class AddGoodsFragment : MyDialogFragment() {
+class AddGoodsDialog : MyBaseDialog() {
 
     private lateinit var addGoodsView: AddGoodsView
     var commitListener: (g: Goods) -> Unit = {}

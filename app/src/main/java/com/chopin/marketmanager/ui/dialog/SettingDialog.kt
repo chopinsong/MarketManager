@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui.fragment
+package com.chopin.marketmanager.ui.dialog
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.settings_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class SettingsFragment : MyDialogFragment() {
+class SettingDialog : MyBaseDialog() {
     var clearListener: (String) -> Unit = {
 
     }

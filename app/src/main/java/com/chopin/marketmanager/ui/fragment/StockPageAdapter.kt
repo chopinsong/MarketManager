@@ -16,7 +16,7 @@ import com.chopin.marketmanager.util.*
 import com.chopin.marketmanager.util.color.DominantColorCalculator
 import kotlinx.android.synthetic.main.stock_page_item.view.*
 
-class MyStockPageAdapter(val context: Context, private val mListener: (v: ImageView, s: StockBean, position: Int) -> Unit) : RecyclerView.Adapter<MyStockPageAdapter.ViewHolder>() {
+class StockPageAdapter(val context: Context, private val mListener: (v: ImageView, s: StockBean, position: Int) -> Unit) : RecyclerView.Adapter<StockPageAdapter.ViewHolder>() {
     private var mValues: ArrayList<StockBean> = ArrayList()
     private var gd = context.goodsDrawable()
 

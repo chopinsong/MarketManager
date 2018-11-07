@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui.fragment
+package com.chopin.marketmanager.ui.dialog
 
 import android.content.Context
 import android.graphics.Color

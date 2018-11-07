@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui
+package com.chopin.marketmanager.ui.view
 
 import android.content.Context
 import android.support.v4.view.ViewPager

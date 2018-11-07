@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="horizontal">
 
-    <com.chopin.marketmanager.ui.NumberPickerView
+    <com.chopin.marketmanager.ui.view.NumberPickerView
         android:id="@+id/brand_picker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         app:npv_DividerColor="@color/colorAccent"
         app:npv_TextColorSelected="@color/colorAccent" />
 
-    <com.chopin.marketmanager.ui.NumberPickerView
+    <com.chopin.marketmanager.ui.view.NumberPickerView
         android:id="@+id/type_picker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         app:npv_DividerColor="@color/colorAccent"
         app:npv_TextColorSelected="@color/colorAccent" />
 
-    <com.chopin.marketmanager.ui.NumberPickerView
+    <com.chopin.marketmanager.ui.view.NumberPickerView
         android:id="@+id/remark_picker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

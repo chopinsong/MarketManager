@@ -12,7 +12,7 @@ import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.PSBean
 import com.chopin.marketmanager.bean.PSItemBean
 import com.chopin.marketmanager.sql.DBManager
-import com.chopin.marketmanager.ui.SpinnerFilterView
+import com.chopin.marketmanager.ui.view.SpinnerFilterView
 import com.chopin.marketmanager.util.*
 import kotlinx.android.synthetic.main.ps_page_item_list.view.*
 import org.jetbrains.anko.doAsync

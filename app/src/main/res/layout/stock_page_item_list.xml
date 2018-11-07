@@ -16,7 +16,7 @@
         tools:listitem="@layout/stock_page_item"/>
 
 
-    <com.chopin.marketmanager.ui.LetterIndexer
+    <com.chopin.marketmanager.ui.view.LetterIndexer
         android:id="@+id/letter_index"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

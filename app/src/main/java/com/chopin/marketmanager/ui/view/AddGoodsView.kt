@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui
+package com.chopin.marketmanager.ui.view
 
 import android.graphics.Bitmap
 import android.support.design.widget.TextInputLayout

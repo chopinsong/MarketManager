@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui
+package com.chopin.marketmanager.ui.view
 
 import android.view.View
 import android.widget.AdapterView

@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui.fragment
+package com.chopin.marketmanager.ui.dialog
 
 import android.content.DialogInterface
 import android.graphics.Color
@@ -9,7 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 
-abstract class MyDialogFragment : DialogFragment() {
+abstract class MyBaseDialog : DialogFragment() {
     private var listener: (dialog: DialogInterface?) -> Unit = {}
 
     fun setOnDismissListener(f: (dialog: DialogInterface?) -> Unit) {

@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui.fragment
+package com.chopin.marketmanager.ui.dialog
 
 import android.os.Bundle
 import android.text.Editable
@@ -18,7 +18,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 
-class PSFragment : MyDialogFragment() {
+class PSFragment : MyBaseDialog() {
     private var commitListener: (b: PSBean) -> Unit = {}
     private var editBean: PSItemBean? = null
     private var presentGoods: Goods? = null
@@ -42,16 +42,6 @@ class PSFragment : MyDialogFragment() {
         }
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        val params = dialog.window.attributes
-//        params.gravity = Gravity.BOTTOM
-//        params.width = WindowManager.LayoutParams.MATCH_PARENT
-//        params.height = WindowManager.LayoutParams.MATCH_PARENT
-//        dialog.window.attributes = params
-//        dialog.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
-//        dialog.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-//    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -84,12 +74,12 @@ class PSFragment : MyDialogFragment() {
 
         })
         select_present_tv.setOnClickListener {
-            val pf = PresentFragment()
+            val pf = PresentDialog()
             pf.setCommitListener { presentGoods, presentCount ->
                 this.presentGoods = presentGoods
                 this.presentCount = presentCount
             }
-            pf.show(fragmentManager, "PresentFragment")
+            pf.show(fragmentManager, "PresentDialog")
         }
     }
 

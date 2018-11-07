@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui.fragment
+package com.chopin.marketmanager.ui.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,13 +8,14 @@ import android.view.Window
 import com.chopin.marketmanager.R
 import com.chopin.marketmanager.bean.Goods
 import com.chopin.marketmanager.sql.DBManager
+import com.chopin.marketmanager.ui.view.GoodsPickerView
 import kotlinx.android.synthetic.main.present_select_layout.*
 import kotlinx.android.synthetic.main.purchase_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
-class PresentFragment : MyDialogFragment() {
+class PresentDialog : MyBaseDialog() {
     private lateinit var gpicker: GoodsPickerView
     private var l: (g: Goods, count: Int) -> Unit = { _, _ -> }
 

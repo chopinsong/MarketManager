@@ -1,4 +1,4 @@
-package com.chopin.marketmanager.ui.fragment
+package com.chopin.marketmanager.ui.dialog
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.goods_edit_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
-class GoodsEditFragment : MyDialogFragment() {
+class GoodsListDialog : MyBaseDialog() {
     var onUpdate:(Goods)->Unit={}
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -67,7 +67,7 @@ class GoodsEditFragment : MyDialogFragment() {
     }
 
     private fun showAddGoodsFragment(g: Goods, i: Int) {
-        val adf = AddGoodsFragment()
+        val adf = AddGoodsDialog()
         val b = Bundle()
         b.putSerializable("goods_edit_bean", g)
         adf.arguments = b
