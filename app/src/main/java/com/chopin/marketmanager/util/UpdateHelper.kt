@@ -15,7 +15,9 @@ import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import android.util.Log
 import com.chopin.marketmanager.BuildConfig
+import com.chopin.marketmanager.util.Constant.IS_DOWNLOAD
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.io.*
 import java.lang.ref.WeakReference
 import java.net.HttpURLConnection
@@ -27,30 +29,21 @@ object UpdateHelper {
     private const val versionUrl = "https://raw.githubusercontent.com/chopinsong/FileLibrary/master/version.txt"
     private const val apkUrl = "https://raw.githubusercontent.com/chopinsong/FileLibrary/master/MarketManager.apk"
     var remoteVersion = 0.0
-    fun check(context: Context): Boolean {
-        val curVersion = getVersion(context)
-        remoteVersion = obtainVersion()
-        i("curVersion=$curVersion   remoteVersion=$remoteVersion")
-        return remoteVersion > curVersion
+    fun check(context: Context, onChecked: (Boolean) -> Unit = {}) {
+        doAsync {
+            val curVersion = getVersion(context)
+            remoteVersion = obtainVersion()
+            i("curVersion=$curVersion   remoteVersion=$remoteVersion")
+            uiThread {
+                onChecked.invoke(remoteVersion > curVersion)
+            }
+        }
     }
 
     fun showInstall(activity: Activity) {
-        if (check(activity)) {
-            Snackbar.make(activity.window.decorView, "下载完成，是否马上安装", Snackbar.LENGTH_LONG).setAction("安装") {
-                install(activity.applicationContext, "${Environment.getExternalStorageDirectory()}${File.separator}download${File.separator + Constant.APK_NAME + remoteVersion}")
-            }
-//                .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-//            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-//                super.onDismissed(transientBottomBar, event)
-//                val alarmManager = activity.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//                val intent2 = Intent().setAction(Constant.INSTALL_ACTION)
-//                val uploadIntent = PendingIntent.getService(activity.applicationContext, 0, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
-//                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10 * 60 * 60, AlarmManager.INTERVAL_DAY, uploadIntent)
-//            }
-//        }
-//    )
-                    .show()
-        }
+        Snackbar.make(activity.window.decorView, "下载完成，是否马上安装", Snackbar.LENGTH_LONG).setAction("安装") {
+            install(activity.applicationContext, "${Environment.getExternalStorageDirectory()}${File.separator}download${File.separator + Constant.APK_NAME + remoteVersion+".apk"}")
+        }.show()
     }
 
     private fun showDownload(activity: Activity, function: (c: Context) -> Unit) {
@@ -61,7 +54,7 @@ object UpdateHelper {
 
     private fun download(context: Context, downloadUrl: String = apkUrl, todo: (c: Context) -> Unit) {
         val request = DownloadManager.Request(Uri.parse(downloadUrl))
-        request.setDestinationInExternalPublicDir("/download/", Constant.APK_NAME + remoteVersion)
+        request.setDestinationInExternalPublicDir("/download/", Constant.APK_NAME + remoteVersion+".apk")
         request.setTitle("销售管理")
         request.setDescription("销售管理更新版本")
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -124,6 +117,7 @@ object UpdateHelper {
 //        intent.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive")
 //        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
+        context.setConfig(IS_DOWNLOAD, false)
         android.os.Process.killProcess(android.os.Process.myPid())
     }
 
@@ -172,25 +166,22 @@ object UpdateHelper {
     }
 
     fun update(weak: WeakReference<Activity>) {
-        doAsync {
-            weak.get()?.let {act ->
-                val isDownload = act.getConfig("isDownload") ?: false
-                if (isDownload) {
-                    showInstall(act)
-                } else {
-                    if (check(act.applicationContext)) {
+        weak.get()?.let { act ->
+            check(act) { isD ->
+                if (isD) {
+                    val isDownload = act.getConfig(IS_DOWNLOAD) ?: false
+                    if (isDownload) {
+                        showInstall(act)
+                    } else {
                         showDownload(act) {
                             download(act) {
-                                act.setConfig("isDownload", true)
+                                act.setConfig(IS_DOWNLOAD, true)
                                 showInstall(act)
                             }
                         }
                     }
                 }
             }
-
         }
     }
-
-
 }

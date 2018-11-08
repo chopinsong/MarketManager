@@ -18,6 +18,7 @@ import com.chopin.marketmanager.bean.StockBean
 import com.chopin.marketmanager.ui.fragment.PSInfoPage
 import com.chopin.marketmanager.ui.fragment.StockPage
 import com.chopin.marketmanager.util.*
+import com.chopin.marketmanager.util.Constant.IS_DOWNLOAD
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_mm.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -150,6 +151,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val vv = hv?.findViewById<TextView>(R.id.version_tv)
         vv?.text = UpdateHelper.getVersion(context = this).toString()
         vv?.setOnClickListener {
+            setConfig(IS_DOWNLOAD,false)
             checkUpdate()
             vv.scaleDown()
         }
