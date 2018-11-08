@@ -11,7 +11,11 @@ class InstallReceiver(private val weak: WeakReference<Activity>):BroadcastReceiv
 
     override fun onReceive(c: Context?, i: Intent?) {
         weak.get()?.let {
-            UpdateHelper.showInstall(it)
+            try {
+                UpdateHelper.showInstall(it)
+            } catch (e: Exception) {
+                System.out.print(e)
+            }
         }
 
     }
