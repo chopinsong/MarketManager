@@ -55,7 +55,7 @@ object GoodsTable {
 
     fun getCommand(): String {
         return "CREATE TABLE $NAME($Goods_ID  INTEGER PRIMARY KEY," +
-                "$GOODS_NAME Text,$BRAND text,$TYPE text,$AVERAGE_PRICE DOUBLE,$IS_ENABLE INTEGER,$TIME TIMESTAMP(14));"
+                "$GOODS_NAME Text,$BRAND text,$TYPE text,$AVERAGE_PRICE DOUBLE,$IS_ENABLE INTEGER,$TIME TIMESTAMP(14),IMAGE_PATH text);"
     }
 }
 
